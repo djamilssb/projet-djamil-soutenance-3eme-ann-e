@@ -1,6 +1,6 @@
 import React from "react";
 
-export function Navbar(): React.JSX.Element {
+export function Footer(): React.JSX.Element {
     return (
         <></>
     )
