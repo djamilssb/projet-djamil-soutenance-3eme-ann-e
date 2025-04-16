@@ -7,9 +7,11 @@
   --font-size-medium: 16px;
   --font-size-large: 24px;
   --font-size-xlarge: 36px;
+  --font-size-xxlarge: 48px;
+  --font-size-xxlarge2: 84px;
 
   --primary-color: #0B0C10;
-  --secondary-color: #fb3636;
+  --secondary-color: #FFE500;
   --tertiary-color: #f5f5f5;
   --grayed-text: #8E8E8E;
 
@@ -20,7 +22,7 @@
   --alert-info-color: #f5f5f5;
 
   /* Couleurs d'état */
-  --hover-red: #e70000;
+  --hover-secondary: #f3db00;
   --hover-color: #fe2121;
   --disabled-color: #BDBDBD;
 
@@ -31,4 +33,14 @@
   --mt: 3rem;
   --mb: 2rem;
   --mb-section: 4rem;
+}
+
+h1 {
+  font-size: var(--font-size-xxlarge2);
+  font-family: var(--font-irish);
+  font-weight: 700;
+}
+
+.bold {
+  font-weight: 700;
 }

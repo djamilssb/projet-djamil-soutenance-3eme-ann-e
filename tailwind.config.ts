@@ -29,6 +29,7 @@ export default {
         alertWarning: "var(--alert-warning-color)",
         alertInfo: "var(--alert-info-color)",
 
+        hoverSecondary: "var(--hover-secondary)",
         hover: "var(--hover-color)",
         disabled: "var(--inactive-color)",
       },
@@ -38,6 +39,8 @@ export default {
         medium: "var(--font-size-medium)",
         large: "var(--font-size-large)",
         xlarge: "var(--font-size-xlarge)",
+        xxlarge: "var(--font-size-xxlarge)",
+        xxxlarge: "var(--font-size-xxxlarge)",
       },
       padding: {
         paddingElement: "var(--padding-element)",

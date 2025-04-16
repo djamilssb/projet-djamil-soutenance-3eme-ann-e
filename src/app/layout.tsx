@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { Irish_Grover } from "next/font/google";
 import "./globals.css";
+import { Navbar } from "./components/Navbar";
 
 // EXAMPLE FONT IMPORTS
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const irish = Irish_Grover({
+  variable: "--font-irish",
   subsets: ["latin"],
+  weight: "400",
 });
 
 // GLOBALS METADATA
@@ -20,12 +22,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="fr">
       <body
-        className={`${geistSans.variable} antialiased`}
+        className={`${irish.variable} antialiased`}
       >
 
-        <header></header>
+        <header><Navbar /></header>
 
         <main>
           {children}
