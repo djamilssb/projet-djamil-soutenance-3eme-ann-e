@@ -8,7 +8,7 @@ export function Footer(): React.JSX.Element {
             <div className="bg-[var(--secondary-color)] flex max-w-fit gap-4 rounded bold">
                 <Link href="">
                     <div className="hover:bg-[var(--hover-secondary)] p-2 rounded">
-                        <h3>Conditions générales d'utilisation</h3>
+                        <h3>Conditions générales d&apos;utilisation</h3>
                     </div>
                 </Link>
                 <Link href="">
