@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Irish_Grover } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "./components/Navbar";
+import { Footer } from "./components/Footer";
 
 // EXAMPLE FONT IMPORTS
 const irish = Irish_Grover({
@@ -33,7 +34,7 @@ export default function RootLayout({
           {children}
         </main>
 
-        <footer></footer>
+        <footer><Footer /></footer>
 
       </body>
     </html>
