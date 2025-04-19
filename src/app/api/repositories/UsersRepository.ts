@@ -5,19 +5,19 @@ class UserRepository {
   constructor() {}
 
   public async getAll(): Promise<Users[]> {
-    const rows = await executeQuery("SELECT * FROM Users", []);
+    const rows = await executeQuery("SELECT * FROM kt_users", []);
     return rows.map((row: object) => new Users(row));
   }
 
   public async getById(id: number): Promise<Users | null> {
-    const row = await executeQuery("SELECT * FROM Users WHERE id = ?", [id]);
+    const row = await executeQuery("SELECT * FROM kt_users WHERE id = ?", [id]);
     if (row.length === 0) return null;
     return new Users(row[0]);
   }
 
   public async create(user: Partial<Users>): Promise<boolean> {
     const newUser = user;
-    const result = await executeQuery("INSERT INTO Users SET ?", [newUser]);
+    const result = await executeQuery("INSERT INTO kt_users SET ?", [newUser]);
     return result.affectedRows > 0;
   }
 
@@ -32,7 +32,7 @@ class UserRepository {
   }
 
   public async delete(id: number): Promise<boolean> {
-    const result = await executeQuery("DELETE FROM Users WHERE id = ?", [id]);
+    const result = await executeQuery("DELETE FROM kt_users WHERE id = ?", [id]);
     return result.affectedRows > 0;
   }
 }
