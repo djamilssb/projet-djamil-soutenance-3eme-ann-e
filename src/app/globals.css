@@ -35,7 +35,7 @@
   --mb-section: 4rem;
 }
 
-h1 {
+#name-app {
   font-size: var(--font-size-xxlarge2);
   font-family: var(--font-irish);
   font-weight: 700;
