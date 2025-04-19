@@ -1,5 +1,4 @@
 import Image from "next/image";
-import React from "react";
 
 export function Navbar(): React.JSX.Element {
     return (
@@ -10,5 +9,5 @@ export function Navbar(): React.JSX.Element {
                 <button className="bg-[var(--secondary-color)] hover:bg-[var(--hover-secondary)] bold p-4 rounded">Se connecter/s&apos;inscrire</button>
             </div>
         </nav>
-    )
+    );
 }
