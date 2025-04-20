@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export function Navbar(): React.JSX.Element {
     return (
-        <nav className="mr-6 ml-6 mt-2 animate-pic">
+        <nav className="mr-6 ml-6 mt-2 levitate">
             <div className="flex items-center justify-between">
                 <Image src={"/kt-logo.png"} alt="Logo de KidsTrotter" height={140} width={140}/>
                 <span id="name-app" className="text-[var(--tertiary-color)] bold">KidsTrotter</span>

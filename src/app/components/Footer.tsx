@@ -3,7 +3,7 @@ import React from "react";
 
 export function Footer(): React.JSX.Element {
     return (
-        <section className="flex justify-between p-4 animate-pic">
+        <section className="flex justify-between p-4 levitate">
             <h2 hidden>Footer menu</h2>
             <div className="bg-[var(--secondary-color)] flex max-w-fit gap-4 rounded bold">
                 <Link href="">
