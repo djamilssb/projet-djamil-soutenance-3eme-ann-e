@@ -39,6 +39,16 @@ export default function RootLayout({
             fill
             priority
           />
+          <div className="relative h-full w-full overflow-hidden">
+            <Image
+              id="rocket"
+              src="/fusee.png"
+              alt=""
+              width={80}
+              height={80}
+              className="absolute bottom-20 right-100"
+            />
+          </div>
         </div>
 
         <div className="absolute top-0 left-0 w-full h-full bg-black opacity-[25%] -z-10"></div>
