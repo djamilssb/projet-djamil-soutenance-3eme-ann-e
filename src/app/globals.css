@@ -1,3 +1,5 @@
+@import url("./home/style.css");
+
 @import "tailwindcss";
 
 :root {
@@ -35,7 +37,7 @@
   --mb-section: 4rem;
 }
 
-h1 {
+#name-app {
   font-size: var(--font-size-xxlarge2);
   font-family: var(--font-irish);
   font-weight: 700;
@@ -43,4 +45,24 @@ h1 {
 
 .bold {
   font-weight: 700;
+}
+
+#rocket {
+  animation: trajectory 4s ease-in-out infinite;
+}
+
+@keyframes trajectory {
+  0% {
+    opacity: 0;
+    transform: translateX(-150px) translateY(-90px) rotate(60deg);
+  }
+  25% {
+    opacity: 1;
+  }
+  50% {
+    transform: translateX(20px) translateY(0px) rotate(60deg);
+  }
+  100% {
+    transform: translateX(200px) translateY(200px) rotate(65deg);
+  }
 }

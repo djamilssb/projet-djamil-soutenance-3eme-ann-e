@@ -3,6 +3,7 @@ import { Irish_Grover } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "./components/Navbar";
 import { Footer } from "./components/Footer";
+import Image from "next/image";
 
 // EXAMPLE FONT IMPORTS
 const irish = Irish_Grover({
@@ -24,18 +25,39 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr">
-      <body
-        className={`${irish.variable} antialiased`}
-      >
+      <body className={`${irish.variable} flex flex-col min-h-screen antialiased`}>
+        
+      <header className="absolute top-0 left-0 w-full z-20">
+        <Navbar />
+      </header>
 
-        <header><Navbar /></header>
+        <div className="absolute top-0 left-0 w-full h-full -z-10">
+          <Image
+            src="https://live.staticflickr.com/65535/54461185237_bfd62aa372_b.jpg"
+            alt="Background"
+            className="object-cover"
+            fill
+            priority
+          />
+          <div className="relative h-full w-full overflow-hidden">
+            <Image
+              id="rocket"
+              src="/fusee.png"
+              alt=""
+              width={80}
+              height={80}
+              className="absolute bottom-20 right-100"
+            />
+          </div>
+        </div>
 
-        <main>
-          {children}
-        </main>
+        <div className="absolute top-0 left-0 w-full h-full bg-black opacity-[25%] -z-10"></div>
 
-        <footer><Footer /></footer>
+        <main className="relative z-10 flex-grow">{children}</main>
 
+        <footer className="relative z-10 mt-auto">
+          <Footer />
+        </footer>
       </body>
     </html>
   );
