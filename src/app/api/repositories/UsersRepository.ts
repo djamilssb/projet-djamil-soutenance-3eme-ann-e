@@ -24,7 +24,7 @@ class UserRepository {
   public async update(id: number, user: Partial<Users>): Promise<boolean> {
 		const userId = id;
 		const updatedUser = user;
-    const result = await executeQuery("UPDATE Users SET ? WHERE id = ?", [
+    const result = await executeQuery("UPDATE kt_users SET ? WHERE id = ?", [
 			updatedUser,
       userId,
     ]);
