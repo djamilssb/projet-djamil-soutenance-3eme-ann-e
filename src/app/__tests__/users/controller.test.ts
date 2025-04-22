@@ -11,6 +11,8 @@ describe("UsersController", () => {
 
     beforeEach(() => {
         
+        jest.spyOn(console, "error").mockImplementation(() => {});
+        
         jest.clearAllMocks();
         
         usersService = new UsersService() as jest.Mocked<UsersService>;
