@@ -22,7 +22,7 @@ export async function PUT(req: NextRequest, context: { params: Promise<{ id: str
             return new Response(JSON.stringify({ message: "Invalid ID." }), { status: 400 });
         }
         const body = await req.json();
-        if (!body.id_user || !body.id_quizz || !body.id_character) {
+        if (!body.id_user || !body.id_quizz) {
             return new Response(JSON.stringify({ message: "Invalid or incomplete data." }), { status: 400 });
         }
         return await saveQuizzController.update(req, id, body);
