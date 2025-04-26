@@ -2,12 +2,13 @@
 
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import ArrowBack from "./ArrowBack";
 
 export function Navbar(): React.JSX.Element {
   const loginPath = usePathname().includes("/sign-in");
 
   return loginPath ? (
-    <></>
+    <ArrowBack />
   ) : (
     <nav className="mr-6 ml-6 mt-2 levitate">
       <div className="flex items-center justify-between">
