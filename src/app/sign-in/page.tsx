@@ -1,5 +1,6 @@
 import Link from "next/link";
 import BlackContainer from "../components/BlackContainer";
+import Form from 'next/form'
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -17,7 +18,7 @@ export default function SignIn(): React.JSX.Element {
           <section className="flex flex-col items-center text-white">
             <h2 className=" text-5xl bold mb-12">Connexion</h2>
 
-            <form className="flex flex-col text-2xl">
+            <Form action={""} className="flex flex-col text-2xl">
               <label className="mb-1" htmlFor="email">
                 Email
               </label>
@@ -39,7 +40,7 @@ export default function SignIn(): React.JSX.Element {
                 className="bg-[var(--grayed-input)] w-110 h-16 rounded p-2 mb-4"
                 required
               />
-            </form>
+            </Form>
 
             <Link href={"/forget-password"}>
               <p className="text-xl mt-2">Mot de passe oublié ?</p>
