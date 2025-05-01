@@ -33,7 +33,6 @@ export default function Menu(): React.JSX.Element {
             className="mb-6"
           />
 
-          {/* Liens de navigation */}
           <div className="text-white text-2xl flex flex-col space-y-6 text-center">
             <Link href="/quizz" className="hover:underline">Démarrer un quizz</Link>
             <Link href="/create" className="hover:underline">Créer un quizz</Link>
