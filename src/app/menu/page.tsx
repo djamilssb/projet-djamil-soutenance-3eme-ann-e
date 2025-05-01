@@ -15,9 +15,8 @@ export default function Menu(): React.JSX.Element {
       <h1 hidden>Menu Principal</h1>
 
       <section className="flex items-center justify-center h-[100vh] relative">
-        {/* Background image */}
         <Image
-          src="/background.jpg" // ← à remplacer par ton fond visuel
+          src="/background.jpg"
           alt="Fond"
           layout="fill"
           objectFit="cover"
@@ -26,7 +25,6 @@ export default function Menu(): React.JSX.Element {
 
         {/* Overlay de menu */}
         <div className="flex flex-col justify-center items-center w-[40vw] h-[60vh] bg-black bg-opacity-80 z-10 rounded-lg p-8">
-          {/* Logo globe */}
           <Image
             src="/kt-logo.png"
             alt="Logo KidsTrotter"
@@ -43,15 +41,12 @@ export default function Menu(): React.JSX.Element {
           </div>
         </div>
 
-        {/* Flèche retour en CSS */}
         <Link href="/" className="absolute top-6 left-6 z-20">
             <div className="arrow-left"></div>
         </Link>
 
-
-        {/* Avatar*/}
         <Image
-          src="/avatar.png" // ← image de profil au coin du haut à droite
+          src="/avatar.png" // image de profil au coin du haut à droite
           alt="Avatar"
           width={60}
           height={60}
