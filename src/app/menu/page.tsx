@@ -49,9 +49,9 @@ export default function Menu(): React.JSX.Element {
         </Link>
 
 
-        {/* Avatar coin haut droit */}
+        {/* Avatar*/}
         <Image
-          src="/avatar.png" // ← image de profil coin haut droit
+          src="/avatar.png" // ← image de profil au coin du haut à droite
           alt="Avatar"
           width={60}
           height={60}
