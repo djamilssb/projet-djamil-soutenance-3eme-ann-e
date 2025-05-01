@@ -1,102 +1,65 @@
-import Departement from "../../api/models/Departement";
+import Departement from "@/app/api/models/Departement";
 
-describe('Departement', () => {
-  describe('constructor', () => {
-    test('devrait initialiser un objet vide quand aucun paramètre', () => {
-      const departement = new Departement();
-      
-      expect(departement.getId()).toBeUndefined();
-      expect(departement.getName()).toBeUndefined();
-      expect(departement.getDepartementNumber()).toBeUndefined();
-    });
+describe("Departement Model", () => {
+    it("should create a Departement instance with provided data", () => {
+        const data = { id: 1, name: "Paris", departement_number: "75" };
+        const departement = new Departement(data);
 
-    test('devrait initialiser avec les données fournies', () => {
-      const data = { 
-        id: 1, 
-        name: 'Paris', 
-        departement_number: '75' 
-      };
-      const departement = new Departement(data);
-      
-      expect(departement.getId()).toBe(1);
-      expect(departement.getName()).toBe('Paris');
-      expect(departement.getDepartementNumber()).toBe('75');
-    });
-    
-    test('devrait initialiser avec des données partielles', () => {
-      const data = { name: 'Paris' };
-      const departement = new Departement(data);
-      
-      expect(departement.getId()).toBeUndefined();
-      expect(departement.getName()).toBe('Paris');
-      expect(departement.getDepartementNumber()).toBeUndefined();
-    });
-  });
-
-  describe('getters', () => {
-    test('getId devrait retourner la valeur correcte', () => {
-      const departement = new Departement({ id: 42 });
-      expect(departement.getId()).toBe(42);
+        expect(departement.id).toBe(1);
+        expect(departement.name).toBe("Paris");
+        expect(departement.departement_number).toBe("75");
     });
 
-    test('getName devrait retourner la valeur correcte', () => {
-      const departement = new Departement({ name: 'Gironde' });
-      expect(departement.getName()).toBe('Gironde');
+    it("should create an empty Departement instance without data", () => {
+        const departement = new Departement();
+        
+        expect(departement.id).toBeUndefined();
+        expect(departement.name).toBeUndefined();
+        expect(departement.departement_number).toBeUndefined();
     });
 
-    test('getDepartementNumber devrait retourner la valeur correcte', () => {
-      const departement = new Departement({ departement_number: '33' });
-      expect(departement.getDepartementNumber()).toBe('33');
-    });
-  });
+    it("should allow setting and getting properties", () => {
+        const departement = new Departement();
 
-  describe('setters', () => {
-    test('setId devrait définir correctement la valeur', () => {
-      const departement = new Departement();
-      departement.setId(42);
-      expect(departement.getId()).toBe(42);
-    });
+        departement.setId(1);
+        departement.setName("Paris");
+        departement.setDepartementNumber("75");
 
-    test('setName devrait définir correctement la valeur', () => {
-      const departement = new Departement();
-      departement.setName('Gironde');
-      expect(departement.getName()).toBe('Gironde');
+        expect(departement.getId()).toBe(1);
+        expect(departement.getName()).toBe("Paris");
+        expect(departement.getDepartementNumber()).toBe("75");
     });
 
-    test('setDepartementNumber devrait définir correctement la valeur', () => {
-      const departement = new Departement();
-      departement.setDepartementNumber('33');
-      expect(departement.getDepartementNumber()).toBe('33');
-    });
-  });
+    it("should create a Departement with partial data", () => {
+        const data = { name: "Paris" };
+        const departement = new Departement(data);
 
-  describe('toJSON', () => {
-    test('devrait retourner un objet avec toutes les propriétés', () => {
-      const departement = new Departement({
-        id: 1,
-        name: 'Paris',
-        departement_number: '75'
-      });
-      
-      const json = departement.toJSON();
-      
-      expect(json).toEqual({
-        id: 1,
-        name: 'Paris',
-        departement_number: '75'
-      });
+        expect(departement.id).toBeUndefined();
+        expect(departement.name).toBe("Paris");
+        expect(departement.departement_number).toBeUndefined();
     });
-    
-    test('devrait retourner un objet avec des propriétés undefined quand non définies', () => {
-      const departement = new Departement({ name: 'Paris' });
-      
-      const json = departement.toJSON();
-      
-      expect(json).toEqual({
-        id: undefined,
-        name: 'Paris',
-        departement_number: undefined
-      });
+
+    it("should convert to JSON correctly", () => {
+        const data = { id: 1, name: "Paris", departement_number: "75" };
+        const departement = new Departement(data);
+        const json = departement.toJSON();
+
+        expect(json).toEqual({
+            id: 1,
+            name: "Paris",
+            departement_number: "75"
+        });
     });
-  });
+
+    it("should include undefined properties in JSON", () => {
+        const data = { name: "Paris" };
+        const departement = new Departement(data);
+        const json = departement.toJSON();
+
+        expect(json).toEqual({
+            id: undefined,
+            name: "Paris",
+            departement_number: undefined
+        });
+    });
 });
