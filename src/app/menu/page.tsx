@@ -37,7 +37,7 @@ export default function Menu(): React.JSX.Element {
           <div className="text-white text-2xl flex flex-col space-y-6 text-center">
             <Link href="/quizz" className="hover:underline">Démarrer un quizz</Link>
             <Link href="/create" className="hover:underline">Créer un quizz</Link>
-            <Link href="/about" className="hover:underline">Qu'est-ce-que KidsTrotter ?</Link>
+            <Link href="/about" className="hover:underline">Qu'est-ce que KidsTrotter ?</Link>
           </div>
         </div>
 
