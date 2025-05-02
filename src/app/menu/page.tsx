@@ -14,7 +14,7 @@ export default function Menu(): React.JSX.Element {
     <>
       <h1 hidden>Menu Principal</h1>
 
-      <section className="flex items-center justify-center h-[100vh] relative">
+      <section className="flex items-center justify-center h-[90vh] relative">
         <Image
           src="/background.jpg"
           alt="Fond"
@@ -52,18 +52,6 @@ export default function Menu(): React.JSX.Element {
           className="absolute top-6 right-6 z-20 rounded-full"
         />
 
-        {/* Pied de page */}
-        <div className="absolute bottom-4 w-full px-8 flex justify-between text-white text-sm z-20">
-          <div className="space-x-6">
-            <Link href="/cookies">Gestion des cookies</Link>
-            <Link href="/cgu">Conditions générales d'utilisation</Link>
-          </div>
-          <Link href="/contact">
-            <button className="bg-yellow-400 text-black font-semibold px-4 py-2 rounded hover:bg-yellow-500">
-              Nous contacter
-            </button>
-          </Link>
-        </div>
       </section>
     </>
   );
