@@ -1,17 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
-import OrganizationsService from "../services/OrganizationsService";
-import Organizations from "../models/Organizations";
+import kt_organizationsService from "../services/OrganizationsService";
+import kt_organizations from "../models/Organizations";
 
-class OrganizationsController {
-    private organizationsService: OrganizationsService;
+class kt_organizationsController {
+    private kt_organizationsService: kt_organizationsService;
 
     constructor() {
-        this.organizationsService = new OrganizationsService();
+        this.kt_organizationsService = new kt_organizationsService();
     }
 
     public async getAllOrganizations(req: NextRequest): Promise<NextResponse> {
         try {
-            const organizations = await this.organizationsService.getAll();
+            const organizations = await this.kt_organizationsService.getAll();
             return NextResponse.json(organizations, { status: 200 });
         } catch (error) {
             console.error('Failed to retrieve all organizations:', error);
@@ -25,7 +25,7 @@ class OrganizationsController {
         }
 
         try {
-            const organization = await this.organizationsService.getById(id);
+            const organization = await this.kt_organizationsService.getById(id);
             if (!organization) {
                 return NextResponse.json({ message: 'Organization not found.' }, { status: 404 });
             }
@@ -36,16 +36,15 @@ class OrganizationsController {
         }
     }
 
-    public async createOrganization(req: NextRequest, body: Partial<Organizations>): Promise<NextResponse> {
+    public async createOrganization(req: NextRequest, body: Partial<kt_organizations>): Promise<NextResponse> {
         const orgData = body;
 
-        // Tu peux ajuster ici selon les champs requis
         if (!orgData.name?.trim()) {
             return NextResponse.json({ message: 'Missing organization name.' }, { status: 400 });
         }
 
         try {
-            const created = await this.organizationsService.create(orgData);
+            const created = await this.kt_organizationsService.create(orgData);
             if (!created) {
                 return NextResponse.json({ message: 'Failed to create the organization.' }, { status: 400 });
             }
@@ -56,13 +55,13 @@ class OrganizationsController {
         }
     }
 
-    public async updateOrganization(req: NextRequest, id: number, newData: Partial<Organizations>): Promise<NextResponse> {
+    public async updateOrganization(req: NextRequest, id: number, newData: Partial<kt_organizations>): Promise<NextResponse> {
         if (isNaN(id)) {
             return NextResponse.json({ message: 'Invalid organization ID.' }, { status: 400 });
         }
 
         try {
-            const updated = await this.organizationsService.update(id, newData);
+            const updated = await this.kt_organizationsService.update(id, newData);
             if (!updated) {
                 return NextResponse.json({ message: 'Failed to update the organization.' }, { status: 400 });
             }
@@ -79,7 +78,7 @@ class OrganizationsController {
         }
 
         try {
-            const deleted = await this.organizationsService.delete(id);
+            const deleted = await this.kt_organizationsService.delete(id);
             if (!deleted) {
                 return NextResponse.json({ message: 'Failed to delete the organization.' }, { status: 400 });
             }
@@ -91,4 +90,4 @@ class OrganizationsController {
     }
 }
 
-export default OrganizationsController;
+export default kt_organizationsController;

@@ -1,14 +1,14 @@
-import Organizations from "../models/Organizations";
+import kt_organizations from "../models/Organizations";
 import OrganizationRepository from "../repositories/OrganizationsRepository";
 
-class OrganizationsService {
+class kt_organizationsService {
     private organizationRepository: OrganizationRepository;
 
     constructor() {
         this.organizationRepository = new OrganizationRepository();
     }
 
-    public async getAll(): Promise<Organizations[]> {
+    public async getAll(): Promise<kt_organizations[]> {
         try {
             const rows = await this.organizationRepository.getAll();
             if (!rows) throw new Error("Error while fetching organizations");
@@ -20,7 +20,7 @@ class OrganizationsService {
         }
     }
 
-    public async getById(id: number): Promise<Organizations | null> {
+    public async getById(id: number): Promise<kt_organizations | null> {
         try {
             const organization = await this.organizationRepository.getById(id);
             if (!organization) throw new Error("Organization not found");
@@ -32,7 +32,7 @@ class OrganizationsService {
         }
     }
 
-    public async create(organization: Partial<Organizations>): Promise<boolean> {
+    public async create(organization: Partial<kt_organizations>): Promise<boolean> {
         try {
             if (
                 !organization.name?.trim() ||
@@ -54,7 +54,7 @@ class OrganizationsService {
         }
     }
 
-    public async update(id: number, organization: Partial<Organizations>): Promise<boolean> {
+    public async update(id: number, organization: Partial<kt_organizations>): Promise<boolean> {
         try {
             if (!id || isNaN(id)) {
                 throw new Error("Invalid organization ID");
@@ -89,4 +89,4 @@ class OrganizationsService {
     }
 }
 
-export default OrganizationsService;
+export default kt_organizationsService;
