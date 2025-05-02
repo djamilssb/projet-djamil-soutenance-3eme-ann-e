@@ -40,18 +40,6 @@ export default function Menu(): React.JSX.Element {
           </div>
         </div>
 
-        <Link href="/" className="absolute top-6 left-6 z-20">
-            <div className="arrow-left"></div>
-        </Link>
-
-        <Image
-          src="/avatar.png" // image de profil au coin du haut à droite
-          alt="Avatar"
-          width={60}
-          height={60}
-          className="absolute top-6 right-6 z-20 rounded-full"
-        />
-
       </section>
     </>
   );
