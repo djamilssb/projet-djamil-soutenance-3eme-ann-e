@@ -10,8 +10,8 @@ describe("Question Model", () => {
         });
 
         expect(question.getId()).toBe(1);
-        expect(question.getQuizzId).toBe(2);
-        expect(question.getOrderIndex).toBe(3);
-        expect(question.getContent).toBe("test content");
+        expect(question.getQuizzId()).toBe(2);
+        expect(question.getOrderIndex()).toBe(3);
+        expect(question.getContent()).toBe("test content");
     });
 });

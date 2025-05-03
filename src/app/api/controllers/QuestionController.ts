@@ -42,6 +42,10 @@ class QuestionController {
     public async createQuestion(req: NextRequest, body: Partial<Question>): Promise<NextResponse> {
         const questionData: Partial<Question> = body;
 
+        if (!questionData.idQuizz || !questionData.content) {
+            return NextResponse.json({ message: 'Données de questions manquantes.' }, { status: 400 });
+        }
+
         try {
             const createdResult = await this.questionService.create(questionData);
             if (!createdResult) {
