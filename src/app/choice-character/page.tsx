@@ -12,7 +12,7 @@ export default function ChoiceCharacter(): React.JSX.Element {
     <>
       <h1 hidden>Choisir un personnage</h1>
 
-      <section className="choice-character-page flex flex-col items-center justify-center h-[90vh] bg-[url('/globe.svg')] bg-cover bg-center relative">
+      <section className="choice-character-page flex flex-col items-center justify-center h-[90vh] bg-cover bg-center relative">
         {/* Bouton retour */}
         <Link href="/menu">
           <div className="absolute top-4 left-4 cursor-pointer">
