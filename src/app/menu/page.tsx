@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import "./style.css";
 
 // SPECIFICS METADATA FOR THE PAGE
 export const metadata: Metadata = {
@@ -24,22 +25,27 @@ export default function Menu(): React.JSX.Element {
         />
 
         {/* Overlay de menu */}
-        <div className="flex flex-col justify-center items-center w-[40vw] h-[60vh] bg-black bg-opacity-80 z-10 rounded-lg p-8">
-          <Image
-            src="/kt-logo.png"
-            alt="Logo KidsTrotter"
-            width={100}
-            height={100}
-            className="mb-6"
-          />
+        <div className="menu-overlay">
+          <h2 className="text-white text-4xl font-bold mb-6">KidsTrotter</h2>
 
           <div className="text-white text-2xl flex flex-col space-y-6 text-center">
-            <Link href="/quizz" className="hover:underline">Démarrer un quizz</Link>
-            <Link href="/create" className="hover:underline">Créer un quizz</Link>
-            <Link href="/about" className="hover:underline">Qu'est-ce que KidsTrotter ?</Link>
+            <Link href="/quizz">
+              <button className="bg-[var(--secondary-color)] hover:bg-[var(--hover-secondary)] text-white text-xl font-bold py-4 px-8 rounded flex items-center justify-between gap-4">
+                Démarrer un quizz <span className="arrow">➡️</span>
+              </button>
+            </Link>
+            <Link href="/create">
+              <button className="bg-[var(--secondary-color)] hover:bg-[var(--hover-secondary)] text-white text-xl font-bold py-4 px-8 rounded flex items-center justify-between gap-4">
+                Créer un quizz <span className="arrow">➡️</span>
+              </button>
+            </Link>
+            <Link href="/about">
+              <button className="bg-[var(--secondary-color)] hover:bg-[var(--hover-secondary)] text-white text-xl font-bold py-4 px-8 rounded flex items-center justify-between gap-4">
+                Qu'est-ce que KidsTrotter ? <span className="arrow">➡️</span>
+              </button>
+            </Link>
           </div>
         </div>
-
       </section>
     </>
   );
