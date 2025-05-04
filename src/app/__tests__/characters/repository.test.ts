@@ -52,6 +52,7 @@ describe("CharactersRepository", () => {
             id_quiz: 1,
             name: "Character 1",
             image_url: "url1",
+            created_at: new Date("2023-01-01"),
         });
 
         (executeQuery as jest.Mock).mockResolvedValue({ affectedRows: 1 });
@@ -63,6 +64,7 @@ describe("CharactersRepository", () => {
                 id_quiz: 1,
                 name: "Character 1",
                 image_url: "url1",
+                created_at: new Date("2023-01-01"),
             },
         ]);
         expect(result).toBe(true);
