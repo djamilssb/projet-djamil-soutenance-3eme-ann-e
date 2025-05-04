@@ -11,29 +11,11 @@
     }
 }
 
-/* Style pour le carré semi-transparent */
-.menu-overlay {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 40vw;
-  height: 50vh;
-  background: rgba(0, 0, 0, 0.5); /* Fond noir semi-transparent */
-  border-radius: 12px; /* Coins arrondis */
-  padding: 2rem; /* Espacement interne */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Ombre */
-}
 
-/* Style pour les flèches */
-.arrow {
-  color: white; /* Couleur blanche */
-  font-size: 1.5rem; /* Taille légèrement plus grande */
-  font-weight: bold;
-  text-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5); /* Contour léger pour la lisibilité */
-  transition: transform 0.2s ease;
-}
-
-button:hover .arrow {
-  transform: translateX(5px); /* Déplacement vers la droite au survol */
+/* Style pour le conteneur du menu */
+.menu-container {
+  background: rgba(0, 0, 0, 0.7); /* Fond noir semi-transparent */
+  border: 2px solid rgba(255, 255, 255, 0.2); /* Bordure subtile */
+  backdrop-filter: blur(0px); /* Pas de flou */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Ombre plus marquée */
 }

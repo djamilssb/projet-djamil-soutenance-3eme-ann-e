@@ -25,23 +25,21 @@ export default function Menu(): React.JSX.Element {
         />
 
         {/* Overlay de menu */}
-        <div className="menu-overlay">
-          <h2 className="text-white text-4xl font-bold mb-6">KidsTrotter</h2>
-
+        <div className="menu-container flex flex-col justify-center items-center w-[40vw] h-[60vh] bg-black bg-opacity-50 z-10 rounded-lg p-8 shadow-lg">
           <div className="text-white text-2xl flex flex-col space-y-6 text-center">
             <Link href="/quizz">
               <button className="bg-[var(--secondary-color)] hover:bg-[var(--hover-secondary)] text-white text-xl font-bold py-4 px-8 rounded flex items-center justify-between gap-4">
-                Démarrer un quizz <span className="arrow">➡️</span>
+                Démarrer un quizz <span>➡️</span>
               </button>
             </Link>
             <Link href="/create">
               <button className="bg-[var(--secondary-color)] hover:bg-[var(--hover-secondary)] text-white text-xl font-bold py-4 px-8 rounded flex items-center justify-between gap-4">
-                Créer un quizz <span className="arrow">➡️</span>
+                Créer un quizz <span>➡️</span>
               </button>
             </Link>
             <Link href="/about">
               <button className="bg-[var(--secondary-color)] hover:bg-[var(--hover-secondary)] text-white text-xl font-bold py-4 px-8 rounded flex items-center justify-between gap-4">
-                Qu'est-ce que KidsTrotter ? <span className="arrow">➡️</span>
+                Qu'est-ce que KidsTrotter ? <span>➡️</span>
               </button>
             </Link>
           </div>
