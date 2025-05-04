@@ -25,8 +25,22 @@ describe("kt_organizationsController", () => {
     describe("getAllOrganizations", () => {
         it("should return status 200 and a list of organizations", async () => {
             const mockOrganizations = [
-                new kt_organizations({ id: 1, name: "Org 1", email: "org1@example.com" }),
-                new kt_organizations({ id: 2, name: "Org 2", email: "org2@example.com" }),
+                new kt_organizations({
+                    id: 1,
+                    name: "Org 1",
+                    email: "org1@example.com",
+                    phone_number: "123456789",
+                    about_us: "About Org 1",
+                    created_at: new Date("2023-01-01"),
+                }),
+                new kt_organizations({
+                    id: 2,
+                    name: "Org 2",
+                    email: "org2@example.com",
+                    phone_number: "987654321",
+                    about_us: "About Org 2",
+                    created_at: new Date("2023-02-01"),
+                }),
             ];
             service.getAll.mockResolvedValue(mockOrganizations);
 
@@ -53,7 +67,14 @@ describe("kt_organizationsController", () => {
     // GET BY ID
     describe("getOrganizationById", () => {
         it("should return status 200 and an organization", async () => {
-            const mockOrganization = new kt_organizations({ id: 1, name: "Org 1", email: "org1@example.com" });
+            const mockOrganization = new kt_organizations({
+                id: 1,
+                name: "Org 1",
+                email: "org1@example.com",
+                phone_number: "123456789",
+                about_us: "About Org 1",
+                created_at: new Date("2023-01-01"),
+            });
             service.getById.mockResolvedValue(mockOrganization);
 
             const req = {} as NextRequest;
@@ -101,7 +122,13 @@ describe("kt_organizationsController", () => {
             service.create.mockResolvedValue(true);
 
             const req = {} as NextRequest;
-            const body = new kt_organizations({ name: "Org 1", email: "org1@example.com" });
+            const body = new kt_organizations({
+                name: "Org 1",
+                email: "org1@example.com",
+                phone_number: "123456789",
+                about_us: "About Org 1",
+                created_at: new Date("2023-01-01"),
+            });
             const response = await controller.createOrganization(req, body);
 
             expect(service.create).toHaveBeenCalledWith(body);
@@ -122,7 +149,13 @@ describe("kt_organizationsController", () => {
             service.create.mockRejectedValue(new Error("Service error"));
 
             const req = {} as NextRequest;
-            const body = new kt_organizations({ name: "Org 1", email: "org1@example.com" });
+            const body = new kt_organizations({
+                name: "Org 1",
+                email: "org1@example.com",
+                phone_number: "123456789",
+                about_us: "About Org 1",
+                created_at: new Date("2023-01-01"),
+            });
             const response = await controller.createOrganization(req, body);
 
             expect(service.create).toHaveBeenCalledWith(body);
