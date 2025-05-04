@@ -10,3 +10,8 @@
         transform: translateY(0px);
     }
 }
+
+/* Masquer la navbar uniquement sur la page choice-character */
+body > .choice-character-page header {
+  display: none !important;
+}
