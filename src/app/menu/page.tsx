@@ -16,9 +16,9 @@ export default function Menu(): React.JSX.Element {
       <h1 hidden>Menu Principal</h1>
 
       <section className="flex items-center justify-center h-[90vh] relative">
-
         {/* Overlay de menu */}
-        <div className="menu-container flex flex-col justify-center items-center w-[40vw] h-[60vh] bg-black bg-opacity-50 z-10 rounded-lg p-8 shadow-lg">
+        <div className="menu-container flex flex-col justify-center items-center w-[40vw] h-auto bg-black bg-opacity-50 z-10 rounded-lg p-8 shadow-lg">
+          <h2 className="text-white text-4xl font-bold mb-8">KidsTrotter</h2>
           <div className="text-white text-2xl flex flex-col space-y-6 text-center">
             <Link href="/quizz">
               <button className="bg-[var(--secondary-color)] hover:bg-[var(--hover-secondary)] text-white text-xl font-bold py-4 px-8 rounded flex items-center justify-between gap-4">
