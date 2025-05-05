@@ -2,6 +2,7 @@ import Auth from "../models/Auth";
 import Users from "../models/Users";
 import AuthRepository from "../repositories/AuthRepository";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 class AuthService {
     private authRepository: AuthRepository;
@@ -10,7 +11,7 @@ class AuthService {
         this.authRepository = new AuthRepository();
     }
 
-    public async signIn(data: Auth): Promise<boolean> {
+    public async signIn(data: Auth): Promise<{ token: string } | null> {
         const user = await this.authRepository.getUserByEmail(data.getEmail());
 
         if (!user) {
@@ -19,15 +20,29 @@ class AuthService {
 
         if (data.getPassword()) {
             const isValidPassword = await bcrypt.compare(data.getPassword()!, user.password!);
-            if (isValidPassword) return true;
+            if (isValidPassword) {
+                const token = jwt.sign(
+                    { id: user.id },
+                    process.env.JWT_SECRET!,
+                    { expiresIn: "3h" }
+                );
+                return { token };
+            }
         }
 
         if (data.getPasswordKids()) {
             const isValidKidsPassword = await bcrypt.compare(data.getPasswordKids()!, user.password_kids!);
-            if (isValidKidsPassword) return true;
+            if (isValidKidsPassword) {
+                const token = jwt.sign(
+                    { id: user.id, isKidsAccount: true },
+                    process.env.JWT_SECRET!,
+                    { expiresIn: "3h" }
+                );
+                return { token };
+            }
         }
 
-        return false;
+        return null;
     }
 
     public async signUp(user: Partial<Users>): Promise<boolean> {

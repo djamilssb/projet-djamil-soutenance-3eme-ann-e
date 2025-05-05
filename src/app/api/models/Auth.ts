@@ -2,14 +2,12 @@ type AuthProps = {
     email: string;
     password?: string;
     password_kids?: string;
-    token?: string;
 }
 
 class Auth {
     private email: string;
     private password?: string;
     private password_kids?: string;
-    private token?: string;
 
     constructor(props: AuthProps) {
         if (!props.email) {
@@ -27,7 +25,6 @@ class Auth {
         this.email = props.email;
         this.password = props.password;
         this.password_kids = props.password_kids;
-        this.token = props.token;
     }
 
     public getEmail(): string {
@@ -40,10 +37,6 @@ class Auth {
 
     public getPasswordKids(): string | undefined {
         return this.password_kids;
-    };
-
-    public getToken(): string | undefined {
-        return this.token;
     };
 
     public setEmail(email: string): void {
@@ -65,10 +58,6 @@ class Auth {
             throw new Error("Cannot set password_kids when password exists");
         }
         this.password_kids = password_kids;
-    };
-
-    public setToken(token: string): void {
-        this.token = token;
     };
 };
 
