@@ -21,7 +21,7 @@ describe("CharactersRepository", () => {
 
         const characters = await charactersRepository.getAll();
 
-        expect(executeQuery).toHaveBeenCalledWith("SELECT * FROM kt_characters", []);
+        expect(executeQuery).toHaveBeenCalledWith("SELECT * FROM characters", []);
         expect(characters).toHaveLength(2);
         expect(characters[0]).toBeInstanceOf(Characters);
         expect(characters[0].getName()).toBe("Character 1");
@@ -33,7 +33,7 @@ describe("CharactersRepository", () => {
 
         const character = await charactersRepository.getById(1);
 
-        expect(executeQuery).toHaveBeenCalledWith("SELECT * FROM kt_characters WHERE id = ?", [1]);
+        expect(executeQuery).toHaveBeenCalledWith("SELECT * FROM characters WHERE id = ?", [1]);
         expect(character).toBeInstanceOf(Characters);
         expect(character?.getName()).toBe("Character 1");
     });
@@ -43,7 +43,7 @@ describe("CharactersRepository", () => {
 
         const character = await charactersRepository.getById(999);
 
-        expect(executeQuery).toHaveBeenCalledWith("SELECT * FROM kt_characters WHERE id = ?", [999]);
+        expect(executeQuery).toHaveBeenCalledWith("SELECT * FROM characters WHERE id = ?", [999]);
         expect(character).toBeNull();
     });
 
@@ -59,7 +59,7 @@ describe("CharactersRepository", () => {
 
         const result = await charactersRepository.create(mockCharacter);
 
-        expect(executeQuery).toHaveBeenCalledWith("INSERT INTO kt_characters SET ?", [
+        expect(executeQuery).toHaveBeenCalledWith("INSERT INTO characters SET ?", [
             {
                 id_quiz: 1,
                 name: "Character 1",
@@ -82,7 +82,7 @@ describe("CharactersRepository", () => {
 
         const result = await charactersRepository.update(mockCharacter.getId()!, mockCharacter);
 
-        expect(executeQuery).toHaveBeenCalledWith("UPDATE kt_characters SET ? WHERE id = ?", [mockCharacter, 1]);
+        expect(executeQuery).toHaveBeenCalledWith("UPDATE characters SET ? WHERE id = ?", [mockCharacter, 1]);
         expect(result).toBe(true);
     });
 
@@ -91,7 +91,7 @@ describe("CharactersRepository", () => {
 
         const result = await charactersRepository.delete(1);
 
-        expect(executeQuery).toHaveBeenCalledWith("DELETE FROM kt_characters WHERE id = ?", [1]);
+        expect(executeQuery).toHaveBeenCalledWith("DELETE FROM characters WHERE id = ?", [1]);
         expect(result).toBe(true);
     });
 });

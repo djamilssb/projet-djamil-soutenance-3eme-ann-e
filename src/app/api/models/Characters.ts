@@ -5,8 +5,9 @@ class Characters {
     image_url?: string;
     created_at?: Date;
 
-    constructor(data?: Partial<Characters>) {
+    constructor(data: Partial<Characters>) {
         Object.assign(this, data);
+        this.created_at = new Date(data.created_at || new Date());
     }
 
     public getId(): number | undefined {
@@ -47,6 +48,16 @@ class Characters {
 
     public setCreatedAt(created_at: Date): void {
         this.created_at = created_at;
+    }
+
+    toJSON() {
+        return {
+            id: this.id,
+            id_quiz: this.id_quiz,
+            name: this.name,
+            image_url: this.image_url,
+            created_at: this.created_at?.toISOString(),
+        };
     }
 }
 

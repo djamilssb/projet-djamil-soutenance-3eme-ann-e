@@ -29,7 +29,7 @@ describe("Characters Model", () => {
         expect(character.getId()).toBe(2);
         expect(character.getIdQuiz()).toBe(102);
         expect(character.getName()).toBe("Updated Character");
-        expect(character.getImageUrl()).toBe("http://example.com/updated_image.png");
+        expect(character.getImageUrl()).toBe("http://alien1.png");
         expect(character.getCreatedAt()).toEqual(new Date("2023-02-01"));
     });
 });

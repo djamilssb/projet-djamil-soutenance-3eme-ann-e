@@ -9,14 +9,12 @@ class CharactersController {
         this.charactersService = new CharactersService();
     }
 
-    public async getAllCharacters(req: NextRequest): Promise<NextResponse> {
-        try {
-            const characters = await this.charactersService.getAll();
-            return NextResponse.json(characters, { status: 200 });
-        } catch (error) {
-            console.error('Failed to retrieve all characters:', error);
-            return NextResponse.json({ message: 'Failed to retrieve characters.' }, { status: 500 });
-        }
+    public async getAllCharacters(req: NextRequest): Promise<Response> {
+        const characters = await this.charactersService.getAll();
+        return new Response(JSON.stringify(characters.map((char) => char.toJSON())), {
+            status: 200,
+            headers: { "Content-Type": "application/json" },
+        });
     }
 
     public async getCharacterById(req: NextRequest, id: number): Promise<NextResponse> {
