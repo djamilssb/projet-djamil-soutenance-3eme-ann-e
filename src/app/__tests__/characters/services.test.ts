@@ -42,5 +42,4 @@ describe("CharactersService", () => {
     expect(result[0].getCreatedAt()).toEqual(new Date("2023-01-01"));
   });
 
-  // Ajoutez d'autres tests ici...
 });

@@ -25,8 +25,8 @@ describe("CharactersController", () => {
     describe("getAllCharacters", () => {
         it("should return status 200 and a list of characters", async () => {
             const mockCharacters = [
-                new Characters({ id: 1, id_quiz: 101, name: "Character 1", image_url: "url1", created_at: "2023-01-01T00:00:00.000Z" }),
-                new Characters({ id: 2, id_quiz: 102, name: "Character 2", image_url: "url2", created_at: "2023-02-01T00:00:00.000Z" }),
+                new Characters({ id: 1, id_quiz: 101, name: "Character 1", image_url: "url1", created_at: new Date("2023-01-01T00:00:00.000Z") }),
+                new Characters({ id: 2, id_quiz: 102, name: "Character 2", image_url: "url2", created_at: new Date("2023-02-01T00:00:00.000Z") }),
             ];
             service.getAll.mockResolvedValue(mockCharacters); // Utilise des instances de Characters
 

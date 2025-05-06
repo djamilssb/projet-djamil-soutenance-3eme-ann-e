@@ -3,27 +3,25 @@ import CharacterRepository from "../repositories/CharactersRepository";
 
 class CharactersService {
 
-    private characterRepository: CharacterRepository;
+    private charactersRepository: CharacterRepository;
 
-    constructor() {
-        this.characterRepository = new CharacterRepository();
+  constructor() {
+    this.charactersRepository = new CharacterRepository();
+  }
+
+  async getAll(): Promise<Characters[]> {
+    try {
+      const characters = await this.charactersRepository.getAll();
+    return characters
+    ;
+    } catch (error) {
+      throw new Error("Erreur lors de la récupération des personnages");
     }
-
-    public async getAll(): Promise<Characters[]> {
-        try {
-            const rows = await this.characterRepository.getAll();
-            if (!rows) throw new Error("Error while fetching characters");
-
-            return rows;
-        } catch (e) {
-            console.error("Error in getAll:", e);
-            throw new Error("Erreur lors de la récupération des personnages");
-        }
-    }
+  }
 
     public async getById(id: number): Promise<Characters | null> {
         try {
-            const character = await this.characterRepository.getById(id);
+            const character = await this.charactersRepository.getById(id);
             if (!character) throw new Error("Character not found");
 
             return character;
@@ -39,7 +37,7 @@ class CharactersService {
                 throw new Error("Incomplete character data");
             }
 
-            const created = await this.characterRepository.create(character);
+            const created = await this.charactersRepository.create(character);
             if (!created) throw new Error("Error while creating the character");
 
             return created;
@@ -55,7 +53,7 @@ class CharactersService {
                 throw new Error("Invalid character ID");
             }
 
-            const updated = await this.characterRepository.update(id, character);
+            const updated = await this.charactersRepository.update(id, character);
             if (!updated) throw new Error("Error while updating the character");
 
             return updated;
@@ -71,7 +69,7 @@ class CharactersService {
                 throw new Error("Invalid character ID");
             }
 
-            const deleted = await this.characterRepository.delete(id);
+            const deleted = await this.charactersRepository.delete(id);
             if (!deleted) throw new Error("Error while deleting the character");
 
             return deleted;

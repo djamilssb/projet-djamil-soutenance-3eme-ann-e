@@ -18,7 +18,7 @@ describe("Characters Model", () => {
     });
 
     it("should correctly set properties", () => {
-        const character = new Characters();
+        const character = new Characters({});
 
         character.setId(2);
         character.setIdQuiz(102);
