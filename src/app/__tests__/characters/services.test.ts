@@ -42,4 +42,39 @@ describe("CharactersService", () => {
     expect(result[0].getCreatedAt()).toEqual(new Date("2023-01-01"));
   });
 
+  it("should throw an error when getAll fails", async () => {
+    repository.getAll.mockRejectedValue(new Error("Database error"));
+
+    await expect(service.getAll()).rejects.toThrow("Erreur lors de la récupération des personnages");
+    expect(repository.getAll).toHaveBeenCalled();
+  });
+
+  it("should throw an error when getById fails", async () => {
+    repository.getById.mockRejectedValue(new Error("Database error"));
+
+    await expect(service.getById(1)).rejects.toThrow("Erreur lors de la récupération du personnage");
+    expect(repository.getById).toHaveBeenCalledWith(1);
+  });
+
+  it("should throw an error when create fails", async () => {
+    repository.create.mockRejectedValue(new Error("Database error"));
+
+    const character = new Characters({ id_quiz: 101, name: "Character 1", image_url: "url1" });
+    await expect(service.create(character)).rejects.toThrow("Erreur lors de la création du personnage");
+    expect(repository.create).toHaveBeenCalledWith(character);
+  });
+
+  it("should throw an error when update fails", async () => {
+    repository.update.mockRejectedValue(new Error("Database error"));
+
+    await expect(service.update(1, { name: "Updated Character" })).rejects.toThrow("Erreur lors de la mise à jour du personnage");
+    expect(repository.update).toHaveBeenCalledWith(1, { name: "Updated Character" });
+  });
+
+  it("should throw an error when delete fails", async () => {
+    repository.delete.mockRejectedValue(new Error("Database error"));
+
+    await expect(service.delete(1)).rejects.toThrow("Erreur lors de la suppression du personnage");
+    expect(repository.delete).toHaveBeenCalledWith(1);
+  });
 });
