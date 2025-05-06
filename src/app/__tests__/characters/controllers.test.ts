@@ -43,6 +43,17 @@ describe("CharactersController", () => {
                 created_at: character.created_at?.toISOString() ?? null,
             }))); // Compare plain objects
         });
+
+        it("should return status 500 if service fails", async () => {
+            service.getAll.mockRejectedValue(new Error("Service error"));
+
+            const req = {} as NextRequest;
+            const response = await controller.getAllCharacters(req);
+
+            expect(service.getAll).toHaveBeenCalled();
+            expect(response.status).toBe(500);
+            expect(await response.json()).toEqual({ message: "Failed to retrieve characters." });
+        });
     });
 
     it("should return status 404 if character is not found", async () => {
@@ -54,6 +65,17 @@ describe("CharactersController", () => {
         expect(service.getById).toHaveBeenCalledWith(999);
         expect(response.status).toBe(404);
         expect(await response.json()).toEqual({ message: "Character not found." });
+    });
+
+    it("should return status 500 if service fails", async () => {
+        service.getById.mockRejectedValue(new Error("Service error"));
+
+        const req = {} as NextRequest;
+        const response = await controller.getCharacterById(req, 1);
+
+        expect(service.getById).toHaveBeenCalledWith(1);
+        expect(response.status).toBe(500);
+        expect(await response.json()).toEqual({ message: "Failed to retrieve the character." });
     });
 
     // CREATE
@@ -73,6 +95,15 @@ describe("CharactersController", () => {
         it("should return status 400 for invalid data", async () => {
             const req = {} as NextRequest;
             const body = { name: "" };
+            const response = await controller.createCharacter(req, body);
+
+            expect(response.status).toBe(400);
+            expect(await response.json()).toEqual({ message: "Missing character data." });
+        });
+
+        it("should return status 400 for missing character data", async () => {
+            const req = {} as NextRequest;
+            const body = {};
             const response = await controller.createCharacter(req, body);
 
             expect(response.status).toBe(400);
@@ -115,11 +146,20 @@ describe("CharactersController", () => {
             expect(await response.json()).toEqual({ message: "Invalid character ID." });
         });
 
+        it("should return status 400 for missing update data", async () => {
+            const req = {} as NextRequest;
+            const body = {};
+            const response = await controller.updateCharacter(req, 1, body);
+
+            expect(response.status).toBe(400);
+            expect(await response.json()).toEqual({ message: "Missing update data." });
+        });
+
         it("should return status 500 if service fails", async () => {
             service.update.mockRejectedValue(new Error("Service error"));
 
             const req = {} as NextRequest;
-            const body = { name: "Updated Character", created_at: new Date("2023-02-01") };
+            const body = { name: "Updated Character" };
             const response = await controller.updateCharacter(req, 1, body);
 
             expect(service.update).toHaveBeenCalledWith(1, body);

@@ -10,11 +10,13 @@ class CharactersController {
     }
 
     public async getAllCharacters(req: NextRequest): Promise<Response> {
-        const characters = await this.charactersService.getAll();
-        return new Response(JSON.stringify(characters.map((char) => char.toJSON())), {
-            status: 200,
-            headers: { "Content-Type": "application/json" },
-        });
+        try {
+            const characters = await this.charactersService.getAll();
+            return new Response(JSON.stringify(characters), { status: 200 });
+        } catch (error) {
+            console.error("Error retrieving characters:", error);
+            return new Response(JSON.stringify({ message: "Failed to retrieve characters." }), { status: 500 });
+        }
     }
 
     public async getCharacterById(req: NextRequest, id: number): Promise<NextResponse> {
@@ -61,6 +63,10 @@ class CharactersController {
 
         if (isNaN(characterId)) {
             return NextResponse.json({ message: 'Invalid character ID.' }, { status: 400 });
+        }
+
+        if (!newData || Object.keys(newData).length === 0) {
+            return NextResponse.json({ message: "Missing update data." }, { status: 400 });
         }
 
         try {
