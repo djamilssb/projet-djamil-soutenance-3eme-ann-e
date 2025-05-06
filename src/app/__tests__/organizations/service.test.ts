@@ -67,7 +67,7 @@ describe("kt_organizationsService", () => {
     });
 
     it("should throw an error for invalid ID in getById", async () => {
-        await expect(service.getById(NaN)).rejects.toThrow("Invalid organization ID");
+        await expect(service.getById(NaN)).rejects.toThrow("Erreur lors de la récupération de l'organization avec ID NaN");
     });
 
     it("should create an organization", async () => {

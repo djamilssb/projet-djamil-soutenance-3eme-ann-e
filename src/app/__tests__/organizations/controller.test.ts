@@ -49,7 +49,14 @@ describe("kt_organizationsController", () => {
 
             expect(service.getAll).toHaveBeenCalled();
             expect(response.status).toBe(200);
-            expect(await response.json()).toEqual(mockOrganizations);
+            expect(await response.json()).toEqual(mockOrganizations.map(org => ({
+                id: org.id,
+                name: org.name,
+                email: org.email,
+                phone_number: org.phone_number,
+                about_us: org.about_us,
+                created_at: org.created_at?.toISOString() ?? null,
+            })));
         });
 
         it("should return status 500 if service fails", async () => {
@@ -82,7 +89,10 @@ describe("kt_organizationsController", () => {
 
             expect(service.getById).toHaveBeenCalledWith(1);
             expect(response.status).toBe(200);
-            expect(await response.json()).toEqual(mockOrganization);
+            expect(await response.json()).toEqual({
+                ...mockOrganization,
+                created_at: mockOrganization.created_at?.toISOString() ?? null,
+            });
         });
 
         it("should return status 404 if organization is not found", async () => {
