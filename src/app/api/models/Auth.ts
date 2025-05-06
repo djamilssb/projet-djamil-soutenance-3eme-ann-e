@@ -2,7 +2,7 @@ type AuthProps = {
     email: string;
     password?: string;
     password_kids?: string;
-}
+};
 
 class Auth {
     private email: string;
@@ -35,7 +35,7 @@ class Auth {
         return this.password;
     };
 
-    public getPasswordKids(): string | undefined {
+    public getPassword_Kids(): string | undefined {
         return this.password_kids;
     };
 
@@ -53,7 +53,7 @@ class Auth {
         this.password = password;
     };
 
-    public setpassword_kids(password_kids: string): void {
+    public setPassword_kids(password_kids: string): void {
         if (this.password) {
             throw new Error("Cannot set password_kids when password exists");
         }
