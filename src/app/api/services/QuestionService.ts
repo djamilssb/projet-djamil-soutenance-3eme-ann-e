@@ -5,8 +5,8 @@ class QuestionService {
 
     private questionRepository: QuestionRepository;
 
-    constructor() {
-        this.questionRepository = new QuestionRepository();
+    constructor(repository?: QuestionRepository) {
+        this.questionRepository = repository ?? new QuestionRepository();
     }
 
     public async getAll(): Promise<Question[]> {
@@ -36,7 +36,7 @@ class QuestionService {
     public async create(question: Partial<Question>): Promise<boolean> {
         try {
 
-            if (!question.idQuizz || !question.getOrderIndex || !question.content?.trim()) throw new Error("Données de la question incomplètes");
+            if (!question.idQuizz || !question.orderIndex || !question.content?.trim()) throw new Error("Données de la question incomplètes");
 
             const createdResult = await this.questionRepository.create(question);
 
@@ -89,10 +89,9 @@ class QuestionService {
         try {
             const rows = await this.questionRepository.getQuestionsByQuizz(idQuizz);
             if (rows.length === 0) return [];
-
             return rows;
         } catch(e) {
-            console.error("Error in filterQuestionsByQuizz:", e);
+            console.error("Error in getQuestionsByQuizz:", e);
             throw new Error(`Erreur lors de la récupération des questions de questionnaire avec ID ${idQuizz}`);
         }
     }
