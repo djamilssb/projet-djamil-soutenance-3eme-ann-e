@@ -11,13 +11,15 @@ class AuthService {
         this.authRepository = new AuthRepository();
     }
 
-    public async signIn(data: Auth): Promise<{ token: string } | null> {
+    public async signIn(data: Auth): Promise<{ token: string; id: string; role: string } | null> {
         const user = await this.authRepository.getUserByEmail(data.getEmail());
-
+    
         if (!user) {
             throw new Error("Invalid credentials");
         }
 
+        const idSession = user.id!.toString();
+    
         if (data.getPassword()) {
             const isValidPassword = await bcrypt.compare(data.getPassword()!, user.password!);
             if (isValidPassword) {
@@ -26,22 +28,22 @@ class AuthService {
                     process.env.JWT_SECRET!,
                     { expiresIn: "3h" }
                 );
-                return { token };
+                return { token, id: idSession, role: user.role! };
             }
         }
-
+    
         if (data.getPassword_Kids()) {
             const isValidKidsPassword = await bcrypt.compare(data.getPassword_Kids()!, user.password_kids!);
             if (isValidKidsPassword) {
                 const token = jwt.sign(
-                    { id: user.id, isKidsAccount: true },
+                    { id: user.id },
                     process.env.JWT_SECRET!,
                     { expiresIn: "3h" }
                 );
-                return { token };
+                return { token, id: idSession, role: user.role! };
             }
         }
-
+    
         return null;
     }
 
