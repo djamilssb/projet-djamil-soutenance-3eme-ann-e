@@ -1,5 +1,6 @@
-import { NextResponse } from "next/server";
 import AuthService from "../services/AuthService";
+import jwt from "jsonwebtoken";
+import { NextResponse } from "next/server";
 import Auth from "../models/Auth";
 import Users from "../models/Users";
 
@@ -13,19 +14,24 @@ class AuthController {
     public async signIn(body: Auth): Promise<NextResponse> {
         try {
             const result = await this.authService.signIn(body);
-
+    
             if (result) {
                 const response = NextResponse.json(
-                    { message: "Authentication successful" },
+                    {
+                        message: "Authentication successful",
+                        id: result.id,
+                        role: result.role,
+                    },
                     { status: 200 }
                 );
-
+    
                 response.cookies.set("token", result.token, {
-                    httpOnly: true, // Empêche l'accès via JavaScript
-                    secure: true,   // Assure que le cookie est envoyé uniquement via HTTPS
-                    sameSite: "strict", // Empêche les attaques CSRF
-                    maxAge: 3 * 60 * 60     // Durée de vie du cookie (en secondes)
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === "production",
+                    sameSite: "strict",
+                    maxAge: 3 * 60 * 60,
                 });
+    
                 return response;
             } else {
                 return NextResponse.json(

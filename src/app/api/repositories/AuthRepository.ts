@@ -7,7 +7,7 @@ class AuthRepository {
     public async getUserByEmail(email: string): Promise<Users | null> {
         try {
             const rows = await executeQuery(`
-                SELECT u.email, u.password, u.password_kids
+                SELECT u.id, u.email, u.password, u.password_kids, u.role
                 FROM kt_users u
                 WHERE u.email = ?
             `, [email]);

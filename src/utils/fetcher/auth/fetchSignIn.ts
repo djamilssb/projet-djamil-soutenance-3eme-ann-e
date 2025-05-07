@@ -10,12 +10,19 @@ const fetchSignIn = async (data: Auth): Promise<boolean> => {
     })
     .then(async (res: Response) => {
         if (!res.ok) {
-            throw new Error('Network response was not ok');
-        }
+            if (res.status === 401) {
+                localStorage.removeItem('user_id');
+                localStorage.removeItem('role');
+                console.error('Session expired or invalid credentials');
+            }
+            throw new Error('Network response failed');
+            }
         const json = await res.json();
 
         if (json.message.includes('successful')) {
             console.log('Authentication successful');
+            localStorage.setItem('user_id', json.id);
+            localStorage.setItem('role', json.role);
             return true;
         } else {
             throw new Error('Authentication failed');
