@@ -20,7 +20,12 @@ class AuthController {
                     { status: 200 }
                 );
 
-                response.headers.set("Authorization", `Bearer ${result.token}`);
+                response.cookies.set("token", result.token, {
+                    httpOnly: true, // Empêche l'accès via JavaScript
+                    secure: true,   // Assure que le cookie est envoyé uniquement via HTTPS
+                    sameSite: "strict", // Empêche les attaques CSRF
+                    maxAge: 3 * 60 * 60     // Durée de vie du cookie (en secondes)
+                });
                 return response;
             } else {
                 return NextResponse.json(
