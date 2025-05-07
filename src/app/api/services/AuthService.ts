@@ -30,8 +30,8 @@ class AuthService {
             }
         }
 
-        if (data.getPasswordKids()) {
-            const isValidKidsPassword = await bcrypt.compare(data.getPasswordKids()!, user.password_kids!);
+        if (data.getPassword_Kids()) {
+            const isValidKidsPassword = await bcrypt.compare(data.getPassword_Kids()!, user.password_kids!);
             if (isValidKidsPassword) {
                 const token = jwt.sign(
                     { id: user.id, isKidsAccount: true },

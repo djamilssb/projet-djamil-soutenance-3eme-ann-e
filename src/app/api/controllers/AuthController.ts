@@ -50,7 +50,7 @@ class AuthController {
             if (!created) {
                 return NextResponse.json({ message: "Failed to create the user." }, { status: 400 });
             }
-            return NextResponse.json({ message: "User successfully created." }, { status: 201 });
+            return NextResponse.json({ message: "User create successful." }, { status: 201 });
         } catch (error) {
             console.error("Failed to create user:", error);
             return NextResponse.json({ message: "Failed to create the user." }, { status: 500 });
