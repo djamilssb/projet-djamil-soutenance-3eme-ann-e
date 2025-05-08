@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import QuestionController from "../controllers/QuestionController";
 
-const questionController = new QuestionController;
+const questionController = new QuestionController();
 
 export async function GET(req: NextRequest) {
     return questionController.getAllQuestions(req);
