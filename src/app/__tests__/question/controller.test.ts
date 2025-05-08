@@ -203,4 +203,36 @@ describe("QuestionController", () => {
             expect(await response.json()).toEqual({ message: "Impossible de supprimer la question." });
         });
     });
+
+    // GET QUESTIONS BY QUIZZ
+    describe("getQuestionsByQuizz", () => {
+        it("should return status 200 and a list of questions", async () => {
+            const qOne: Question = new Question({ id: 1, idQuizz: 1, orderIndex: 1, content: "Question 1" });
+            const qTwo: Question = new Question({ id: 2, idQuizz: 1, orderIndex: 2, content: "Question 2" });
+            const quizzId: number = 1;
+
+            questionService.getQuestionsByQuizz.mockResolvedValue([qOne, qTwo]);
+
+            const req = {} as NextRequest;
+            const response = await questionController.getQuestionsByQuizz(req, quizzId);
+
+            expect(questionService.getQuestionsByQuizz).toHaveBeenCalled();
+            expect(response.status).toBe(200);
+            expect(await response.json()).toEqual([
+                qOne,
+                qTwo
+            ]);
+        });
+
+        it("should return status 500 if service fails", async () => {
+            questionService.getQuestionsByQuizz.mockRejectedValue(new Error("Service error"));
+
+            const req = {} as NextRequest;
+            const response = await questionController.getQuestionsByQuizz(req, 1);
+
+            expect(questionService.getQuestionsByQuizz).toHaveBeenCalled();
+            expect(response.status).toBe(500);
+            expect(await response.json()).toEqual({ message: "Impossible de récupérer les questions." });
+        });
+    });
 });
