@@ -6,7 +6,8 @@ import Image from "next/image";
 export function Navbar(): React.JSX.Element | null {
   const pathname = usePathname();
 
-  const hideNavbarOn = ["/choice-quiz"];
+  // Pages où le Navbar doit être masqué
+  const hideNavbarOn = ["/choice-character"];
 
   if (hideNavbarOn.includes(pathname)) {
     return null;
