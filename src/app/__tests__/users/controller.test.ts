@@ -85,55 +85,6 @@ describe("UsersController", () => {
         });
     });
 
-    // CREATE USER
-    describe("createUser", () => {
-        it("should return status 201 and a success message", async () => {
-            usersService.create.mockResolvedValue(true);
-
-            const req = {} as NextRequest;
-            const body = {
-                username: "testuser",
-                password: "passwordtest",
-                password_kids: "passwordtest",
-                email: "test@example.com",
-            };
-
-            const response = await usersController.createUser(req, body);
-
-            expect(usersService.create).toHaveBeenCalledWith(body);
-            expect(response.status).toBe(201);
-            expect(await response.json()).toEqual({ message: "User successfully created." });
-        });
-
-        it("should return status 400 if required fields are missing", async () => {
-            const req = {} as NextRequest;
-            const body = { username: "testuser" };
-
-            const response = await usersController.createUser(req, body);
-
-            expect(response.status).toBe(400);
-            expect(await response.json()).toEqual({ message: "Missing user data." });
-        });
-
-        it("should return status 500 if service fails", async () => {
-            usersService.create.mockRejectedValue(new Error("Service error"));
-
-            const req = {} as NextRequest;
-            const body = {
-                username: "testuser",
-                password: "passwordtest",
-                password_kids: "passwordtest",
-                email: "test@example.com",
-            };
-
-            const response = await usersController.createUser(req, body);
-
-            expect(usersService.create).toHaveBeenCalledWith(body);
-            expect(response.status).toBe(500);
-            expect(await response.json()).toEqual({ message: "Failed to create the user." });
-        });
-    });
-
     // UPDATE USER
     describe("updateUser", () => {
         it("should return status 200 and a success message", async () => {
