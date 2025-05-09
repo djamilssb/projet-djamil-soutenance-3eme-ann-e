@@ -2,13 +2,15 @@
 
 import { usePathname } from "next/navigation";
 import Image from "next/image";
+import ArrowBack from "./ArrowBack";
 
 export function Navbar(): React.JSX.Element | null {
   const pathname = usePathname();
 
-  // Pages où le Navbar doit être masqué
-  const hideNavbarOn = ["/choice-character"];
+  // Liste des pages où la navbar ne doit pas apparaître
+  const hideNavbarOn = ["/choice-character", "/menu"];
 
+  // Si la page actuelle est dans la liste, ne pas afficher la navbar
   if (hideNavbarOn.includes(pathname)) {
     return null;
   }
