@@ -33,23 +33,6 @@ class UsersService {
         }
     }
 
-    public async create(user: Partial<Users>): Promise<boolean> {
-        try {
-            if (!user.username?.trim() || !user.password?.trim() || !user.password_kids?.trim() || !user.email?.trim()) {
-                throw new Error("Incomplete user data");
-            }
-
-            const created = await this.userRepository.create(user);
-
-            if (!created) throw new Error("Error while creating the user");
-
-            return created;
-        } catch (e) {
-            console.error("Error in create:", e);
-            throw new Error("Error while creating the user");
-        }
-    }
-
     public async update(id: number, user: Partial<Users>): Promise<boolean> {
         try {
             if (!id || isNaN(id)) {

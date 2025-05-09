@@ -15,16 +15,10 @@ class UserRepository {
     return new Users(row[0]);
   }
 
-  public async create(user: Partial<Users>): Promise<boolean> {
-    const newUser = user;
-    const result = await executeQuery("INSERT INTO kt_users SET ?", [newUser]);
-    return result.affectedRows > 0;
-  }
-
   public async update(id: number, user: Partial<Users>): Promise<boolean> {
 		const userId = id;
 		const updatedUser = user;
-    const result = await executeQuery("UPDATE Users SET ? WHERE id = ?", [
+    const result = await executeQuery("UPDATE kt_users SET ? WHERE id = ?", [
 			updatedUser,
       userId,
     ]);
