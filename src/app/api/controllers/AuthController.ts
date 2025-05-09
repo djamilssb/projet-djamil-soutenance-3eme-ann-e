@@ -27,7 +27,7 @@ class AuthController {
     
                 response.cookies.set("token", result.token, {
                     httpOnly: true,
-                    secure: process.env.NODE_ENV === "production",
+                    secure: true,
                     sameSite: "strict",
                     maxAge: 3 * 60 * 60,
                 });
