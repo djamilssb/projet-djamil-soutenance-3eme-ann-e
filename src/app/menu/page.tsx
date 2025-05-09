@@ -20,25 +20,43 @@ export default function Menu(): React.JSX.Element {
         <div className="menu-container flex flex-col justify-center items-center w-[40vw] h-auto bg-black bg-opacity-50 z-10 rounded-lg p-8 shadow-lg">
           {/* Logo de KidsTrotter */}
           <span
-          id="name-app"
-          className="text-[var(--tertiary-color)] bold"
-        >
-          KidsTrotter
-        </span>
+            id="name-app"
+            className="text-[var(--tertiary-color)] bold"
+          >
+            KidsTrotter
+          </span>
           <div className="text-white text-2xl flex flex-col space-y-6 text-center">
             <Link href="/quizz">
               <button className="bg-[var(--secondary-color)] hover:bg-[var(--hover-secondary)] text-white text-xl font-bold py-4 px-8 rounded flex items-center justify-between gap-4">
-                Démarrer un quizz <span>➡️</span>
+                Démarrer un quizz
+                <Image
+                  src="/Circled Right.png"
+                  alt="Flèche circulaire"
+                  width={24}
+                  height={24}
+                />
               </button>
             </Link>
             <Link href="/create">
               <button className="bg-[var(--secondary-color)] hover:bg-[var(--hover-secondary)] text-white text-xl font-bold py-4 px-8 rounded flex items-center justify-between gap-4">
-                Créer un quizz <span>➡️</span>
+                Créer un quizz
+                <Image
+                  src="/Circled Right.png"
+                  alt="Flèche circulaire"
+                  width={24}
+                  height={24}
+                />
               </button>
             </Link>
             <Link href="/about">
               <button className="bg-[var(--secondary-color)] hover:bg-[var(--hover-secondary)] text-white text-xl font-bold py-4 px-8 rounded flex items-center justify-between gap-4">
-                Qu'est-ce que KidsTrotter ? <span>➡️</span>
+                Qu'est-ce que KidsTrotter ?
+                <Image
+                  src="/Circled Right.png"
+                  alt="Flèche circulaire"
+                  width={24}
+                  height={24}
+                />
               </button>
             </Link>
           </div>
