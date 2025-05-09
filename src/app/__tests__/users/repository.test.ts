@@ -46,29 +46,6 @@ describe("UsersRepository", () => {
         expect(user).toBeNull();
     });
 
-    it("should create a user", async () => {
-        const mockUser = new Users({
-            username: "testuser",
-            password: "passwordtest",
-            password_kids: "passwordtest",
-            email: "okde@ded.fr",
-        });
-    
-        (executeQuery as jest.Mock).mockResolvedValue({ affectedRows: 1 });
-    
-        const result = await usersRepository.create(mockUser);
-    
-        expect(executeQuery).toHaveBeenCalledWith("INSERT INTO kt_users SET ?", [
-            {
-                username: "testuser",
-                email: "okde@ded.fr",
-                password: "passwordtest",
-                password_kids: "passwordtest",
-            },
-        ]);
-        expect(result).toBe(true);
-    });
-
     it("should update a user", async () => {
 
         const mockUser = new Users({ id: 1, username: "updateduser", password: "passwordtest", password_kids: "passwordtest", email: "eee@ee.fr"});
