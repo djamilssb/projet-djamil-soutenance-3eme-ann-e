@@ -10,3 +10,7 @@
         transform: translateY(0px);
     }
 }
+
+body > .choice-quiz-page header {
+    display: none;
+  }

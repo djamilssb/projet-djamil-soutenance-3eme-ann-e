@@ -5,7 +5,6 @@ import Image from "next/image";
 export default function ChoixQuizzPage(): React.JSX.Element {
   return (
     <>
-      <h1>Choix du quizz</h1>
 
       <Link href="/home">
         <div className="absolute top-4 left-4 cursor-pointer flex items-center">
