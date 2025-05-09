@@ -29,9 +29,7 @@ export default function ChoiceCharacter(): React.JSX.Element {
           Choisir un personnage :
         </h2>
 
-        {/* Personnages */}
         <div className="flex flex-row gap-16">
-          {/* Personnage 1 */}
           <Link href="/character/1">
             <div className="cursor-pointer hover:scale-105 transition-transform">
               <Image
@@ -43,7 +41,6 @@ export default function ChoiceCharacter(): React.JSX.Element {
             </div>
           </Link>
 
-          {/* Personnage 2 */}
           <Link href="/character/2">
             <div className="cursor-pointer hover:scale-105 transition-transform">
               <Image
