@@ -37,4 +37,3 @@ export function Navbar(): React.JSX.Element | null {
     </nav>
   );
 }
-
