@@ -27,7 +27,7 @@ export default function Menu(): React.JSX.Element {
           </span>
           <div className="text-white text-2xl flex flex-col space-y-6 text-center">
             <Link href="/quizz">
-              <button className="bg-[var(--secondary-color)] hover:bg-[var(--hover-secondary)] text-white text-xl font-bold py-4 px-8 rounded flex items-center justify-between gap-4">
+              <button className="bg-[var(--secondary-color)] hover:bg-[var(--hover-secondary)] text-black text-xl font-bold py-4 px-8 rounded flex items-center justify-between gap-4">
                 Démarrer un quizz
                 <Image
                   src="/Circled Right.png"
@@ -38,7 +38,7 @@ export default function Menu(): React.JSX.Element {
               </button>
             </Link>
             <Link href="/create">
-              <button className="bg-[var(--secondary-color)] hover:bg-[var(--hover-secondary)] text-white text-xl font-bold py-4 px-8 rounded flex items-center justify-between gap-4">
+              <button className="bg-[var(--secondary-color)] hover:bg-[var(--hover-secondary)] text-black text-xl font-bold py-4 px-8 rounded flex items-center justify-between gap-4">
                 Créer un quizz
                 <Image
                   src="/Circled Right.png"
@@ -49,7 +49,7 @@ export default function Menu(): React.JSX.Element {
               </button>
             </Link>
             <Link href="/about">
-              <button className="bg-[var(--secondary-color)] hover:bg-[var(--hover-secondary)] text-white text-xl font-bold py-4 px-8 rounded flex items-center justify-between gap-4">
+              <button className="bg-[var(--secondary-color)] hover:bg-[var(--hover-secondary)] text-black text-xl font-bold py-4 px-8 rounded flex items-center justify-between gap-4">
                 Qu'est-ce que KidsTrotter ?
                 <Image
                   src="/Circled Right.png"
