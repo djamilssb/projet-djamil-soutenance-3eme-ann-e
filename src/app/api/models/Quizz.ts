@@ -6,7 +6,7 @@ class Quizz {
     description?: string;
     type?: string;
     nbr_questions?: number;
-    difficukty_level?: string;  // Note: there's a typo here from the original code
+    difficukty_level?: string;
     created_at?: Date;
     updated_at?: Date;
 
