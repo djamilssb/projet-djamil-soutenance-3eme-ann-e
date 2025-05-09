@@ -16,9 +16,7 @@ export default function Menu(): React.JSX.Element {
       <h1 hidden>Menu Principal</h1>
 
       <section className="flex items-center justify-center h-[90vh] relative">
-        {/* Overlay de menu */}
         <div className="menu-container flex flex-col justify-center items-center w-[40vw] h-auto bg-black bg-opacity-50 z-10 rounded-lg p-8 shadow-lg">
-          {/* Logo de KidsTrotter */}
           <span
             id="name-app"
             className="text-[var(--tertiary-color)] bold"
