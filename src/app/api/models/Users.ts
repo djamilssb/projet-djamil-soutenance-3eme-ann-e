@@ -7,7 +7,7 @@ class Users {
     role?: string;
     created_at?: Date;
 
-    constructor(data?: Partial<Users>) {
+    constructor(data: Partial<Users>) {
         Object.assign(this, data)
     };
 

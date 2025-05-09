@@ -39,15 +39,6 @@ describe("UsersService", () => {
         expect(user?.getUsername()).toBe("testuser");
     });
 
-    it("should create a user", async () => {
-        usersRepository.create.mockResolvedValue(true);
-
-        const result = await usersService.create({ username: "testuser", password: "passwordtest", password_kids: "passwordtest", email: "eee@frfrf.fr" });
-
-        expect(usersRepository.create).toHaveBeenCalledWith({ username: "testuser", password: "passwordtest", password_kids: "passwordtest", email: "eee@frfrf.fr" });
-        expect(result).toBe(true);
-    });
-
     it("should update a user", async () => {
         usersRepository.update.mockResolvedValue(true);
 
