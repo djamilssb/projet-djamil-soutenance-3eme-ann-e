@@ -11,7 +11,7 @@
     }
 }
 
-/* Masquer la navbar uniquement sur la page choice-character */
+/* Pour masquer le navbar sur la page choice-character */
 body > .choice-character-page header {
-  display: none !important;
+  display: none;
 }

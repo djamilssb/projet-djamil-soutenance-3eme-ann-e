@@ -2,6 +2,8 @@ import UsersRepository from "@/app/api/repositories/UsersRepository";
 import Users from "@/app/api/models/Users";
 import executeQuery from "@/utils/executeQuery";
 
+jest.mock("@/utils/executeQuery");
+
 describe("UsersRepository", () => {
     let usersRepository: UsersRepository;
 
