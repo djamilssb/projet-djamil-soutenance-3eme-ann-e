@@ -9,9 +9,8 @@ export const metadata: Metadata = {
 
 export default function ChoiceCharacter(): React.JSX.Element {
   return (
-    <>
+    <div>
       <h1 hidden>Choisir un personnage</h1>
-
       <section className="choice-character-page flex flex-col items-center justify-center h-[90vh] bg-cover bg-center relative">
         <Link href="/menu">
           <div className="absolute top-4 left-4 cursor-pointer flex items-center">
@@ -21,13 +20,11 @@ export default function ChoiceCharacter(): React.JSX.Element {
               viewBox="0 0 24 24"
               strokeWidth={2}
               stroke="currentColor"
-              className="w-6 h-6 text-white"
-            >
+              className="w-6 h-6 text-white">
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                d="M15 19l-7-7 7-7"
-              />
+                d="M15 19l-7-7 7-7"/>
             </svg>
           </div>
         </Link>
@@ -64,6 +61,6 @@ export default function ChoiceCharacter(): React.JSX.Element {
           </Link>
         </div>
       </section>
-    </>
+    </div>
   );
 }
