@@ -12,19 +12,6 @@ export default function ChoiceCharacter(): React.JSX.Element {
     <div>
       <h1 hidden>Choisir un personnage</h1>
       <section className="choice-character-page flex flex-col items-center justify-center h-[90vh] bg-cover bg-center relative">
-        <Link href="/menu">
-          <div className="absolute top-4 left-4 cursor-pointer flex items-center">
-            <Image
-              src="/Left 3.png"
-              alt="Flèche gauche"
-              width={40}
-              height={40}
-              className="w-10 h-10 transition-transform transform hover:scale-110 active:scale-95 active:brightness-75"
-            />
-          </div>
-        </Link>
-
-        {/* Titre */}
         <h2 className="text-white text-3xl font-bold mb-8">
           Choisir un personnage :
         </h2>
