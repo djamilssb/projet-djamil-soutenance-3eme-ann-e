@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import UsersService from "../services/UsersService";
 import Users from "../models/Users";
 
@@ -9,7 +9,7 @@ class UsersController {
         this.usersService = new UsersService();
     }
 
-    public async getAllUsers(req: NextRequest): Promise<NextResponse> {
+    public async getAll(): Promise<NextResponse> {
         try {
             const users = await this.usersService.getAll();
             return NextResponse.json(users, { status: 200 });
@@ -19,7 +19,7 @@ class UsersController {
         }
     }
 
-    public async getUserById(req: NextRequest, id: number): Promise<NextResponse> {
+    public async getById(id: number): Promise<NextResponse> {
         const userId: number = id;
 
         if (isNaN(userId)) {
@@ -38,7 +38,7 @@ class UsersController {
         }
     }
 
-    public async updateUser(req: NextRequest, id: number, newData: Partial<Users>): Promise<NextResponse> {
+    public async update(id: number, newData: Partial<Users>): Promise<NextResponse> {
         const userId = id;
         const userData = newData;
 
@@ -58,7 +58,7 @@ class UsersController {
         }
     }
 
-    public async deleteUser(req: NextRequest, id: number): Promise<NextResponse> {
+    public async delete(id: number): Promise<NextResponse> {
         const userId: number = id;
 
         if (isNaN(userId)) {

@@ -7,7 +7,7 @@ export async function GET(req: NextRequest, context: { params: Promise<{ id: str
     const id = await context.params.then((res) => res.id);
     const userId = parseInt(id, 10);
 
-    return await usersController.getUserById(req, userId);
+    return await usersController.getById(userId);
 }
 
 export async function PUT(req: NextRequest, context: { params: Promise<{ id: string }> }) {
@@ -15,12 +15,12 @@ export async function PUT(req: NextRequest, context: { params: Promise<{ id: str
     const userId = parseInt(id, 10);
     const newData = await req.json();
 
-    return await usersController.updateUser(req, userId, newData);
+    return await usersController.update(userId, newData);
 }
 
 export async function DELETE(req: NextRequest, context: { params: Promise<{ id: string }> }) {
     const id = await context.params.then((res) => res.id);
     const userId = parseInt(id, 10);
 
-    return await usersController.deleteUser(req, userId);
+    return await usersController.delete(userId);
 }
