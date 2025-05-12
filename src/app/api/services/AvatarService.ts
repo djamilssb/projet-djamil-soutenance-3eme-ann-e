@@ -1,3 +1,4 @@
+import Avatar from "../models/Avatar";
 import AvatarRepository from "../repositories/AvatarRepository";
 
 class AvatarService {
