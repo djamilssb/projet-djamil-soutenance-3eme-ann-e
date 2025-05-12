@@ -2,7 +2,6 @@
 
 import { usePathname } from "next/navigation";
 import Image from "next/image";
-import ArrowBack from "./ArrowBack";
 
 export function Navbar(): React.JSX.Element | null {
   const pathname = usePathname();
