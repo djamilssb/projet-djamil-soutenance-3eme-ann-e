@@ -2,6 +2,8 @@ import QuestionRepository from "@/app/api/repositories/QuestionRepository";
 import Question from "@/app/api/models/Question";
 import executeQuery from "@/utils/executeQuery";
 
+jest.mock("@/utils/executeQuery");
+
 describe("QuestionRepository", () => {
     let questionRepository: QuestionRepository;
 
