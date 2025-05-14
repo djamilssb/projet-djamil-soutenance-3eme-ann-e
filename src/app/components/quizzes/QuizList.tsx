@@ -25,7 +25,7 @@ export default function QuizList(): React.JSX.Element {
                 </div>
             </div>
             <div className="list-footer">
-                <Link href="/account/quizzes/create" className="big-btn">Créer un nouveau quizz</Link>
+                <Link href="/account/quizzes/create" className="btn big-btn">Créer un nouveau quizz</Link>
             </div>
         </div>
     );

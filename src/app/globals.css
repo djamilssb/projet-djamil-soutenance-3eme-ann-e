@@ -83,15 +83,17 @@ main {
 .link-btn:hover {
   background: var(--hover-secondary);
 }
-.big-btn {
+.btn {
+  min-width: 286px;
   padding: 15px;
   border-radius: 25px;
   background: linear-gradient(to right, #24F2D6 0%, #158C7C 100%);
   font-size: var(--font-size-medium);
   color: #fff;
   transition: 0.2s linear;
+  cursor: pointer;
 }
-.big-btn:hover {
+.btn:hover {
   background: linear-gradient(to left, #24F2D6 0%, #158C7C 100%);
 }
 .page-bg {
@@ -188,6 +190,109 @@ main {
   background: #a49507;
 }
 
+/* form quiz create */
+.quiz-form {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
+}
+.quiz-form .form-body {
+  position: relative;
+  max-height: 300px;
+  overflow-y: auto;
+  padding-right: 30px;
+}
+.quiz-form .form-footer {
+  display: flex;
+  justify-content: center;
+  padding-top: 1.5rem;
+}
+.quiz-form .form-line {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  margin-bottom: 1rem;
+  font-size: var(--font-size-medium);
+  color: #fff;
+}
+.quiz-form .form-line label {
+  width: 100%;
+  max-width: 200px;
+  margin-right: 0;
+  margin-bottom: 10px;
+}
+.quiz-form .form-line input {
+  width: 80%;
+  height: 35px;
+  padding: 0 16px;
+  background: #5e5e5e80;
+  text-align: center;
+}
+
+.quiz-form .questions {
+  margin-top: 2rem;
+}
+.quiz-form .question-block {
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #fff;
+}
+.quiz-form .questions .question-block:last-child {
+  border-bottom: 0;
+}
+.quiz-form .question-block .form-line {
+  flex-direction: column;
+  align-items: flex-start;
+}
+.quiz-form .question-block .form-line:first-child {
+  margin-bottom: 1rem;
+}
+.quiz-form .question-block .form-line.answer {
+  padding-left: 2rem;
+}
+.quiz-form .question-block .form-line label {
+  margin-bottom: 0.5rem;
+}
+.quiz-form .question-block .form-line input {
+  width: 100%;
+  max-width: none;
+  text-align: left;
+}
+.quiz-form .answer-wrap {
+  position: relative;
+}
+.quiz-form .answer-wrap .check-label {
+  position: absolute;
+  right: 0;
+  top: 0;
+  display: flex;
+  align-items: center;
+  color: #fff;
+  cursor: pointer;
+}
+.quiz-form .answer-wrap input[type="radio"] {
+  display: none;
+}
+.quiz-form .answer-wrap .check-label span {
+  position: relative;
+  padding-left: 30px;
+}
+.quiz-form .answer-wrap .check-label span::before {
+  position: absolute;
+  left: 0;
+  top: 2px;
+  width: 20px;
+  height: 20px;
+  background: #fff;
+  content: "";
+}
+.quiz-form .answer-wrap .check-label input:checked + span::before {
+  background: var(--alert-warning-color);
+}
+
 @media (min-width: 640px) {
   .black-wrap {
     width: 90%;
@@ -200,12 +305,29 @@ main {
   }
   .quiz-list .list-header,
   .quiz-list .quiz-item .item-body,
-  .big-btn,
-  .link-btn {
+  .btn, .link-btn,
+  .quiz-form .form-line {
     font-size: 20px;
   }
   .quiz-list .list-footer {
     padding-bottom: 0;
+  }
+
+  .quiz-form {
+    padding: 20px;
+  }
+  .quiz-form .form-line {
+    flex-direction: row;
+    align-items: center;
+  }
+  .quiz-form .form-line label {
+    margin-right: 10px;
+    margin-bottom: 0;
+  }
+  .quiz-form .form-line input {
+    width: 50%;
+    max-width: 200px;
+    height: 65px;
   }
 }
 @media (min-width: 1024px) {
@@ -217,8 +339,34 @@ main {
   }
   .quiz-list .list-header,
   .quiz-list .quiz-item .item-body,
-  .big-btn,
-  .link-btn {
+  .btn, .link-btn,
+  .quiz-form .form-line {
     font-size: var(--font-size-large);
+  }
+
+  .quiz-form {
+    display: block;
+    padding: 20px 60px;
+  }
+  .quiz-form .form-body {
+    max-height: 550px;
+  }
+  .quiz-form .form-line label {
+    margin-right: 20px;
+  }
+  .quiz-form .form-line.q-number-wrap {
+    position: absolute;
+    top: 1rem;
+    right: 45px;
+    flex-direction: column;
+  }
+  .quiz-form .form-line.q-number-wrap label {
+    width: auto;
+    max-width: none;
+    margin-bottom: 1rem;
+    margin-right: 0;
+  }
+  .quiz-form .form-line.q-number-wrap input {
+    max-width: 90px;
   }
 }
