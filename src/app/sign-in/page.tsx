@@ -2,11 +2,18 @@ import Link from "next/link";
 import BlackContainer from "../components/BlackContainer";
 import Form from 'next/form'
 import { Metadata } from "next";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import fetchSignIn from "@/utils/fetcher/auth/fetchSignIn";
 
 export const metadata: Metadata = {
   title: "Connexion à KidsTrotter",
   description: "",
 };
+
+// const mutation = useMutation({
+//   mutationFn: async () => await fetchSignIn(),
+// })
 
 export default function SignIn(): React.JSX.Element {
   return (
