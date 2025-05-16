@@ -208,7 +208,15 @@ main {
 .quiz-form .form-footer {
   display: flex;
   justify-content: center;
+  align-items: center;
+  flex-direction: column;
   padding-top: 1.5rem;
+}
+.quiz-form .form-footer .note {
+  margin-bottom: 1rem;
+}
+.quiz-form .form-footer .note.success {
+  color: var(--alert-success-color);
 }
 .quiz-form .form-line {
   display: flex;
@@ -267,7 +275,7 @@ main {
 .quiz-form .answer-wrap .check-label {
   position: absolute;
   right: 0;
-  top: 0;
+  top: 6px;
   display: flex;
   align-items: center;
   color: #fff;

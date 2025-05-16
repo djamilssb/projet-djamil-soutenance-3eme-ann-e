@@ -7,6 +7,7 @@ interface Input {
     label: string,
     defaultValue?: any,
     readonly?: boolean,
+    required?: boolean,
     onChange?: (value: number) => void
 }
 export default function QuizFormInput({ props }: { props: Input}): React.JSX.Element {
@@ -37,6 +38,7 @@ export default function QuizFormInput({ props }: { props: Input}): React.JSX.Ele
                     name={props.iName}
                     value={props.defaultValue}
                     readOnly={props.readonly}
+                    required={props.required}
                 />
             )}
         </div>
