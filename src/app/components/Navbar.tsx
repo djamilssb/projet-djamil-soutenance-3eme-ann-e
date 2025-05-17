@@ -6,6 +6,9 @@ import Image from "next/image";
 export function Navbar(): React.JSX.Element | null {
   const pathname = usePathname();
 
+  const hideNavbarOn = ["/menu"];
+
+  if (hideNavbarOn.includes(pathname)) {
   // Liste des pages où la navbar ne doit pas apparaître
   const hideNavbarOn = ["/choice-character", "/menu"];
 
