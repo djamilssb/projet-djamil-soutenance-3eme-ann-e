@@ -1,6 +1,7 @@
 @import url("./home/style.css");
 @import url("./choice-character/style.css");
 @import url("./choice-quiz/style.css");
+@import url("./question-page/style.css");
 
 @import "tailwindcss";
 
