@@ -1,0 +1,17 @@
+.levitate {
+    animation: levitate 1s ease-in-out infinite alternate;
+}
+
+@keyframes levitate {
+    0% {
+        transform: translateY(-3px);
+    }
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+/* Pour masquer le navbar sur la page choice-character */
+body > .choice-character-page header {
+  display: none;
+}
