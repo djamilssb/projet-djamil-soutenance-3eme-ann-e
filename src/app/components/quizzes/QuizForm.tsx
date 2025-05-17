@@ -1,8 +1,25 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from 'next/navigation';
 import QuizFormInput from "./QuizFormInput";
 import QuizQuestionInput from "./QuizQuestionInput";
+
+interface QuizQuestion {
+    text: string;
+    answers: {
+        text: string;
+        correct: boolean;
+    }[];
+}
+interface QuizData {
+    quiz_name: string;
+    quiz_author: string;
+    quiz_date: string;
+    questions: QuizQuestion[];
+}
+interface QuizFormProps {
+    data?: QuizData | null;
+}
 
 function getCurrentDate(): string {
     const today = new Date();
@@ -23,17 +40,17 @@ function transformFormData(formData: { [k: string]: FormDataEntryValue }) {
         const rightAnswerIndex = formData[`right-${i}`] as string;
 
         const questionText = formData[questionKey];
-        const answers: { [key: string]: { text: string; correct: boolean } } = {};
+        const answers: { text: string; correct: boolean }[] = [];
 
         for (let j = 0; j < 4; j++) {
             const answerKey = `answer_${i}_${j}`;
             const answerText = formData[answerKey] as string;
 
             if (answerText !== undefined) {
-                answers[`${j + 1}`] = {
+                answers.push({
                     text: answerText,
                     correct: rightAnswerIndex === String(j)
-                };
+                });
             }
         }
 
@@ -51,10 +68,16 @@ function transformFormData(formData: { [k: string]: FormDataEntryValue }) {
     };
 }
 
-export default function QuizForm(): React.JSX.Element {
+export default function QuizForm({ data }: QuizFormProps): React.JSX.Element {
     const [questionNumber, setQuestionNumber] = useState(1);
     const [showSuccess, setShowSuccess] = useState(false); 
     const router = useRouter();
+
+    useEffect(() => {
+        if (data && data.questions) {
+          setQuestionNumber(data.questions.length);
+        }
+    }, [data]);
 
     const handleQuestionNumberChange = (value: number) => {
         setQuestionNumber(value);
@@ -131,7 +154,8 @@ export default function QuizForm(): React.JSX.Element {
                         iName: 'quiz_name',
                         label: 'Nom du quizz',
                         iClass: '',
-                        required: true
+                        required: true,
+                        defaultValue: data?.quiz_name ?? ''
                     }}
                 />
                 <QuizFormInput
@@ -140,8 +164,8 @@ export default function QuizForm(): React.JSX.Element {
                         iClass: 'date',
                         iName: 'quiz_date',
                         label: 'Date de création',
-                        defaultValue: getCurrentDate(),
-                        readonly: true
+                        defaultValue: data?.quiz_date ? data.quiz_date : getCurrentDate(),
+                        readonly: true,
                     }}
                 />
                 <QuizFormInput
@@ -150,7 +174,8 @@ export default function QuizForm(): React.JSX.Element {
                         iClass: '',
                         iName: 'quiz_author',
                         label: 'Nom du créateur',
-                        required: true
+                        required: true,
+                        defaultValue: data?.quiz_author ?? ''
                     }}
                 />
                 <QuizFormInput
@@ -174,14 +199,17 @@ export default function QuizForm(): React.JSX.Element {
                                 iName: `question_${index + 1}`,
                                 label: `Question ${index + 1} :`,
                                 iIndex: index + 1,
-                                required: true
+                                required: true,
+                                defaultValue: data?.questions[index].text ?? '',
+                                answers: data?.questions[index].answers ?? undefined
                             }}
                         />
                     ))}
                 </div>
             </div>
             <div className="form-footer">
-                {showSuccess ? <p className="note success levitate">Le quiz a été sauvegardé avec succès</p> : ''}
+                {showSuccess && data == null ? <p className="note success levitate">Le quiz a été sauvegardé avec succès</p> : ''}
+                {showSuccess && data != null ? <p className="note success levitate">Le quiz a été modifié avec succès</p> : ''}
                 <button type="submit" className="btn">Confirmer</button>
             </div>
         </form>

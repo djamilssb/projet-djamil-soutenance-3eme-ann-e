@@ -7,10 +7,12 @@ export function Navbar(): React.JSX.Element | null {
   const pathname = usePathname();
 
   // Liste des pages où la navbar ne doit pas apparaître
-  const hideNavbarOn = ["/choice-character", "/menu", "/account/quizzes", "/account/quizzes/create"];
+  const hideNavbarOn = ["/choice-character", "/menu"];
+
+  const urlSegments = pathname.split('/');
 
   // Si la page actuelle est dans la liste, ne pas afficher la navbar
-  if (hideNavbarOn.includes(pathname)) {
+  if (hideNavbarOn.includes(pathname) || urlSegments.includes('quizzes')) {
     return null;
   }
 

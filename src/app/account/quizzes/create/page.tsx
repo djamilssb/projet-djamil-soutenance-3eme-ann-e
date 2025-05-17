@@ -14,7 +14,7 @@ export default function QuizCreate(): React.JSX.Element {
         {/* <div className="page-bg"></div> */}
         <div className="page-wrap">
             <section className="black-wrap flex levitate">
-                <QuizForm />
+                <QuizForm data={null} />
             </section>
         </div>
     </>

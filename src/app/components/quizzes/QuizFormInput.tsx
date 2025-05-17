@@ -28,7 +28,7 @@ export default function QuizFormInput({ props }: { props: Input}): React.JSX.Ele
                     id={props.iName}
                     name={props.iName}
                     min="1"
-                    value={props.defaultValue}
+                    defaultValue={props.defaultValue}
                     onChange={handleChange}
                 />
             ) : (
@@ -36,7 +36,7 @@ export default function QuizFormInput({ props }: { props: Input}): React.JSX.Ele
                     type={props.iType}
                     id={props.iName}
                     name={props.iName}
-                    value={props.defaultValue}
+                    defaultValue={props.defaultValue}
                     readOnly={props.readonly}
                     required={props.required}
                 />

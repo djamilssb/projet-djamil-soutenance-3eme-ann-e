@@ -5,7 +5,7 @@ import QuizListItem from './QuizListItem';
 import Link from "next/link";
 
 export default function QuizList(): React.JSX.Element {
-    const [quizList, setQuizList] = useState([{'title': 'London2012', 'date': '22/01/2025', 'userName': 'Jerome82'}]);
+    const [quizList, setQuizList] = useState([{'id': 1, 'title': 'London2012', 'date': '22/01/2025', 'userName': 'Jerome82'}]);
 
     return (
         <div className="quiz-list">
@@ -19,7 +19,7 @@ export default function QuizList(): React.JSX.Element {
                     </div>
                     <div className="list-body">
                         {quizList.map((quiz, index) =>
-                            <QuizListItem key={index} title={quiz.title} date={quiz.date} userName={quiz.userName}/>
+                            <QuizListItem key={index} id={quiz.id} title={quiz.title} date={quiz.date} userName={quiz.userName}/>
                         )}
                     </div>
                 </div>
