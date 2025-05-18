@@ -172,3 +172,69 @@
 .next-button:hover {
   background: #2563eb;
 }
+
+/* ========================================
+   ÉCRANS D'ERREUR ET DE CHARGEMENT
+   ======================================== */
+
+.error-container {
+  background-color: rgba(0, 0, 0, 0.85);
+  border: 2px solid #e74c3c;
+  padding: 30px;
+  border-radius: 10px;
+  color: white;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  max-width: 500px;
+  text-align: center;
+  z-index: 20;
+}
+
+.error-container h2 {
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  color: #e74c3c;
+}
+
+.error-container p {
+  margin-bottom: 20px;
+}
+
+.return-button {
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.return-button:hover {
+  background-color: #2563eb;
+}
+
+.loading-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 20px;
+  border-radius: 10px;
+  z-index: 20;
+}
+
+.dev-message {
+  margin-top: 20px;
+  padding: 5px;
+  background-color: rgba(255, 165, 0, 0.2);
+  border: 1px solid orange;
+  color: orange;
+  font-size: 0.8rem;
+  text-align: center;
+}
