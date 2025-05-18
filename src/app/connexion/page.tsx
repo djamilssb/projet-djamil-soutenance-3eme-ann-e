@@ -102,7 +102,7 @@ function SignInForm() {
               />
 
               <Link href={"/forget-password"}>
-                <p className="text-base mt-2 mb-2 underline">Mot de passe oublié ?</p>
+                <p className="text-base text-center mt-2 mb-2 underline">Mot de passe oublié ?</p>
               </Link>
 
               <button
