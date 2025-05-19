@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { mockQuestions, mockAnswers, MockAnswer } from "../../../__tests__/quizMockData";
+import { mockQuestions, mockAnswers, mockQuizzes, MockAnswer } from "../../../__tests__/quizMockData";
 import "./style.css";
 
 // Composant principal du Quiz
@@ -55,6 +55,34 @@ function QuizContent({ quizId }: { quizId: number }) {
       }
     };
   }, []);
+
+  // Récupérer les informations du quiz
+  const { 
+    data: quizInfo, 
+    isLoading: quizLoading, 
+    isError: quizError 
+  } = useQuery({
+    queryKey: ["quiz", quizId],
+    queryFn: async () => {
+      try {
+        const response = await fetch(`/api/quiz?id=${quizId}`);
+        if (!response.ok) {
+          throw new Error(`Erreur serveur: ${response.status}`);
+        }
+        return await response.json();
+      } catch (error) {
+        console.error("Erreur lors du chargement des informations du quiz:", error);
+        // Utiliser les données mock en développement
+        if (process.env.NODE_ENV === 'development') {
+          console.log("Utilisation des données quiz mock en développement");
+          setUseFallbackData(true);
+          const mockQuiz = mockQuizzes.find(q => q.id === quizId);
+          return mockQuiz || mockQuizzes[0]; // Retourner le premier quiz par défaut si l'ID n'est pas trouvé
+        }
+        throw error;
+      }
+    },
+  });
 
   // Récupérer les questions du quiz depuis l'API
   const { 
@@ -129,17 +157,20 @@ function QuizContent({ quizId }: { quizId: number }) {
     }
   };
 
+  // Déterminer le nombre total de questions
+  const totalQuestions = quizInfo?.questionCount || questions?.length || 10;
+
   // Passer à la question suivante
   const handleNextQuestion = () => {
     setSelectedAnswer(null);
     setShowFeedback(false);
     
-    if (currentQuestionIndex < 9) {
+    if (currentQuestionIndex < totalQuestions - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
       // Sauvegarder le score
       saveScore();
-      router.push(`/game/quiz/score?quizId=${quizId}&score=${score}`);
+      router.push(`/game/quiz/score?quizId=${quizId}&score=${score}&total=${totalQuestions}`);
     }
   };
 
@@ -175,13 +206,13 @@ function QuizContent({ quizId }: { quizId: number }) {
   };
 
   // Afficher un message d'erreur
-  if (questionsError && !useFallbackData) {
+  if ((questionsError || quizError) && !useFallbackData) {
     return (
       <div className="quiz-fullscreen">
         <div className="quiz-background">
           <Image
-            src="/paris.png"
-            alt="Background de la question"
+            src="/paris.png" // Image par défaut
+            alt="Background du quiz"
             fill
             style={{ objectFit: 'cover', opacity: 0.5 }}
             priority
@@ -199,13 +230,13 @@ function QuizContent({ quizId }: { quizId: number }) {
   }
 
   // Afficher un chargement pendant la récupération des données
-  if ((questionsLoading || answersLoading) && !useFallbackData) {
+  if ((questionsLoading || answersLoading || quizLoading) && !useFallbackData) {
     return (
       <div className="quiz-fullscreen">
         <div className="quiz-background">
           <Image
-            src="/paris.png"
-            alt="Background de la question"
+            src="/paris.png" // Image par défaut
+            alt="Background du quiz"
             fill
             style={{ objectFit: 'cover' }}
             priority
@@ -219,13 +250,13 @@ function QuizContent({ quizId }: { quizId: number }) {
   }
 
   // Vérifier que questions existe et a des éléments
-  if (!questions || questions.length === 0) {
+  if (!questions || questions.length === 0 || !quizInfo) {
     return (
       <div className="quiz-fullscreen">
         <div className="quiz-background">
           <Image
-            src="/paris.png"
-            alt="Background de la question"
+            src="/paris.png" // Image par défaut
+            alt="Background du quiz"
             fill
             style={{ objectFit: 'cover', opacity: 0.5 }}
             priority
@@ -243,14 +274,18 @@ function QuizContent({ quizId }: { quizId: number }) {
   }
 
   const currentQuestion = questions[currentQuestionIndex];
+  
+  // Images dynamiques du quiz
+  const backgroundImage = quizInfo.backgroundImage || "/paris.png";
+  const avatarImage = quizInfo.avatarImage || "/alien1.png";
 
   return (
     <div className="quiz-fullscreen">
-      {/* Image de fond */}
+      {/* Image de fond dynamique */}
       <div className="quiz-background">
         <Image
-          src="/paris.png"
-          alt="Background de la question"
+          src={backgroundImage}
+          alt="Background du quiz"
           fill
           style={{ objectFit: 'cover' }}
           priority
@@ -259,10 +294,10 @@ function QuizContent({ quizId }: { quizId: number }) {
       
       {/* Contenu du quiz */}
       <div className="quizz-content">
-        {/* Personnage */}
+        {/* Personnage dynamique */}
         <img 
-          src="/alien1.png" 
-          alt="Personnage Alien" 
+          src={avatarImage}
+          alt="Avatar du quiz"
           className="character"
         />
 
@@ -270,7 +305,7 @@ function QuizContent({ quizId }: { quizId: number }) {
         <div className="question-container">
           {/* Indicateur de progression */}
           <p className="question-progress">
-            Question {currentQuestionIndex + 1}/10
+            Question {currentQuestionIndex + 1}/{totalQuestions}
           </p>
           
           <p className="question-text">
@@ -309,7 +344,7 @@ function QuizContent({ quizId }: { quizId: number }) {
                 onClick={handleNextQuestion}
                 className="next-button"
               >
-                {currentQuestionIndex < 9 ? "Question suivante" : "Voir mon score"}
+                {currentQuestionIndex < totalQuestions - 1 ? "Question suivante" : "Voir mon score"}
               </button>
             </div>
           )}
