@@ -9,14 +9,14 @@ class AuthService {
 
     constructor() {
         this.authRepository = new AuthRepository();
-    }
+    };
 
     public async signIn(data: Auth): Promise<{ token: string; id: string; role: string } | null> {
         const user = await this.authRepository.getUserByEmail(data.getEmail());
     
         if (!user) {
             throw new Error("Invalid credentials");
-        }
+        };
 
         const idSession = user.id!.toString();
     
@@ -29,8 +29,8 @@ class AuthService {
                     { expiresIn: "3h" }
                 );
                 return { token, id: idSession, role: user.role! };
-            }
-        }
+            };
+        };
     
         if (data.getPassword_Kids()) {
             const isValidKidsPassword = await bcrypt.compare(data.getPassword_Kids()!, user.password_kids!);
@@ -41,15 +41,15 @@ class AuthService {
                     { expiresIn: "3h" }
                 );
                 return { token, id: idSession, role: user.role! };
-            }
-        }
+            };
+        };
     
         return null;
-    }
+    };
 
     public async signUp(user: Partial<Users>): Promise<boolean> {
         try {
-            if (!user.username?.trim() || !user.password?.trim() || !user.password_kids?.trim() || !user.email?.trim()) {
+            if (!user.id_avatar || !user.username?.trim() || !user.password?.trim() || !user.password_kids?.trim() || !user.email?.trim() || !user.phone?.trim() || !user.address?.trim()) {
                 throw new Error("Incomplete user data");
             }
 
@@ -64,8 +64,8 @@ class AuthService {
         } catch (e) {
             console.error("Error in signUp:", e);
             throw new Error("Error while creating the user");
-        }
-    }
-}
+        };
+    };
+};
 
 export default AuthService;
