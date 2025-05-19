@@ -50,7 +50,7 @@ class AuthController {
     public async signUp(body: Partial<Users>): Promise<NextResponse> {
         const userData: Partial<Users> = body;
 
-        if (!userData.id_avatar ||!userData.username || !userData.password || !userData.password_kids || !userData.email || !userData.phone || !userData.address) {
+        if (!userData.id_avatar || !userData.username || !userData.password || !userData.password_kids || !userData.email || !userData.phone || !userData.address) {
             return NextResponse.json({ message: "Missing user data." }, { status: 400 });
         }
 
