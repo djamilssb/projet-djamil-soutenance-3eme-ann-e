@@ -170,7 +170,7 @@ function QuizContent({ quizId }: { quizId: number }) {
     } else {
       // Sauvegarder le score
       saveScore();
-      router.push(`/game/quiz/score?quizId=${quizId}&score=${score}&total=${totalQuestions}`);
+      router.push(`/game/quiz/resultat?quizId=${quizId}&score=${score}&total=${totalQuestions}`);
     }
   };
 
