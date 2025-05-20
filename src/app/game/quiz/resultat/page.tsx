@@ -2,13 +2,27 @@
 "use client";
 
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import './style.css';
 
 export default function ScorePage() {
   const searchParams = useSearchParams();
+  const router = useRouter();
+  
+  // À AJOUTER DANS LE FUTUR: Vérification de l'authentification
+  // useEffect(() => {
+  //   const checkAuth = async () => {
+  //     const isAuthenticated = await verifyUserAuthentication();
+  //     if (!isAuthenticated) {
+  //       router.push('/login?returnUrl=/game/quiz-list');
+  //     }
+  //   };
+  //   
+  //   checkAuth();
+  // }, [router]);
+  
   const [animateScore, setAnimateScore] = useState(false);
   
   // Récupération des paramètres de l'URL
@@ -22,6 +36,56 @@ export default function ScorePage() {
       setAnimateScore(true);
     }, 300);
   }, []);
+  
+  // Sauvegarde du score lors du chargement de la page
+  useEffect(() => {
+    // Uniquement si nous avons un score valide
+    if (score > 0 && quizId > 0) {
+      saveScore();
+    }
+  }, [score, quizId]); // S'exécute uniquement si score ou quizId change
+
+  const saveScore = async () => {
+    try {
+      // À MODIFIER: Remplacer par l'ID de personnage réel quand disponible
+      const characterId = 1;
+      
+      // À MODIFIER: Remplacer par l'ID de l'utilisateur connecté quand l'authentification sera en place
+      const userId = 1;
+      
+      const response = await fetch("/api/savequizz", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id_quizz: quizId,
+          id_user: userId,
+          id_character: characterId,
+          score: score,
+        }),
+      });
+      
+      if (!response.ok) {
+        console.error("Erreur lors de la sauvegarde du score:", response.status);
+      }
+    } catch (error) {
+      console.error("Erreur lors de la sauvegarde du score:", error);
+    }
+  };
+  
+  // Fonction pour rejouer le quiz
+  const handleReplayQuiz = () => {
+    // À MODIFIER: Vous pourriez vouloir effectuer des actions supplémentaires ici
+    // comme effacer des états globaux, réinitialiser des compteurs, etc.
+    
+    // À AJOUTER DANS LE FUTUR: Vérification de l'authentification avant de rejouer
+    // if (!isAuthenticated) {
+    //   router.push('/login?returnUrl=/game/quiz/questions?quizId=' + quizId);
+    //   return;
+    // }
+    
+    // Redirection vers le même quiz pour le rejouer
+    router.push(`/game/quiz/questions?quizId=${quizId}`);
+  };
   
   // Calculer le pourcentage de réussite
   const percentage = Math.round((score / total) * 100);
@@ -55,26 +119,32 @@ export default function ScorePage() {
           />
         </div>
         
-        <h2 className="score-title">{message}</h2>
+        <h1 className="score-title">{message}</h1>
         
-        <div className={`score-value ${colorClass} ${animateScore ? 'animate' : ''}`}>
+        <div className={`score-value ${animateScore ? 'animate' : ''} ${colorClass}`}>
           <span className="score-number">{score}</span>
           <span className="score-divider">/</span>
-          <span className="score-total">{total}</span>
+          <span className="total-number">{total}</span>
         </div>
         
         <div className="score-percentage">
-          {percentage}% de bonnes réponses
+          {percentage}% de réussite
         </div>
         
         <div className="buttons-container">
-          <Link href="/game" className="home-button">
-            Retour aux jeux
+          <Link href="/game/quiz-list">
+            <button className="home-button">
+              Retour aux jeux
+            </button>
           </Link>
           
-          <Link href={`/game/quiz?quizId=${quizId}`} className="replay-button">
-            Rejouer ce quiz
-          </Link>
+          {/* Bouton pour rejouer avec gestionnaire d'événements */}
+          <button 
+            className="replay-button"
+            onClick={handleReplayQuiz}
+          >
+            Rejouer le quiz
+          </button>
         </div>
       </div>
     </div>

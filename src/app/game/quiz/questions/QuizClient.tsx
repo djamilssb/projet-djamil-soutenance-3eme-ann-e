@@ -182,21 +182,32 @@ function QuizContent({ quizId }: { quizId: number }) {
     }
 
     try {
+      // Récupération d'un ID de personnage (avatar) par défaut
+      // À MODIFIER: Récupérer l'ID réel du personnage quand disponible
+      const characterId = 1; // Valeur par défaut pour le moment
+      
+      // À MODIFIER: Remplacer par l'ID de l'utilisateur connecté quand l'authentification sera en place
+      const userId = 1; // Utilisateur par défaut pour le développement
+      
       const response = await fetch("/api/savequizz", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           id_quizz: quizId,
-          id_user: 1, // À remplacer par l'ID de l'utilisateur actuel
+          id_user: userId,
+          id_character: characterId,
           score: score,
         }),
       });
       
       if (!response.ok) {
-        console.error("Erreur lors de la sauvegarde du score:", response.status);
+        throw new Error(`Erreur HTTP: ${response.status}`);
       }
+      
+      console.log("Score sauvegardé avec succès!");
     } catch (error) {
       console.error("Erreur lors de la sauvegarde du score:", error);
+      // Option: Vous pourriez afficher un message à l'utilisateur ici
     }
   };
 
