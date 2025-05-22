@@ -45,7 +45,7 @@ class QuizzController {
             if (!created) {
                 return NextResponse.json({ message: 'Échec de la création du quizz.' }, { status: 400 });
             }
-            return NextResponse.json({ message: 'Quizz créé avec succès.' }, { status: 201 });
+            return NextResponse.json({ message: 'Quizz créé avec succès.', result: created }, { status: 201 });
         } catch (error) {
             console.error('Failed to create quizz:', error);
             return NextResponse.json({ message: 'Impossible de créer le quizz.' }, { status: 500 });

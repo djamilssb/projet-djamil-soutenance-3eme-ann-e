@@ -4,9 +4,8 @@ class Quizz {
     id_departement?: number;
     title?: string;
     description?: string;
-    type?: string;
-    nbr_questions?: number;
-    difficukty_level?: string;
+    is_custom?: boolean;
+    nbr_question?: number;
     created_at?: Date;
     updated_at?: Date;
 
@@ -34,16 +33,8 @@ class Quizz {
         return this.description;
     }
 
-    public getType(): string | undefined {
-        return this.type;
-    }
-
     public getNbrQuestions(): number | undefined {
-        return this.nbr_questions;
-    }
-
-    public getDifficuktyLevel(): string | undefined {
-        return this.difficukty_level;
+        return this.nbr_question;
     }
 
     public getCreatedAt(): Date | undefined {
@@ -74,16 +65,8 @@ class Quizz {
         this.description = description;
     }
 
-    public setType(type: string): void {
-        this.type = type;
-    }
-
     public setNbrQuestions(nbr_questions: number): void {
-        this.nbr_questions = nbr_questions;
-    }
-
-    public setDifficuktyLevel(difficukty_level: string): void {
-        this.difficukty_level = difficukty_level;
+        this.nbr_question = nbr_questions;
     }
 
     public setCreatedAt(created_at: Date): void {
@@ -101,9 +84,7 @@ class Quizz {
             id_departement: this.id_departement,
             title: this.title,
             description: this.description,
-            type: this.type,
-            nbr_questions: this.nbr_questions,
-            difficukty_level: this.difficukty_level,
+            nbr_question: this.nbr_question,
             created_at: this.created_at,
             updated_at: this.updated_at
         };
