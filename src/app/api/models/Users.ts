@@ -1,9 +1,12 @@
 class Users {
     id?: number;
+    id_avatar?: number;
     username?: string;
     password?: string;
     password_kids?: string;
     email?: string;
+    phone?: string;
+    address?: string;
     role?: string;
     created_at?: Date;
 
@@ -13,6 +16,10 @@ class Users {
 
     public getId(): number | undefined {
         return this.id;
+    };
+
+    public getIdAvatar(): number | undefined {
+        return this.id_avatar;
     };
 
     public getUsername(): string | undefined {
@@ -31,6 +38,14 @@ class Users {
         return this.email;
     };
 
+    public getPhone(): string | undefined {
+        return this.phone;
+    };
+
+    public getAddress(): string | undefined {
+        return this.address;
+    };
+
     public getRole(): string | undefined {
         return this.role;
     };
@@ -41,6 +56,10 @@ class Users {
 
     public setId(id: number): void {
         this.id = id;
+    };
+
+    public setIdAvatar(id_avatar: number): void {
+        this.id_avatar = id_avatar;
     };
 
     public setUsername(username: string): void {
@@ -57,6 +76,14 @@ class Users {
 
     public setEmail(email: string): void {
         this.email = email;
+    };
+
+    public setPhone(phone: string): void {
+        this.phone = phone;
+    };
+
+    public setAddress(address: string): void {
+        this.address = address;
     };
 
     public setRole(role: string): void {

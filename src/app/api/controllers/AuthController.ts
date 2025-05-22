@@ -1,5 +1,4 @@
 import AuthService from "../services/AuthService";
-import jwt from "jsonwebtoken";
 import { NextResponse } from "next/server";
 import Auth from "../models/Auth";
 import Users from "../models/Users";
@@ -9,7 +8,7 @@ class AuthController {
 
     constructor() {
         this.authService = new AuthService();
-    }
+    };
 
     public async signIn(body: Auth): Promise<NextResponse> {
         try {
@@ -38,20 +37,20 @@ class AuthController {
                     { message: "Invalid credentials" },
                     { status: 401 }
                 );
-            }
+            };
         } catch (error) {
             console.error("Failed to sign in:", error);
             return NextResponse.json(
                 { message: "An error occurred during authentication" },
                 { status: 500 }
             );
-        }
-    }
+        };
+    };
 
     public async signUp(body: Partial<Users>): Promise<NextResponse> {
         const userData: Partial<Users> = body;
 
-        if (!userData.username || !userData.password || !userData.password_kids || !userData.email) {
+        if (!userData.id_avatar || !userData.username || !userData.password || !userData.password_kids || !userData.email || !userData.phone || !userData.address) {
             return NextResponse.json({ message: "Missing user data." }, { status: 400 });
         }
 
@@ -65,8 +64,8 @@ class AuthController {
         } catch (error) {
             console.error("Failed to create user:", error);
             return NextResponse.json({ message: "Failed to create the user." }, { status: 500 });
-        }
-    }
-}
+        };
+    };
+};
 
 export default AuthController;
