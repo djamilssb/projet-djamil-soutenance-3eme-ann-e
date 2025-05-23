@@ -3,6 +3,9 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from 'next/navigation';
 import QuizFormInput from "./QuizFormInput";
 import QuizQuestionInput from "./QuizQuestionInput";
+import { useMutation } from "@tanstack/react-query";
+import fetchQuizCreate from "@/utils/fetcher/quiz/fetchQuizCreate";
+import Quizz from "@/app/api/models/Quizz";
 
 interface QuizQuestion {
     text: string;
@@ -15,6 +18,9 @@ interface QuizData {
     quiz_name: string;
     quiz_author: string;
     quiz_date: string;
+    quiz_image: string;
+    description: string;
+    department: string;
     questions: QuizQuestion[];
 }
 interface QuizFormProps {
@@ -64,14 +70,25 @@ function transformFormData(formData: { [k: string]: FormDataEntryValue }) {
         quiz_name: formData.quiz_name as string,
         quiz_author: formData.quiz_author as string,
         quiz_date: formData.quiz_date as string,
+        description: formData.description as string,
+        department: formData.department as string,
+        quiz_image: formData.quiz_image as string,
         questions,
     };
 }
 
 export default function QuizForm({ data }: QuizFormProps): React.JSX.Element {
+    const mutation = useMutation({
+        mutationFn: fetchQuizCreate,
+    });
+    
     const [questionNumber, setQuestionNumber] = useState(1);
     const [showSuccess, setShowSuccess] = useState(false); 
+    
     const router = useRouter();
+    const userId = 3;
+    const userName = "Jerome82";
+    const departments = [{id: 2, name: "34 Hérault"}, {id: 4, name: "11 Aude"}]
 
     useEffect(() => {
         if (data && data.questions) {
@@ -137,11 +154,22 @@ export default function QuizForm({ data }: QuizFormProps): React.JSX.Element {
         console.log('res', res, formValues); 
 
         if (res) {
+            const quiz = new Quizz({
+                "id_user": userId,
+                "title": res.quiz_name,
+                "description": res.description,
+                "id_departement": Number(res.department),
+                "nbr_question": res.questions.length,
+                "image_url": res.quiz_image,
+                "is_custom": true
+            });
+            mutation.mutate(quiz);
+
             setShowSuccess(true);
 
-            setTimeout(() => {
-                router.push('/account/quizzes');
-            }, 500);
+            // setTimeout(() => {
+            //     router.push('/account/quizzes');
+            // }, 500);
         }
     };
 
@@ -175,9 +203,32 @@ export default function QuizForm({ data }: QuizFormProps): React.JSX.Element {
                         iName: 'quiz_author',
                         label: 'Nom du créateur',
                         required: true,
-                        defaultValue: data?.quiz_author ?? ''
+                        defaultValue: data?.quiz_author ?? userName
                     }}
                 />
+                <QuizFormInput
+                    props={{
+                        iType: 'text',
+                        iClass: '',
+                        iName: 'quiz_image',
+                        label: 'Url de l\'image',
+                        required: false,
+                        defaultValue: data?.quiz_image ?? ""
+                    }}
+                />
+                <div className="form-line">
+                    <label>Département</label>
+                    <select name="department">
+                        <option value="0">Choisir</option>
+                        {departments.map((el, key) => 
+                            <option value={el.id} key={key}>{el.name}</option>
+                        )}
+                    </select>
+                </div>
+                <div className="form-line">
+                    <label>Description</label>
+                    <textarea name="description"></textarea>
+                </div>
                 <QuizFormInput
                     props={{
                         iType: 'number',

@@ -6,6 +6,7 @@ class Quizz {
     description?: string;
     is_custom?: boolean;
     nbr_question?: number;
+    image_url?: string;
     created_at?: Date;
     updated_at?: Date;
 
@@ -35,6 +36,10 @@ class Quizz {
 
     public getNbrQuestions(): number | undefined {
         return this.nbr_question;
+    }
+
+    public getImageUrl(): string | undefined {
+        return this.image_url;
     }
 
     public getCreatedAt(): Date | undefined {
@@ -67,6 +72,10 @@ class Quizz {
 
     public setNbrQuestions(nbr_questions: number): void {
         this.nbr_question = nbr_questions;
+    }
+
+    public setImageUrl(url: string): void {
+        this.image_url = url;
     }
 
     public setCreatedAt(created_at: Date): void {

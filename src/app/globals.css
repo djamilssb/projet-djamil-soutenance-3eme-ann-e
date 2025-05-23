@@ -243,6 +243,19 @@ main {
   background: #5e5e5e80;
   text-align: center;
 }
+.quiz-form .form-line textarea {
+  width: 80%;
+  height: 100px;
+  padding: 0 16px;
+  background: #5e5e5e80;
+  resize: none;
+}
+.quiz-form .form-line select {
+  width: 80%;
+  height: 35px;
+  padding: 0 16px;
+  background: #5e5e5e80;
+}
 
 .quiz-form .questions {
   margin-top: 2rem;
@@ -339,6 +352,9 @@ main {
   .quiz-form .form-line input {
     width: 50%;
     max-width: 200px;
+    height: 65px;
+  }
+  .quiz-form .form-line select {
     height: 65px;
   }
 }
