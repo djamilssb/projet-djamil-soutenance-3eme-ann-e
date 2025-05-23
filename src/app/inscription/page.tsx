@@ -1,17 +1,23 @@
 "use client";
 
-import Image from "next/image";
 import { formOptions, useForm } from "@tanstack/react-form";
 import { useMutation } from "@tanstack/react-query";
 import fetchSignUp from "@/utils/fetcher/auth/fetchSignUp";
 import QueryClientProvider from "../components/QueryClientProvider";
 import Users from "../api/models/Users";
+import MenuAvatar from "./components/MenuAvatar";
+import { useModale } from "../hooks/useModale";
+import { useState } from "react";
+import Image from "next/image";
 
 interface SignUpFormData {
   username: string;
   email: string;
   password: string;
   password_kids: string;
+  id_avatar?: number;
+  address: string; // Nouveau champ pour l'adresse
+  phone: string; // Nouveau champ pour le numéro de téléphone
 }
 
 const defaultSignUpData: SignUpFormData = {
@@ -19,6 +25,9 @@ const defaultSignUpData: SignUpFormData = {
   email: "",
   password: "",
   password_kids: "",
+  id_avatar: 1,
+  address: "", // Valeur par défaut pour l'adresse
+  phone: "", // Valeur par défaut pour le numéro de téléphone
 };
 
 const formOpts = formOptions({
@@ -26,6 +35,9 @@ const formOpts = formOptions({
 });
 
 function SignUp() {
+  const [avatarUrl, setAvatarUrl] = useState<string>("/default_avatar.webp");
+  const {isModaleVisible, openModale, closeModale} = useModale();
+
   const mutation = useMutation({
     mutationFn: fetchSignUp,
   });
@@ -38,11 +50,21 @@ function SignUp() {
         email: value.email,
         password: value.password,
         password_kids: value.password_kids,
+        id_avatar: value.id_avatar,
+        address: value.address,
+        phone: value.phone,
       });
 
       mutation.mutate(newUser);
+      console.log(newUser)
     },
   });
+
+  const handleAvatarSelection = (avatarId: number, avatarUrl: string) => {
+    form.setFieldValue("id_avatar", avatarId);
+    setAvatarUrl(avatarUrl);
+    closeModale();
+  };
 
   return (
     <>
@@ -55,17 +77,19 @@ function SignUp() {
           </h2>
           <form
             className="flex flex-col md:flex-row w-full gap-8"
-            onSubmit={form.handleSubmit}
+            onSubmit={(e) => {
+              e.preventDefault();
+              form.handleSubmit();
+            }}
           >
             <div className="flex-1 flex flex-col justify-center">
               <div className="flex flex-col gap-6 w-[20vw] text-lg">
-                {" "}
                 <form.Field
                   name="username"
                   children={(field) => (
                     <input
                       type="text"
-                      placeholder="username"
+                      placeholder="Nom d'utilisateur"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
                       className="w-full h-12 p-3 rounded bg-[var(--grayed-input)] text-white"
@@ -91,7 +115,7 @@ function SignUp() {
                   children={(field) => (
                     <input
                       type="password"
-                      placeholder="********"
+                      placeholder="Mot de passe"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
                       className="w-full h-12 p-3 rounded bg-[var(--grayed-input)] text-white"
@@ -104,10 +128,34 @@ function SignUp() {
                   children={(field) => (
                     <input
                       type="password"
-                      placeholder="********"
+                      placeholder="Mot de passe enfant"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
                       className="h-12 p-3 rounded bg-[var(--grayed-input)] text-white"
+                    />
+                  )}
+                />
+                <form.Field
+                  name="address"
+                  children={(field) => (
+                    <input
+                      type="text"
+                      placeholder="Adresse"
+                      value={field.state.value}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      className="w-full h-12 p-3 rounded bg-[var(--grayed-input)] text-white"
+                    />
+                  )}
+                />
+                <form.Field
+                  name="phone"
+                  children={(field) => (
+                    <input
+                      type="tel"
+                      placeholder="Numéro de téléphone"
+                      value={field.state.value}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      className="w-full h-12 p-3 rounded bg-[var(--grayed-input)] text-white"
                     />
                   )}
                 />
@@ -117,7 +165,7 @@ function SignUp() {
             <div className="flex flex-col items-center gap-6 w-full md:w-80">
               <div className="relative w-48 h-48 rounded-full overflow-hidden bg-white">
                 <Image
-                  src="/avatar.png"
+                  src={avatarUrl}
                   alt="Avatar"
                   fill
                   className="object-cover"
@@ -125,9 +173,10 @@ function SignUp() {
               </div>
               <button
                 type="button"
+                onClick={openModale}
                 className="bg-transparent border border-white px-4 py-2 rounded text-white hover:bg-white hover:text-black cursor-pointer"
               >
-                Modifier l’avatar
+                Modifier l&apos;avatar
               </button>
               <button
                 type="submit"
@@ -139,6 +188,8 @@ function SignUp() {
           </form>
         </div>
       </div>
+
+      {isModaleVisible && <MenuAvatar onAvatarSelect={handleAvatarSelection} />}
     </>
   );
 }
