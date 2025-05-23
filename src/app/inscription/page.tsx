@@ -16,8 +16,8 @@ interface SignUpFormData {
   password: string;
   password_kids: string;
   id_avatar?: number;
-  address: string; // Nouveau champ pour l'adresse
-  phone: string; // Nouveau champ pour le numéro de téléphone
+  address: string;
+  phone: string;
 }
 
 const defaultSignUpData: SignUpFormData = {
@@ -25,9 +25,9 @@ const defaultSignUpData: SignUpFormData = {
   email: "",
   password: "",
   password_kids: "",
-  id_avatar: 1,
-  address: "", // Valeur par défaut pour l'adresse
-  phone: "", // Valeur par défaut pour le numéro de téléphone
+  id_avatar: undefined,
+  address: "",
+  phone: "",
 };
 
 const formOpts = formOptions({
