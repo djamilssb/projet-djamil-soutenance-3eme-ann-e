@@ -12,10 +12,23 @@ class QuestionController {
 
     public async getAllQuestions(req: NextRequest): Promise<NextResponse> {
         try {
+            // Récupération du paramètre quizId s'il existe
+            const quizId = req.nextUrl.searchParams.get("quizId");
+            
+            // Si quizId est fourni, utiliser getQuestionsByQuizz
+            if (quizId) {
+                const quizIdNumber = parseInt(quizId, 10);
+                if (!isNaN(quizIdNumber)) {
+                    const questions = await this.questionService.getQuestionsByQuizz(quizIdNumber);
+                    return NextResponse.json(questions, { status: 200 });
+                }
+            }
+            
+            // Sinon récupérer toutes les questions
             const questions = await this.questionService.getAll();
             return NextResponse.json(questions, { status: 200 });
         } catch (error) {
-            console.error('Failed to retrieve all questions:', error);
+            console.error('Failed to retrieve questions:', error);
             return NextResponse.json({ message: 'Impossible de récupérer les questions.' }, { status: 500 });
         }
     }

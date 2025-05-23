@@ -65,7 +65,7 @@ function QuizContent({ quizId }: { quizId: number }) {
     queryKey: ["quiz", quizId],
     queryFn: async () => {
       try {
-        const response = await fetch(`/api/quiz?id=${quizId}`);
+        const response = await fetch(`/api/quizz?id=${quizId}`);
         if (!response.ok) {
           throw new Error(`Erreur serveur: ${response.status}`);
         }
@@ -94,7 +94,7 @@ function QuizContent({ quizId }: { quizId: number }) {
     queryKey: ["questions", quizId],
     queryFn: async () => {
       try {
-        const response = await fetch(`/api/questions?quizzId=${quizId}`);
+        const response = await fetch(`/api/questions?quizId=${quizId}`);
         if (!response.ok) {
           throw new Error(`Erreur serveur: ${response.status}`);
         }
