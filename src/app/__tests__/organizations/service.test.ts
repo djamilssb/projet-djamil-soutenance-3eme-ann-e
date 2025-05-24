@@ -1,17 +1,17 @@
 import kt_organizationsService from "@/app/api/services/OrganizationsService";
-import OrganizationRepository from "@/app/api/repositories/OrganizationsRepository";
+import kt_OrganizationRepository from "@/app/api/repositories/OrganizationsRepository";
 import kt_organizations from "@/app/api/models/Organizations";
 
 jest.mock("@/app/api/repositories/OrganizationsRepository");
 
 describe("kt_organizationsService", () => {
     let service: kt_organizationsService;
-    let repository: jest.Mocked<OrganizationRepository>;
+    let repository: jest.Mocked<kt_OrganizationRepository>;
 
     beforeEach(() => {
-        repository = new OrganizationRepository() as jest.Mocked<OrganizationRepository>;
+        repository = new kt_OrganizationRepository() as jest.Mocked<kt_OrganizationRepository>;
         service = new kt_organizationsService();
-        (service as any).organizationRepository = repository;
+        (service as any).kt_OrganizationRepository = repository;
         jest.clearAllMocks();
     });
 
