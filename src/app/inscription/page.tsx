@@ -9,6 +9,7 @@ import MenuAvatar from "./components/MenuAvatar";
 import { useModale } from "../hooks/useModale";
 import { useState } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 interface SignUpFormData {
   username: string;
@@ -37,10 +38,18 @@ const formOpts = formOptions({
 function SignUp() {
   const [avatarUrl, setAvatarUrl] = useState<string>("/default_avatar.webp");
   const {isModaleVisible, openModale, closeModale} = useModale();
+  const router = useRouter();
 
   const mutation = useMutation({
-    mutationFn: fetchSignUp,
-  });
+  mutationFn: fetchSignUp,
+  onSuccess: (result) => {
+    if (result) {
+      router.push("/connexion");
+    } else {
+      alert("Erreur lors de l'inscription. Vérifie tes informations.");
+    }
+  }
+});
 
   const form = useForm({
     ...formOpts,
@@ -56,7 +65,6 @@ function SignUp() {
       });
 
       mutation.mutate(newUser);
-      console.log(newUser)
     },
   });
 
