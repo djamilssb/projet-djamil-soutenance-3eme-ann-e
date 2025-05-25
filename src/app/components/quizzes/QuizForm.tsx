@@ -5,7 +5,11 @@ import QuizFormInput from "./QuizFormInput";
 import QuizQuestionInput from "./QuizQuestionInput";
 import { useMutation } from "@tanstack/react-query";
 import fetchQuizCreate from "@/utils/fetcher/quiz/fetchQuizCreate";
+import fetchQuestionCreate from "@/utils/fetcher/quiz/fetchQuestionCreate";
+import fetchAnswerCreate from "@/utils/fetcher/quiz/fetchAnswerCreate";
 import Quizz from "@/app/api/models/Quizz";
+import Question from "@/app/api/models/Question";
+import Answer from "@/app/api/models/Answer";
 
 interface QuizQuestion {
     text: string;
@@ -80,6 +84,38 @@ function transformFormData(formData: { [k: string]: FormDataEntryValue }) {
 export default function QuizForm({ data }: QuizFormProps): React.JSX.Element {
     const mutation = useMutation({
         mutationFn: fetchQuizCreate,
+        onSuccess: async (quizId: number, quizData) => {
+            console.log("Quiz created:", quizId);
+            console.warn("questions", quizData);
+    
+            try {
+                quizData?.questions?.map(async (q, index) => {
+                    const question = new Question({
+                        "id_quizz": quizId,
+                        "content": q.text as string,
+                        "order_index": index + 1
+                    });
+                    const questionId: number = await fetchQuestionCreate(question);
+    
+                    if (questionId != null) {
+                        q.answers.map(a => {
+                            const answer = new Answer({
+                                "id_quizz": quizId,
+                                "id_question": questionId,
+                                "content": a.text,
+                                "is_correct": a.correct
+                            });
+
+                            fetchAnswerCreate(answer);
+                        })
+                    }
+                })
+    
+                console.log("All questions and answers created successfully");
+            } catch (err) {
+                console.error("Error creating questions or answers:", err);
+            }
+        },
     });
     
     const [questionNumber, setQuestionNumber] = useState(1);
@@ -161,7 +197,8 @@ export default function QuizForm({ data }: QuizFormProps): React.JSX.Element {
                 "id_departement": Number(res.department),
                 "nbr_question": res.questions.length,
                 "image_url": res.quiz_image,
-                "is_custom": true
+                "is_custom": true,
+                "questions": res.questions
             });
             mutation.mutate(quiz);
 
