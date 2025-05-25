@@ -1,7 +1,7 @@
 import Quizz from "@/app/api/models/Quizz";
 import fetchQuestionCreate from "./fetchQuestionCreate";
 
-const fetchQuizCreate = async (data: Quizz): Promise<boolean> => {
+const fetchQuizCreate = async (data: Quizz): Promise<number> => {
     return await fetch('/api/quizz', {
         method: 'POST',
         headers: {
@@ -17,12 +17,9 @@ const fetchQuizCreate = async (data: Quizz): Promise<boolean> => {
             throw new Error('Network response failed');
         }
         const json = await res.json();
-        console.info('new', json);
 
         if (res.status == 201) {
-            const quizId = json.result.insertId;
-
-            return true;
+            return json.result.insertId;
         } else {
             throw new Error('Quiz creation failed');
         }
