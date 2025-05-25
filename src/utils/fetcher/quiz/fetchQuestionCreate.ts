@@ -1,6 +1,6 @@
 import Question from "@/app/api/models/Question";
 
-const fetchQuestionCreate = async (data: Question): Promise<boolean> => {
+const fetchQuestionCreate = async (data: Question): Promise<number> => {
     return await fetch('/api/questions', {
         method: 'POST',
         headers: {
@@ -9,15 +9,13 @@ const fetchQuestionCreate = async (data: Question): Promise<boolean> => {
         body: JSON.stringify(data),
     })
     .then(async (res: Response) => {
-        if (!res.ok) {
-            if (res.status === 400) {
-                console.error(res.text);
-            }
-        }
+        console.info('question creating...')
+        if (!res.ok) throw new Error('Failed to create question');
         const json = await res.json();
 
         if (res.status == 201) {
-            return true;
+            console.info('question created')
+            return json.result.insertId;
         } else {
             throw new Error('Question creation failed');
         }
