@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "test": "jest",
-    "dev": "cross-env NODE_ENV=development PORT=3872 next dev --turbopack",
+    "dev": "cross-env NODE_ENV=development PORT=3873 next dev --turbopack",
     "build": "cross-env NODE_ENV=production PORT=3873 next build",
     "start": "next start",
     "lint": "next lint"

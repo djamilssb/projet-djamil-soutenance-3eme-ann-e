@@ -24,13 +24,129 @@ export default function CompteUser() {
   });
 
   useEffect(() => {
-    // @TODO: Fetch user data from API
-    //setUserData(userFromApi)
+    const fetchUserData = async () => {
+      try {
+        // Récupération de l'ID utilisateur depuis le localStorage
+        const userId = localStorage.getItem('user_id');
+        
+        if (!userId) {
+          // Redirection vers la page de connexion si l'utilisateur n'est pas connecté
+          router.push('/connexion');
+          return;
+        }
+        
+        // Appel à l'API pour récupérer les données utilisateur
+        const response = await fetch(`/api/users/${userId}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        });
+        
+        if (!response.ok) {
+          throw new Error('Échec de la récupération des données utilisateur');
+        }
+        
+        // Conversion de la réponse en JSON
+        const user = await response.json();
+        
+        // Mise à jour de l'état avec les données utilisateur
+        setUserData({
+          email: user.email || '',
+          username: user.username || '',
+          password: '********', // On ne montre jamais le vrai mot de passe
+          childPassword: '********', // On ne montre jamais le vrai mot de passe enfant
+          created_at: new Date(user.created_at).toLocaleDateString('fr-FR') || '',
+        });
+        
+      } catch (error) {
+        console.error('Erreur lors de la récupération des données utilisateur:', error);
+      }
+    };
 
-  }, []);
+    // Appel de la fonction de récupération des données
+    fetchUserData();
+  }, [router]);
 
   const handleModifier = () => {
-    router.push("/modifications");
+    // Si déjà en mode édition, alors on soumet les modifications
+    if (editable) {
+      handleSubmit();
+    } else {
+      // Sinon on passe en mode édition
+      setEditable(true);
+    }
+  };
+
+  const handleSubmit = async () => {
+    try {
+      const userId = localStorage.getItem('user_id');
+      
+      if (!userId) {
+        router.push('/connexion');
+        return;
+      }
+      
+      // Définir un type qui inclut toutes les propriétés possibles
+      interface UpdateData {
+        email: string;
+        username: string;
+        password?: string;
+        childPassword?: string;
+      }
+      
+      // Initialiser avec les propriétés obligatoires
+      const dataToSend: UpdateData = {
+        email: userData.email,
+        username: userData.username,
+      };
+      
+      // Ajout des mots de passe uniquement s'ils ont été modifiés
+      if (userData.password !== '********') {
+        dataToSend.password = userData.password;
+      }
+      
+      if (userData.childPassword !== '********') {
+        dataToSend.childPassword = userData.childPassword;
+      }
+      
+      const response = await fetch(`/api/users/${userId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dataToSend),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Échec de la mise à jour des données utilisateur');
+      }
+      
+      setEditable(false);
+      
+      const updatedUser = await response.json();
+      setUserData({
+        ...userData,
+        email: updatedUser.email || userData.email,
+        username: updatedUser.username || userData.username,
+        password: '********',
+        childPassword: '********',
+      });
+      
+      alert('Profil mis à jour avec succès !');
+      
+    } catch (error) {
+      console.error('Erreur lors de la mise à jour des données:', error);
+      alert('Erreur lors de la mise à jour du profil');
+    }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setUserData({
+      ...userData,
+      [name]: value,
+    });
   };
 
   return (
@@ -53,22 +169,64 @@ export default function CompteUser() {
         <div className="space-y-6">
           <div className="flex justify-between items-center">
             <p className="text-lg">Mail :</p>
-            <p className="text-lg">{userData.email}</p>
+            {editable ? (
+              <input
+                type="text"
+                name="email"
+                value={userData.email}
+                onChange={handleInputChange}
+                className="bg-gray-800 text-white rounded px-3 py-1"
+              />
+            ) : (
+              <p className="text-lg">{userData.email}</p>
+            )}
           </div>
           
           <div className="flex justify-between items-center">
             <p className="text-lg">Nom d'utilisateur :</p>
-            <p className="text-lg">{userData.username}</p>
+            {editable ? (
+              <input
+                type="text"
+                name="username"
+                value={userData.username}
+                onChange={handleInputChange}
+                className="bg-gray-800 text-white rounded px-3 py-1"
+              />
+            ) : (
+              <p className="text-lg">{userData.username}</p>
+            )}
           </div>
           
           <div className="flex justify-between items-center">
             <p className="text-lg">Mot de passe :</p>
-            <p className="text-lg">{userData.password}</p>
+            {editable ? (
+              <input
+                type="password"
+                name="password"
+                value={userData.password}
+                onChange={handleInputChange}
+                placeholder="Nouveau mot de passe"
+                className="bg-gray-800 text-white rounded px-3 py-1"
+              />
+            ) : (
+              <p className="text-lg">{userData.password}</p>
+            )}
           </div>
           
           <div className="flex justify-between items-center">
             <p className="text-lg">Mot de passe enfant :</p>
-            <p className="text-lg">{userData.childPassword}</p>
+            {editable ? (
+              <input
+                type="password"
+                name="childPassword"
+                value={userData.childPassword}
+                onChange={handleInputChange}
+                placeholder="Nouveau mot de passe enfant"
+                className="bg-gray-800 text-white rounded px-3 py-1"
+              />
+            ) : (
+              <p className="text-lg">{userData.childPassword}</p>
+            )}
           </div>
           
           <div className="flex justify-between items-center">
@@ -82,7 +240,7 @@ export default function CompteUser() {
             onClick={handleModifier}
             className="bg-teal-400 hover:bg-teal-500 text-black font-bold py-2 px-12 rounded-full transition-colors cursor-pointer"
           >
-            Modifier
+            {editable ? 'Valider' : 'Modifier'}
           </button>
         </div>
       </div>
