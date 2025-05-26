@@ -3,11 +3,62 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-// SPECIFICS METADATA FOR THE PAGE
 export const metadata: Metadata = {
-    title: "Home",
-    description: "Welcome to the home page!",
-}
+  title: "Kidstrotter | Quiz éducatifs pour enfants",
+  description: "Bienvenue sur Kidstrotter, l'univers galactique où les enfants s'amusent tout en développant leur culture générale grâce à des quiz ludiques et éducatifs.",
+  keywords: [
+    "Kidstrotter",
+    "quiz enfants",
+    "éducation ludique",
+    "apprentissage interactif",
+    "quiz culture générale",
+    "jeu éducatif",
+    "application enfant",
+    "quiz galactique",
+    "ludique",
+    "espace",
+    "futuriste"
+  ],
+  authors: [{ name: "Kidstrotter", url: "https://kidstrotter.com" }],
+  creator: "Kidstrotter",
+  publisher: "Kidstrotter",
+  robots: {
+    index: true,
+    follow: true,
+    nocache: false,
+    googleBot: {
+      index: true,
+      follow: true,
+      noimageindex: false,
+    },
+  },
+  openGraph: {
+    title: "Kidstrotter | Apprendre en s'amusant",
+    description: "Kidstrotter propose à votre enfant une aventure spatiale remplie de quiz éducatifs et amusants pour enrichir ses connaissances.",
+    url: "https://kidstrotter.com",
+    siteName: "Kidstrotter",
+    images: [
+      {
+        url: "https://kidstrotter.com/images/og-home.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Enfant astronaute avec un alien rigolo et un vaisseau spatial dans l'univers de Kidstrotter",
+      },
+    ],
+    locale: "fr_FR",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Kidstrotter | Quiz galactiques pour enfants",
+    description: "Une aventure éducative interstellaire pour apprendre en jouant !",
+    creator: "@Kidstrotter",
+    images: ["https://kidstrotter.com/images/og-home.jpg"],
+  },
+  category: "education",
+  themeColor: "#2D2DFF",
+};
+
 
 export default function Home(): React.JSX.Element {
   return (
