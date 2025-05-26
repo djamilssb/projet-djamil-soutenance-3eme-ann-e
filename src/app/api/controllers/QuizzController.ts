@@ -45,7 +45,7 @@ class QuizzController {
             if (!created) {
                 return NextResponse.json({ message: 'Échec de la création du quizz.' }, { status: 400 });
             }
-            return NextResponse.json({ message: 'Quizz créé avec succès.' }, { status: 201 });
+            return NextResponse.json({ message: 'Quizz créé avec succès.', result: created }, { status: 201 });
         } catch (error) {
             console.error('Failed to create quizz:', error);
             return NextResponse.json({ message: 'Impossible de créer le quizz.' }, { status: 500 });
@@ -113,6 +113,31 @@ class QuizzController {
             return NextResponse.json({ message: 'Impossible de récupérer les quizz du département.' }, { status: 500 });
         }
     }
+
+    public async getAllQuizByIdUser(req: NextRequest): Promise<NextResponse> {
+    try {
+        // Extraire les paramètres de l'URL
+        const url = new URL(req.url);
+        const userIdParam = url.searchParams.get('userId');
+        
+        // Si aucun ID utilisateur n'est fourni, retourner une erreur
+        if (!userIdParam) {
+            return NextResponse.json({ message: 'ID utilisateur requis.' }, { status: 400 });
+        }
+        
+        const userId = parseInt(userIdParam);
+        if (isNaN(userId)) {
+            return NextResponse.json({ message: 'ID utilisateur invalide.' }, { status: 400 });
+        }
+        
+        // Récupérer les quiz créés par cet utilisateur OU les quiz génériques (id_user NULL)
+        const quizzes = await this.quizzService.getAllQuizByIdUser(userId);
+        return NextResponse.json(quizzes, { status: 200 });
+    } catch (error) {
+        console.error('Failed to retrieve quizzes:', error);
+        return NextResponse.json({ message: 'Impossible de récupérer les quizz.' }, { status: 500 });
+    }
+}
 }
 
 export default QuizzController;

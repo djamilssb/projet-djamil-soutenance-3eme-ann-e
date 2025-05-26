@@ -4,11 +4,13 @@ class Quizz {
     id_departement?: number;
     title?: string;
     description?: string;
-    type?: string;
-    nbr_questions?: number;
-    difficukty_level?: string;
+    is_custom?: boolean;          
+    nbr_question?: number;       
+    is_active?: number;           
+    image_url?: string;           
     created_at?: Date;
     updated_at?: Date;
+    
 
     constructor(data?: Partial<Quizz>) {
         Object.assign(this, data)
@@ -34,16 +36,20 @@ class Quizz {
         return this.description;
     }
 
-    public getType(): string | undefined {
-        return this.type;
+    public getIsCustom(): boolean | undefined {
+        return this.is_custom;
     }
 
-    public getNbrQuestions(): number | undefined {
-        return this.nbr_questions;
+    public getNbrQuestion(): number | undefined {
+        return this.nbr_question;
     }
 
-    public getDifficuktyLevel(): string | undefined {
-        return this.difficukty_level;
+    public getIsActive(): number | undefined {
+        return this.is_active;
+    }
+
+    public getImageUrl(): string | undefined {
+        return this.image_url;
     }
 
     public getCreatedAt(): Date | undefined {
@@ -74,16 +80,20 @@ class Quizz {
         this.description = description;
     }
 
-    public setType(type: string): void {
-        this.type = type;
+    public setIsCustom(is_custom: boolean): void {
+        this.is_custom = is_custom;
     }
 
-    public setNbrQuestions(nbr_questions: number): void {
-        this.nbr_questions = nbr_questions;
+    public setNbrQuestion(nbr_question: number): void {
+        this.nbr_question = nbr_question;
     }
 
-    public setDifficuktyLevel(difficukty_level: string): void {
-        this.difficukty_level = difficukty_level;
+    public setIsActive(is_active: number): void {
+        this.is_active = is_active;
+    }
+
+    public setImageUrl(image_url: string): void {
+        this.image_url = image_url;
     }
 
     public setCreatedAt(created_at: Date): void {
@@ -101,9 +111,10 @@ class Quizz {
             id_departement: this.id_departement,
             title: this.title,
             description: this.description,
-            type: this.type,
-            nbr_questions: this.nbr_questions,
-            difficukty_level: this.difficukty_level,
+            is_custom: this.is_custom,
+            nbr_question: this.nbr_question,
+            is_active: this.is_active,
+            image_url: this.image_url,
             created_at: this.created_at,
             updated_at: this.updated_at
         };

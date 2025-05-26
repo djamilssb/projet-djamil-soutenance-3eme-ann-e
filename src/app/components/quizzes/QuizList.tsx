@@ -1,11 +1,84 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import QuizListItem from './QuizListItem';
 import Link from "next/link";
 
-export default function QuizList(): React.JSX.Element {
-    const [quizList, setQuizList] = useState([{'id': 1, 'title': 'London2012', 'date': '22/01/2025', 'userName': 'Jerome82'}]);
+interface QuizListProps {
+  isCustom?: boolean; 
+  userId?: number; 
+  showCreateButton?: boolean; 
+}
+
+interface Quiz {
+  id: number;
+  title: string;
+  date: string; 
+  userName: string; 
+}
+
+export default function QuizList({ 
+  isCustom = false, 
+  userId, 
+  showCreateButton = true 
+}: QuizListProps): React.JSX.Element {
+    const [quizList, setQuizList] = useState<Quiz[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        async function fetchQuizzes() {
+            try {
+                setLoading(true);
+                
+                let url = '/api/quizz';
+                const params = new URLSearchParams();
+                
+                if (isCustom !== undefined) {
+                    // Convertir le booléen en entier (0 ou 1)
+                    params.append('isCustom', isCustom ? '1' : '0');
+                }
+                
+                if (userId) {
+                    params.append('userId', userId.toString());
+                }
+                
+                if (params.toString()) {
+                    url += `?${params.toString()}`;
+                }
+                
+                const response = await fetch(url);
+                
+                if (!response.ok) {
+                    throw new Error('Erreur lors de la récupération des quiz');
+                }
+                
+                const data = await response.json();
+                
+                // Ajouter du code de débogage
+                console.log("Données brutes de l'API:", data);
+                
+                const formattedData = data.map((quiz: any) => ({
+                    id: quiz.id,
+                    title: quiz.title,
+                    date: new Date(quiz.created_at).toLocaleDateString('fr-FR'),
+                    userName: quiz.userName || 'Anonyme'
+                }));
+                
+                console.log("Données formatées:", formattedData);
+                
+                setQuizList(formattedData);
+            } catch (err) {
+                console.error('Erreur de chargement des quiz:', err);
+                setError('Impossible de charger les quiz. Veuillez réessayer plus tard.');
+                setQuizList([{'id': 1, 'title': 'London2012', 'date': '22/01/2025', 'userName': 'Jerome82'}]);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        fetchQuizzes();
+    }, [isCustom, userId]);
 
     return (
         <div className="quiz-list">
@@ -17,16 +90,34 @@ export default function QuizList(): React.JSX.Element {
                         <div className="item">Nom du créateur</div>
                         <div className="item"></div>
                     </div>
-                    <div className="list-body">
-                        {quizList.map((quiz, index) =>
-                            <QuizListItem key={index} id={quiz.id} title={quiz.title} date={quiz.date} userName={quiz.userName}/>
-                        )}
-                    </div>
+                    {loading ? (
+                        <div className="loading">Chargement des quiz...</div>
+                    ) : error ? (
+                        <div className="error">{error}</div>
+                    ) : (
+                        <div className="list-body">
+                            {quizList.length === 0 ? (
+                                <div className="no-quizzes">Aucun quiz disponible</div>
+                            ) : (
+                                quizList.map((quiz, index) =>
+                                    <QuizListItem 
+                                        key={index} 
+                                        id={quiz.id} 
+                                        title={quiz.title} 
+                                        date={quiz.date} 
+                                        userName={quiz.userName}
+                                    />
+                                )
+                            )}
+                        </div>
+                    )}
                 </div>
             </div>
-            <div className="list-footer">
-                <Link href="/account/quizzes/create" className="btn big-btn">Créer un nouveau quizz</Link>
-            </div>
+            {showCreateButton && (
+                <div className="list-footer">
+                    <Link href="/account/quizzes/create" className="btn big-btn">Créer un nouveau quizz</Link>
+                </div>
+            )}
         </div>
     );
 }
