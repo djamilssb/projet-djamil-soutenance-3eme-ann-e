@@ -12,7 +12,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Metadata } from "next";
 
-export const metadata: Metadata = {
+const metadata: Metadata = {
   title: "Créer un compte | Kidstrotter",
   description: "Inscrivez votre enfant sur Kidstrotter, l'application ludique pour apprendre en s'amusant grâce à des quiz éducatifs dans un univers galactique.",
   keywords: [
