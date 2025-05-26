@@ -9,7 +9,7 @@ import BlackContainer from "../components/BlackContainer";
 import Auth from "../api/models/Auth";
 import { Metadata } from "next";
 
-export const metadata: Metadata = {
+const metadata: Metadata = {
   title: "Connexion | Kidstrotter",
   description: "Connectez-vous à votre compte Kidstrotter pour permettre à votre enfant de retrouver ses quiz éducatifs et continuer son aventure spatiale en toute sécurité.",
   keywords: [
@@ -107,7 +107,10 @@ function SignInForm() {
             <h2 className="text-3xl bold mb-8">Connexion</h2>
             <form
               className="flex flex-col text-xl"
-              onSubmit={form.handleSubmit}
+              onSubmit={(e) => {
+                e.preventDefault();
+                form.handleSubmit();
+              }}
             >
               <label className="mb-1" htmlFor="email">
                 Email
