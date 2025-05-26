@@ -58,7 +58,6 @@ export default function ModifierCompte() {
         username: parsedData.username,
       });
     } else {
-      // Définir les placeholders par défaut
       setPlaceholderData({
         email: "didi.heko@gmail.com",
         username: "London2012",
