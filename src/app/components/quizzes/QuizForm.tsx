@@ -149,6 +149,12 @@ function checkValidFields() {
     });
 };
 
+function showHideLoader(show: boolean) {
+    const loader = document.querySelector('.loader-wrap');
+
+    show ? loader?.classList.add('active') : loader?.classList.remove('active');
+}
+
 export default function QuizForm({ data }: QuizFormProps): React.JSX.Element {
     const mutation = useMutation({
         mutationFn: fetchQuizCreate,
@@ -179,6 +185,7 @@ export default function QuizForm({ data }: QuizFormProps): React.JSX.Element {
                     }
                 })
     
+                showHideLoader(false);
                 console.log("All questions and answers created successfully");
             } catch (err) {
                 console.error("Error creating questions or answers:", err);
@@ -189,6 +196,7 @@ export default function QuizForm({ data }: QuizFormProps): React.JSX.Element {
     const [questionNumber, setQuestionNumber] = useState(1);
     const [showSuccess, setShowSuccess] = useState(false); 
     
+    const router = useRouter();
     const userId = 3;
     const userName = "Jerome82";
     const departments = [{id: 2, name: "34 Hérault"}, {id: 4, name: "11 Aude"}]
@@ -235,13 +243,14 @@ export default function QuizForm({ data }: QuizFormProps): React.JSX.Element {
                 "is_custom": true,
                 "questions": res.questions
             });
+            showHideLoader(true);
             mutation.mutate(quiz);
 
             setShowSuccess(true);
 
-            // setTimeout(() => {
-            //     router.push('/account/quizzes');
-            // }, 500);
+            setTimeout(() => {
+                router.push('/account/quizzes');
+            }, 1000);
         }
     };
 
