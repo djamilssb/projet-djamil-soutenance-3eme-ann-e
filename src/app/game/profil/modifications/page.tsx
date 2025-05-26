@@ -232,14 +232,6 @@ export default function ModifierCompte() {
           </div>
           
           <div className="space-y-6">
-            <div className="flex items-center h-[41px]">
-
-            </div>
-            
-            <div className="flex items-center h-[41px]">
-
-            </div>
-            
             <div className="flex items-center">
               <label htmlFor="currentChildPassword" className="w-48">Mot de passe enfant actuel :</label>
               <input
@@ -277,6 +269,14 @@ export default function ModifierCompte() {
                 className="bg-gray-800/50 text-white px-3 py-2 rounded flex-1"
                 disabled={!currentChildPassword}
               />
+            </div>
+            
+            <div className="flex items-center">
+              {}
+            </div>
+            
+            <div className="flex items-center">
+              {}
             </div>
           </div>
           
