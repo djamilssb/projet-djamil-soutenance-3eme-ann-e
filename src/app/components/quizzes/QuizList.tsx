@@ -5,9 +5,10 @@ import QuizListItem from './QuizListItem';
 import Link from "next/link";
 
 interface QuizListProps {
-  isCustom?: boolean; 
+  idUserNull?: boolean; // Nouveau prop pour filtrer id_user=NULL 
   userId?: number; 
-  showCreateButton?: boolean; 
+  showCreateButton?: boolean;
+  mode?: 'play' | 'edit'; // Nouveau prop pour le mode d'affichage
 }
 
 interface Quiz {
@@ -18,9 +19,10 @@ interface Quiz {
 }
 
 export default function QuizList({ 
-  isCustom = false, 
+  idUserNull = false, 
   userId, 
-  showCreateButton = true 
+  showCreateButton = true,
+  mode = 'edit' // Par défaut, mode édition 
 }: QuizListProps): React.JSX.Element {
     const [quizList, setQuizList] = useState<Quiz[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
@@ -34,9 +36,9 @@ export default function QuizList({
                 let url = '/api/quizz';
                 const params = new URLSearchParams();
                 
-                if (isCustom !== undefined) {
-                    // Convertir le booléen en entier (0 ou 1)
-                    params.append('isCustom', isCustom ? '1' : '0');
+                // Utiliser idUserNull au lieu de isCustom
+                if (idUserNull) {
+                    params.append('idUserNull', '1');
                 }
                 
                 if (userId) {
@@ -78,7 +80,7 @@ export default function QuizList({
         }
 
         fetchQuizzes();
-    }, [isCustom, userId]);
+    }, [idUserNull, userId]); // Modifier la dépendance
 
     return (
         <div className="quiz-list">
@@ -106,6 +108,7 @@ export default function QuizList({
                                         title={quiz.title} 
                                         date={quiz.date} 
                                         userName={quiz.userName}
+                                        mode={mode} // Passer le mode à QuizListItem
                                     />
                                 )
                             )}
