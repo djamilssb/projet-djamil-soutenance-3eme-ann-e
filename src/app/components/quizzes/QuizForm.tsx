@@ -203,7 +203,7 @@ export default function QuizForm({ data }: QuizFormProps): React.JSX.Element {
 
     useEffect(() => {
         if (data && data.questions) {
-          setQuestionNumber(data.questions.length);
+            setQuestionNumber(data.questions.length);
         }
     }, [data]);
 
@@ -312,13 +312,13 @@ export default function QuizForm({ data }: QuizFormProps): React.JSX.Element {
                     <select name="department" required>
                         <option value="0">Choisir</option>
                         {departments.map((el, key) => 
-                            <option value={el.id} key={key}>{el.name}</option>
+                            <option value={el.id} key={key} selected={el.id.toString() == data?.department}>{el.name}</option>
                         )}
                     </select>
                 </div>
                 <div className="form-line">
                     <label>Description</label>
-                    <textarea name="description" required></textarea>
+                    <textarea name="description" required value={data?.description ?? ''}></textarea>
                 </div>
                 <QuizFormInput
                     props={{
@@ -326,7 +326,7 @@ export default function QuizForm({ data }: QuizFormProps): React.JSX.Element {
                         iClass: 'q-number-wrap',
                         iName: 'q_number',
                         label: 'Nombre de question',
-                        defaultValue: questionNumber,
+                        defaultValue: data?.questions.length ?? questionNumber,
                         onChange: handleQuestionNumberChange
                     }}
                 />

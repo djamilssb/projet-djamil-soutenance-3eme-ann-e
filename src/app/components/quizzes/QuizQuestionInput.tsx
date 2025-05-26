@@ -46,7 +46,7 @@ export default function QuizQuestionInput({ props }: { props: Input}): React.JSX
                             name={`right-${props.iIndex}`} 
                             defaultValue={index}
                             required
-                            defaultChecked={props.answers != undefined ? props.answers[index].correct : undefined}
+                            defaultChecked={props.answers != undefined ? props.answers[index].correct ? true : false : undefined}
                         />
                         <span>Vrai</span>
                     </label>
