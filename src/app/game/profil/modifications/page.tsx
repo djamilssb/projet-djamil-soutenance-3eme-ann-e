@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import ArrowBack from "../components/ArrowBack";
+import ArrowBack from "@/app/components/ArrowBack";
 
 interface UserData {
   email: string;
