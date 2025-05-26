@@ -12,10 +12,23 @@ class AnswerController {
 
     public async getAllAnswers(req: NextRequest): Promise<NextResponse> {
         try {
+            // Vérifier si un questionId est fourni dans les paramètres de la requête
+            const questionId = req.nextUrl.searchParams.get("questionId");
+            
+            // Si un questionId est fourni, filtrer les réponses pour cette question
+            if (questionId) {
+                const questionIdNum = parseInt(questionId, 10);
+                if (!isNaN(questionIdNum)) {
+                    const answers = await this.answerService.getAnswersByQuestion(questionIdNum);
+                    return NextResponse.json(answers, { status: 200 });
+                }
+            }
+            
+            // Sinon retourner toutes les réponses (comportement d'origine)
             const answers = await this.answerService.getAll();
             return NextResponse.json(answers, { status: 200 });
         } catch (error) {
-            console.error('Failed to retrieve all answers:', error);
+            console.error('Failed to retrieve answers:', error);
             return NextResponse.json({ message: 'Impossible de récupérer les réponses.' }, { status: 500 });
         }
     }

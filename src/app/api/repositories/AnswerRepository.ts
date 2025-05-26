@@ -41,8 +41,14 @@ class AnswerRepository {
         return rows.map((row: object) => new Answer(row));
     }
 
-    public async getAnswersByQuestion(idQuestion: number): Promise<Answer[]> {
-        const rows = await executeQuery("SELECT * FROM kt_answers WHERE id_question = ?", [idQuestion]);
+    // Méthode qui récupère les réponses par ID de question
+    public async getByQuestionId(questionId: number): Promise<Answer[]> {
+        // Vérifier que cette requête filtre correctement par id_question
+        const rows = await executeQuery(
+            "SELECT * FROM kt_answers WHERE id_question = ?", 
+            [questionId]
+        );
+        
         return rows.map((row: object) => new Answer(row));
     }
 }

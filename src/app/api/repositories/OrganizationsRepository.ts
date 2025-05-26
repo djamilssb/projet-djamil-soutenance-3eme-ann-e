@@ -1,27 +1,27 @@
 import executeQuery from "@/utils/executeQuery";
-import Organizations from "../models/Organizations";
+import kt_organizations from "../models/Organizations";
 
-class OrganizationRepository {
+class kt_OrganizationRepository {
   constructor() {}
 
-  public async getAll(): Promise<Organizations[]> {
+  public async getAll(): Promise<kt_organizations[]> {
     const rows = await executeQuery("SELECT * FROM kt_organizations", []);
-    return rows.map((row: object) => new Organizations(row));
+    return rows.map((row: object) => new kt_organizations(row));
   }
 
-  public async getById(id: number): Promise<Organizations | null> {
+  public async getById(id: number): Promise<kt_organizations | null> {
     const row = await executeQuery("SELECT * FROM kt_organizations WHERE id = ?", [id]);
     if (row.length === 0) return null;
-    return new Organizations(row[0]);
+    return new kt_organizations(row[0]);
   }
 
-  public async create(organization: Partial<Organizations>): Promise<boolean> {
-    const newOrganization = organization;
+  public async create(kt_organization: Partial<kt_organizations>): Promise<boolean> {
+    const newOrganization = kt_organization;
     const result = await executeQuery("INSERT INTO kt_organizations SET ?", [newOrganization]);
     return result.affectedRows > 0;
   }
 
-  public async update(id: number, organization: Partial<Organizations>): Promise<boolean> {
+  public async update(id: number, organization: Partial<kt_organizations>): Promise<boolean> {
     const organizationId = id;
     const updatedOrganization = organization;
     const result = await executeQuery("UPDATE kt_organizations SET ? WHERE id = ?", [
@@ -37,4 +37,4 @@ class OrganizationRepository {
   }
 }
 
-export default OrganizationRepository;
+export default kt_OrganizationRepository;
