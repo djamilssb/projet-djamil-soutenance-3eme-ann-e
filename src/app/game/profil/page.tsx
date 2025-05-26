@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import ArrowBack from "@/app/components/ArrowBack";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 interface UserData {
   email: string;
@@ -10,12 +11,13 @@ interface UserData {
   password: string;
   password_kids: string;
   created_at: string;
-  currentPassword?: string; // Mot de passe actuel principal
-  currentPassword_kids?: string; // Mot de passe actuel enfant
+  currentPassword?: string;
+  currentPassword_kids?: string;
 }
 
 export default function CompteUser() {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const [editable, setEditable] = useState<boolean>(false);
   const [passwordError, setPasswordError] = useState<string>("");
   const [kidsPasswordError, setKidsPasswordError] = useState<string>("");
@@ -29,39 +31,96 @@ export default function CompteUser() {
     currentPassword_kids: "",
   });
 
-  useEffect(() => {
-    const fetchData = async () => {
+  // Récupérer les données utilisateur avec TanStack Query
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["userData"],
+    queryFn: async () => {
       const userId = localStorage.getItem('user_id');
       
       if (!userId) {
         router.push('/connexion');
-        return;
+        throw new Error('Non authentifié');
       }
       
-      try {
-        const response = await fetch(`/api/users/${userId}`);
-        if (!response.ok) {
-          throw new Error('Erreur lors de la récupération des données utilisateur');
-        }
-        
-        const data = await response.json();
-        setUserData({
-          email: data.email || "",
-          username: data.username || "",
-          password: "********",
-          password_kids: "********",
-          created_at: data.created_at || "",
-          currentPassword: "",
-          currentPassword_kids: "",
-        });
-      } catch (error) {
-        console.error('Erreur:', error);
-        alert('Erreur lors de la récupération des données utilisateur');
+      const response = await fetch(`/api/users/${userId}`);
+      if (!response.ok) {
+        throw new Error('Erreur lors de la récupération des données utilisateur');
       }
-    };
+      
+      return await response.json();
+    }
+  });
 
-    fetchData();
-  }, [router]);
+  // Mutation pour mettre à jour les données utilisateur
+  const updateUserMutation = useMutation({
+    mutationFn: async (dataToSend: any) => {
+      const userId = localStorage.getItem('user_id');
+      if (!userId) throw new Error('Non authentifié');
+      
+      const response = await fetch(`/api/users/${userId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dataToSend),
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        if (errorData.error === "invalid_password") {
+          setPasswordError("Mot de passe actuel incorrect");
+          throw new Error("invalid_password");
+        }
+        if (errorData.error === "invalid_kids_password") {
+          setKidsPasswordError("Mot de passe enfant actuel incorrect");
+          throw new Error("invalid_kids_password");
+        }
+        throw new Error('Échec de la mise à jour des données utilisateur');
+      }
+      
+      return await response.json();
+    },
+    onSuccess: () => {
+      setEditable(false);
+      queryClient.invalidateQueries({ queryKey: ['userData'] });
+      alert('Profil mis à jour avec succès !');
+      setUserData(prevData => ({
+        ...prevData,
+        password: '********',
+        password_kids: '********',
+        currentPassword: "",
+        currentPassword_kids: "",
+      }));
+    },
+    onError: (error: any) => {
+      if (error.message !== "invalid_password" && error.message !== "invalid_kids_password") {
+        console.error('Erreur lors de la mise à jour des données:', error);
+        alert('Erreur lors de la mise à jour du profil');
+      }
+    }
+  });
+
+  // Mettre à jour l'état local avec les données de l'API
+  useEffect(() => {
+    if (data) {
+      setUserData({
+        email: data.email || "",
+        username: data.username || "",
+        password: "********",
+        password_kids: "********",
+        created_at: data.created_at || "",
+        currentPassword: "",
+        currentPassword_kids: "",
+      });
+    }
+  }, [data]);
+
+  // Redirection en cas d'erreur
+  useEffect(() => {
+    if (isError) {
+      router.push('/connexion');
+    }
+  }, [isError, router]);
 
   const handleModifier = () => {
     if (editable) {
@@ -81,13 +140,6 @@ export default function CompteUser() {
 
   const handleSubmit = async () => {
     try {
-      const userId = localStorage.getItem('user_id');
-      
-      if (!userId) {
-        router.push('/connexion');
-        return;
-      }
-      
       // Réinitialisation des erreurs
       setPasswordError("");
       setKidsPasswordError("");
@@ -135,54 +187,48 @@ export default function CompteUser() {
         dataToSend.currentPassword_kids = userData.currentPassword_kids;
       }
       
-      const response = await fetch(`/api/users/${userId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(dataToSend),
-      });
-      
-      if (!response.ok) {
-        const errorData = await response.json();
-        if (errorData.error === "invalid_password") {
-          setPasswordError("Mot de passe actuel incorrect");
-          return;
-        }
-        if (errorData.error === "invalid_kids_password") {
-          setKidsPasswordError("Mot de passe enfant actuel incorrect");
-          return;
-        }
-        throw new Error('Échec de la mise à jour des données utilisateur');
-      }
-      
-      setEditable(false);
-      
-      const updatedUser = await response.json();
-      setUserData({
-        ...userData,
-        email: updatedUser.email || userData.email,
-        username: updatedUser.username || userData.username,
-        password: '********',
-        password_kids: '********',
-        currentPassword: "",
-        currentPassword_kids: "",
-      });
-      
-      alert('Profil mis à jour avec succès !');
+      // Utiliser la mutation pour mettre à jour les données
+      updateUserMutation.mutate(dataToSend);
       
     } catch (error) {
       console.error('Erreur lors de la mise à jour des données:', error);
-      alert('Erreur lors de la mise à jour du profil');
     }
   };
 
+  const formatDate = (dateString: string) => {
+    if (!dateString) return "";
+    
+    try {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('fr-FR', { 
+        day: 'numeric', 
+        month: 'long', 
+        year: 'numeric'
+      });
+    } catch (error) {
+      console.error('Erreur lors du formatage de la date:', error);
+      return dateString;
+    }
+  };
+
+  // Afficher un spinner pendant le chargement
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-teal-400"></div>
+      </div>
+    );
+  }
+
   return (
     <>
+      {/* ArrowBack déplacé en dehors du carré */}
+      <div className="absolute top-5 left-5">
+        <ArrowBack />
+      </div>
       <div className="bg-black/80 text-white p-8 rounded-lg shadow-lg w-full max-w-md">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold">Mon Compte</h2>
-          <ArrowBack />
         </div>
         
         <div className="space-y-6">
@@ -288,16 +334,17 @@ export default function CompteUser() {
           
           <div className="flex justify-between items-center">
             <p className="text-lg">Date de création :</p>
-            <p className="text-lg">{userData.created_at}</p>
+            <p className="text-lg">{formatDate(userData.created_at)}</p>
           </div>
         </div>
         
         <div className="mt-8 flex justify-center">
           <button 
             onClick={handleModifier}
-            className="bg-teal-400 hover:bg-teal-500 text-black font-bold py-2 px-12 rounded-full transition-colors cursor-pointer"
+            disabled={updateUserMutation.isPending}
+            className={`bg-teal-400 hover:bg-teal-500 text-black font-bold py-2 px-12 rounded-full transition-colors cursor-pointer ${updateUserMutation.isPending ? 'opacity-50 cursor-not-allowed' : ''}`}
           >
-            {editable ? 'Valider' : 'Modifier'}
+            {updateUserMutation.isPending ? 'Chargement...' : editable ? 'Valider' : 'Modifier'}
           </button>
         </div>
       </div>
