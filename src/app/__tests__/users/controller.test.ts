@@ -29,7 +29,7 @@ describe("UsersController", () => {
             usersService.getAll.mockResolvedValue([userOne, userTwo]);
 
             const req = {} as NextRequest;
-            const response = await usersController.getAllUsers(req);
+            const response = await usersController.getAll();
 
             expect(usersService.getAll).toHaveBeenCalled();
             expect(response.status).toBe(200);
@@ -43,7 +43,7 @@ describe("UsersController", () => {
             usersService.getAll.mockRejectedValue(new Error("Service error"));
 
             const req = {} as NextRequest;
-            const response = await usersController.getAllUsers(req);
+            const response = await usersController.getAll();
 
             expect(usersService.getAll).toHaveBeenCalled();
             expect(response.status).toBe(500);
@@ -58,7 +58,7 @@ describe("UsersController", () => {
             usersService.getById.mockResolvedValue(newUser);
 
             const req = {} as NextRequest;
-            const response = await usersController.getUserById(req, 1);
+            const response = await usersController.getById(1);
 
             expect(usersService.getById).toHaveBeenCalledWith(1);
             expect(response.status).toBe(200);
@@ -69,7 +69,7 @@ describe("UsersController", () => {
             usersService.getById.mockResolvedValue(null);
 
             const req = {} as NextRequest;
-            const response = await usersController.getUserById(req, 999);
+            const response = await usersController.getById(999);
 
             expect(usersService.getById).toHaveBeenCalledWith(999);
             expect(response.status).toBe(404);
@@ -78,7 +78,7 @@ describe("UsersController", () => {
 
         it("should return status 400 for invalid user ID", async () => {
             const req = {} as NextRequest;
-            const response = await usersController.getUserById(req, NaN);
+            const response = await usersController.getById(NaN);
 
             expect(response.status).toBe(400);
             expect(await response.json()).toEqual({ message: "Invalid user ID." });
@@ -93,7 +93,7 @@ describe("UsersController", () => {
             const req = {} as NextRequest;
             const body = { username: "updateduser" };
 
-            const response = await usersController.updateUser(req, 1, body);
+            const response = await usersController.update(1, body);
 
             expect(usersService.update).toHaveBeenCalledWith(1, body);
             expect(response.status).toBe(200);
@@ -104,7 +104,7 @@ describe("UsersController", () => {
             const req = {} as NextRequest;
             const body = { username: "updateduser" };
 
-            const response = await usersController.updateUser(req, NaN, body);
+            const response = await usersController.update(NaN, body);
 
             expect(response.status).toBe(400);
             expect(await response.json()).toEqual({ message: "Invalid user ID." });
@@ -116,7 +116,7 @@ describe("UsersController", () => {
             const req = {} as NextRequest;
             const body = { username: "updateduser" };
 
-            const response = await usersController.updateUser(req, 1, body);
+            const response = await usersController.update(1, body);
 
             expect(usersService.update).toHaveBeenCalledWith(1, body);
             expect(response.status).toBe(500);
@@ -130,7 +130,7 @@ describe("UsersController", () => {
             usersService.delete.mockResolvedValue(true);
 
             const req = {} as NextRequest;
-            const response = await usersController.deleteUser(req, 1);
+            const response = await usersController.delete(1);
 
             expect(usersService.delete).toHaveBeenCalledWith(1);
             expect(response.status).toBe(200);
@@ -139,7 +139,7 @@ describe("UsersController", () => {
 
         it("should return status 400 for invalid user ID", async () => {
             const req = {} as NextRequest;
-            const response = await usersController.deleteUser(req, NaN);
+            const response = await usersController.delete(NaN);
 
             expect(response.status).toBe(400);
             expect(await response.json()).toEqual({ message: "Invalid user ID." });
@@ -149,7 +149,7 @@ describe("UsersController", () => {
             usersService.delete.mockRejectedValue(new Error("Service error"));
 
             const req = {} as NextRequest;
-            const response = await usersController.deleteUser(req, 1);
+            const response = await usersController.delete(1);
 
             expect(usersService.delete).toHaveBeenCalledWith(1);
             expect(response.status).toBe(500);
