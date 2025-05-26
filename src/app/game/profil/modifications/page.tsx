@@ -28,6 +28,11 @@ export default function ModifierCompte() {
     creationDate: "",
   });
   
+  const [placeholderData, setPlaceholderData] = useState({
+    email: "",
+    username: "",
+  });
+  
   const [currentPassword, setCurrentPassword] = useState("");
   const [currentChildPassword, setCurrentChildPassword] = useState("");
   
@@ -46,12 +51,24 @@ export default function ModifierCompte() {
         newPassword: "",
         newChildPassword: "",
       });
+      
+      // Définir les placeholders depuis les données sauvegardées
+      setPlaceholderData({
+        email: parsedData.email,
+        username: parsedData.username,
+      });
     } else {
-      setFormData({
+      // Définir les placeholders par défaut
+      setPlaceholderData({
         email: "didi.heko@gmail.com",
         username: "London2012",
-        password: "**********",
-        childPassword: "**********",
+      });
+      
+      setFormData({
+        email: "",
+        username: "",
+        password: "",
+        childPassword: "",
         _password: "********",
         _childPassword: "********",
         newPassword: "",
@@ -108,9 +125,10 @@ export default function ModifierCompte() {
       return;
     }
     
+    // Utiliser les placeholders si les champs sont vides
     const dataToSave = {
-      email: formData.email,
-      username: formData.username,
+      email: formData.email || placeholderData.email,
+      username: formData.username || placeholderData.username,
       password: "**********",
       childPassword: "**********",
       _password: formData.newPassword || formData._password, 
@@ -154,6 +172,7 @@ export default function ModifierCompte() {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
+                placeholder={placeholderData.email}
                 className="bg-gray-800/50 text-white px-3 py-2 rounded flex-1"
                 required
               />
@@ -167,6 +186,7 @@ export default function ModifierCompte() {
                 name="username"
                 value={formData.username}
                 onChange={handleChange}
+                placeholder={placeholderData.username}
                 className="bg-gray-800/50 text-white px-3 py-2 rounded flex-1"
                 required
               />
@@ -179,6 +199,7 @@ export default function ModifierCompte() {
                 id="currentPassword"
                 value={currentPassword}
                 onChange={handleCurrentPasswordChange}
+                placeholder="********"
                 className="bg-gray-800/50 text-white px-3 py-2 rounded flex-1"
               />
             </div>
@@ -191,6 +212,7 @@ export default function ModifierCompte() {
                 name="newPassword"
                 value={formData.newPassword}
                 onChange={handleChange}
+                placeholder="Nouveau mot de passe"
                 className="bg-gray-800/50 text-white px-3 py-2 rounded flex-1"
                 disabled={!currentPassword} // Désactiver tant que le mot de passe actuel n'est pas saisi
               />
@@ -203,6 +225,7 @@ export default function ModifierCompte() {
                 id="confirmNewPassword"
                 value={confirmNewPassword}
                 onChange={handleConfirmNewPasswordChange}
+                placeholder="Confirmation du mot de passe"
                 className="bg-gray-800/50 text-white px-3 py-2 rounded flex-1"
                 disabled={!currentPassword}
               />
@@ -225,6 +248,7 @@ export default function ModifierCompte() {
                 id="currentChildPassword"
                 value={currentChildPassword}
                 onChange={handleCurrentChildPasswordChange}
+                placeholder="********"
                 className="bg-gray-800/50 text-white px-3 py-2 rounded flex-1"
               />
             </div>
@@ -237,6 +261,7 @@ export default function ModifierCompte() {
                 name="newChildPassword"
                 value={formData.newChildPassword}
                 onChange={handleChange}
+                placeholder="Nouveau mot de passe enfant"
                 className="bg-gray-800/50 text-white px-3 py-2 rounded flex-1"
                 disabled={!currentChildPassword}
               />
@@ -249,6 +274,7 @@ export default function ModifierCompte() {
                 id="confirmNewChildPassword"
                 value={confirmNewChildPassword}
                 onChange={handleConfirmNewChildPasswordChange}
+                placeholder="Confirmation du mot de passe enfant"
                 className="bg-gray-800/50 text-white px-3 py-2 rounded flex-1"
                 disabled={!currentChildPassword}
               />
