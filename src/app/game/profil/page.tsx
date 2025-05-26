@@ -11,6 +11,8 @@ interface UserData {
   password: string;
   password_kids: string;
   created_at: string;
+  phone: string;       // Ajout du numéro de téléphone
+  address: string;     // Ajout de l'adresse
   currentPassword?: string;
   currentPassword_kids?: string;
 }
@@ -27,6 +29,8 @@ export default function CompteUser() {
     password: "",
     password_kids: "",
     created_at: "",
+    phone: "",        // Initialisation du champ téléphone
+    address: "",      // Initialisation du champ adresse
     currentPassword: "",
     currentPassword_kids: "",
   });
@@ -109,6 +113,8 @@ export default function CompteUser() {
         password: "********",
         password_kids: "********",
         created_at: data.created_at || "",
+        phone: data.phone || "",      // Récupération du téléphone
+        address: data.address || "",  // Récupération de l'adresse
         currentPassword: "",
         currentPassword_kids: "",
       });
@@ -164,6 +170,8 @@ export default function CompteUser() {
       interface UpdateData {
         email: string;
         username: string;
+        phone: string;     // Ajout du téléphone dans les données à envoyer
+        address: string;   // Ajout de l'adresse dans les données à envoyer
         password?: string;
         password_kids?: string;
         currentPassword?: string;
@@ -174,6 +182,8 @@ export default function CompteUser() {
       const dataToSend: UpdateData = {
         email: userData.email,
         username: userData.username,
+        phone: userData.phone,     // Inclure le téléphone dans les données à envoyer
+        address: userData.address  // Inclure l'adresse dans les données à envoyer
       };
       
       // Ajout des mots de passe uniquement s'ils ont été modifiés
@@ -259,6 +269,40 @@ export default function CompteUser() {
               />
             ) : (
               <p className="text-lg">{userData.username}</p>
+            )}
+          </div>
+          
+          {/* Section téléphone - Nouveau champ ajouté */}
+          <div className="flex justify-between items-center">
+            <p className="text-lg">Téléphone :</p>
+            {editable ? (
+              <input
+                type="tel"
+                name="phone"
+                value={userData.phone}
+                onChange={handleInputChange}
+                placeholder="Numéro de téléphone"
+                className="bg-gray-800 text-white rounded px-3 py-1"
+              />
+            ) : (
+              <p className="text-lg">{userData.phone || "Non renseigné"}</p>
+            )}
+          </div>
+          
+          {/* Section adresse - Nouveau champ ajouté */}
+          <div className="flex justify-between items-center">
+            <p className="text-lg">Adresse :</p>
+            {editable ? (
+              <input
+                type="text"
+                name="address"
+                value={userData.address}
+                onChange={handleInputChange}
+                placeholder="Votre adresse"
+                className="bg-gray-800 text-white rounded px-3 py-1"
+              />
+            ) : (
+              <p className="text-lg">{userData.address || "Non renseignée"}</p>
             )}
           </div>
           
