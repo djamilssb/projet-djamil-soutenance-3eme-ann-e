@@ -10,6 +10,7 @@ import fetchAnswerCreate from "@/utils/fetcher/quiz/fetchAnswerCreate";
 import Quizz from "@/app/api/models/Quizz";
 import Question from "@/app/api/models/Question";
 import Answer from "@/app/api/models/Answer";
+import Loader from '../Loader';
 
 interface QuizQuestion {
     text: string;
@@ -81,6 +82,73 @@ function transformFormData(formData: { [k: string]: FormDataEntryValue }) {
     };
 }
 
+function validateForm(isFormValid: boolean): boolean {
+    document.querySelectorAll('[required]').forEach((input) => {
+        const element = input as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
+        console.warn('form check',element.type);
+        // For radio buttons, only validate the group once
+        if (element.type === 'radio') {
+            const name = element.name;
+            const group = document.querySelectorAll(`input[name="${name}"]`);
+            const oneChecked = Array.from(group).some((radio) => (radio as HTMLInputElement).checked);
+      
+            if (!oneChecked) {
+                group.forEach((radio) => {
+                    const checkLabel = radio.closest('.check-label');
+                    if (checkLabel) {
+                        checkLabel.classList.add('error');
+                    } else {
+                        console.warn(`Missing .check-label for radio group: ${name}`);
+                    }
+                });
+                isFormValid = false;
+            }
+        } else if (element.type === 'select-one') {
+            const parent = element.closest('.form-line');
+
+            if (element.value == "0") {
+                parent?.classList.add('error');
+            } else {
+                console.warn(`Missing .form-line for: ${element.name}`);
+            }
+        } else {
+            const parent = element.closest('.form-line');
+            if (!element.value.trim()) {
+                if (parent) {
+                    parent.classList.add('error');
+                } else {
+                    console.warn(`Missing .form-line for: ${element.name}`);
+                }
+                isFormValid = false;
+            }
+        }
+    });
+
+    return isFormValid;
+}
+
+function checkValidFields() {
+    document.querySelectorAll('input, textarea, select').forEach((el) => {
+        el.addEventListener('change', () => {
+            const parent = el.closest('.form-line');
+            if (parent?.classList.contains('error')) {
+                parent.classList.remove('error');
+            }
+    
+            if ((el as HTMLInputElement).type === 'radio') {
+                const group = document.querySelectorAll(`input[name="${(el as HTMLInputElement).name}"]`);
+                group.forEach((radio) => {
+                    const label = radio.closest('.check-label');
+                    
+                    if (label) {
+                        label.classList.remove('error');
+                    }
+                });
+            }
+        });
+    });
+};
+
 export default function QuizForm({ data }: QuizFormProps): React.JSX.Element {
     const mutation = useMutation({
         mutationFn: fetchQuizCreate,
@@ -121,7 +189,6 @@ export default function QuizForm({ data }: QuizFormProps): React.JSX.Element {
     const [questionNumber, setQuestionNumber] = useState(1);
     const [showSuccess, setShowSuccess] = useState(false); 
     
-    const router = useRouter();
     const userId = 3;
     const userName = "Jerome82";
     const departments = [{id: 2, name: "34 Hérault"}, {id: 4, name: "11 Aude"}]
@@ -138,6 +205,7 @@ export default function QuizForm({ data }: QuizFormProps): React.JSX.Element {
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        checkValidFields();
         setShowSuccess(false);
 
         const form = e.currentTarget;
@@ -150,40 +218,7 @@ export default function QuizForm({ data }: QuizFormProps): React.JSX.Element {
         document.querySelectorAll('.form-line').forEach(line => line.classList.remove('error'));
 
         // Validate required fields
-        document.querySelectorAll('[required]').forEach((input) => {
-            const element = input as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
-            console.info(element);
-            // For radio buttons, only validate the group once
-            if (element.type === 'radio') {
-                const name = element.name;
-                const group = document.querySelectorAll(`input[name="${name}"]`);
-                const oneChecked = Array.from(group).some((radio) => (radio as HTMLInputElement).checked);
-          
-                if (!oneChecked) {
-                    group.forEach((radio) => {
-                        const checkLabel = radio.closest('.check-label');
-                        if (checkLabel) {
-                            checkLabel.classList.add('error');
-                        } else {
-                            console.warn(`Missing .check-label for radio group: ${name}`);
-                        }
-                    });
-                  isFormValid = false;
-                }
-            } else {
-                const parent = element.closest('.form-line');
-                if (!element.value.trim()) {
-                    if (parent) {
-                        parent.classList.add('error');
-                    } else {
-                        console.warn(`Missing .form-line for: ${element.name}`);
-                    }
-                    isFormValid = false;
-                }
-            }
-        });
-
-        if (!isFormValid) {
+        if (!validateForm(isFormValid)) {
             return;
         }
         const res = transformFormData(formValues);
@@ -210,8 +245,18 @@ export default function QuizForm({ data }: QuizFormProps): React.JSX.Element {
         }
     };
 
+    useEffect(() => {
+        const form = document.getElementById("quiz-create") as HTMLFormElement;
+        if (form) {
+          form.setAttribute("noValidate", "");
+        }
+
+        checkValidFields();
+    }, []);
+
     return (
-        <form className="quiz-form" onSubmit={handleSubmit}>
+        <form id="quiz-create" className="quiz-form" onSubmit={handleSubmit}>
+            <Loader title="Création est en cours..." />
             <div className="form-body">
                 <QuizFormInput
                     props={{
@@ -249,13 +294,13 @@ export default function QuizForm({ data }: QuizFormProps): React.JSX.Element {
                         iClass: '',
                         iName: 'quiz_image',
                         label: 'Url de l\'image',
-                        required: false,
+                        required: true,
                         defaultValue: data?.quiz_image ?? ""
                     }}
                 />
                 <div className="form-line">
                     <label>Département</label>
-                    <select name="department">
+                    <select name="department" required>
                         <option value="0">Choisir</option>
                         {departments.map((el, key) => 
                             <option value={el.id} key={key}>{el.name}</option>
@@ -264,7 +309,7 @@ export default function QuizForm({ data }: QuizFormProps): React.JSX.Element {
                 </div>
                 <div className="form-line">
                     <label>Description</label>
-                    <textarea name="description"></textarea>
+                    <textarea name="description" required></textarea>
                 </div>
                 <QuizFormInput
                     props={{

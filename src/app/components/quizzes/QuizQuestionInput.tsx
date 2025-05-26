@@ -45,6 +45,7 @@ export default function QuizQuestionInput({ props }: { props: Input}): React.JSX
                             type="radio" 
                             name={`right-${props.iIndex}`} 
                             defaultValue={index}
+                            required
                             defaultChecked={props.answers != undefined ? props.answers[index].correct : undefined}
                         />
                         <span>Vrai</span>

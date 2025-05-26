@@ -254,13 +254,20 @@ main {
   height: 35px;
   padding: 0 16px;
   background: #5e5e5e80;
+  border: 2px solid transparent;
   text-align: center;
+}
+.quiz-form .form-line.error input,
+.quiz-form .form-line.error textarea,
+.quiz-form .form-line.error select {
+  border-color: var(--alert-danger-color);
 }
 .quiz-form .form-line textarea {
   width: 80%;
   height: 100px;
   padding: 0 16px;
   background: #5e5e5e80;
+  border: 2px solid transparent;
   resize: none;
 }
 .quiz-form .form-line select {
@@ -268,6 +275,7 @@ main {
   height: 35px;
   padding: 0 16px;
   background: #5e5e5e80;
+  border: 2px solid transparent;
 }
 
 .quiz-form .questions {
@@ -290,6 +298,9 @@ main {
 }
 .quiz-form .question-block .form-line.answer {
   padding-left: 2rem;
+}
+.quiz-form .answer-wrap .check-label.error {
+  border-bottom: 1px solid var(--alert-danger-color);
 }
 .quiz-form .question-block .form-line label {
   margin-bottom: 0.5rem;
