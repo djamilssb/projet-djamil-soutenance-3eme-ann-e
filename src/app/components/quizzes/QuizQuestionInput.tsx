@@ -15,7 +15,7 @@ interface Input {
 }
 export default function QuizQuestionInput({ props }: { props: Input}): React.JSX.Element {
     const answers = [1, 2, 3, 4];
-    console.info('data', props.answers);
+    // console.info('data', props.answers);
     return (
         <div className="question-block">
             <div className={`form-line ${props.iClass}`}>
@@ -45,6 +45,7 @@ export default function QuizQuestionInput({ props }: { props: Input}): React.JSX
                             type="radio" 
                             name={`right-${props.iIndex}`} 
                             defaultValue={index}
+                            required
                             defaultChecked={props.answers != undefined ? props.answers[index].correct : undefined}
                         />
                         <span>Vrai</span>

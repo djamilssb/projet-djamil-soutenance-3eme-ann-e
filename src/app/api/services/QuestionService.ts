@@ -36,7 +36,7 @@ class QuestionService {
     public async create(question: Partial<Question>): Promise<boolean> {
         try {
 
-            if (!question.idQuizz || !question.orderIndex || !question.content?.trim()) throw new Error("Données de la question incomplètes");
+            if (!question.id_quizz || !question.order_index || !question.content?.trim()) throw new Error("Données de la question incomplètes");
 
             const createdResult = await this.questionRepository.create(question);
 

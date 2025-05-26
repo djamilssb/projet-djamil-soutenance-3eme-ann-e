@@ -1,13 +1,13 @@
 class Answer {
     id?: number;
-    idQuizz?: number;
-    idQuestion?: number;
-    orderIndex?: number;
+    id_quizz?: number;
+    id_question?: number;
+    order_index?: number;
     content?: string;
     explication?: string;
-    isCorrect?: boolean;
-    createdAt?: Date;
-    updatedAt?: Date;
+    is_correct?: boolean;
+    created_at?: Date;
+    updated_at?: Date;
 
     constructor(data?: Partial<Answer>) {
         Object.assign(this, data)
@@ -18,15 +18,15 @@ class Answer {
     };
 
     public getQuizzId(): number | undefined {
-        return this.idQuizz;
+        return this.id_quizz;
     };
 
     public getQuestionId(): number | undefined {
-        return this.idQuestion;
+        return this.id_question;
     };
     
     public getOrderIndex(): number | undefined {
-        return this.orderIndex;
+        return this.order_index;
     };
 
     public getContent(): string | undefined {
@@ -38,11 +38,11 @@ class Answer {
     };
 
     public getIsCorrect(): boolean | undefined {
-        return this.isCorrect;
+        return this.is_correct;
     };
 
     public setOrderIndex(index: number): void {
-        this.orderIndex = index;
+        this.order_index = index;
     };
 
     public setContent(text: string): void {
@@ -52,6 +52,19 @@ class Answer {
     public setExplication(text: string): void {
         this.explication = text;
     };
+
+    public toJSON(): object {
+        return {
+            id: this.id,
+            id_quizz: this.id_quizz,
+            id_question: this.id_question,
+            content: this.content,
+            explication: this.explication,
+            is_correct: this.is_correct,
+            created_at: this.created_at,
+            updated_at: this.updated_at
+        };
+    }
 }
 
 export default Answer;

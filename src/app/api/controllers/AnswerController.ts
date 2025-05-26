@@ -54,14 +54,17 @@ class AnswerController {
 
     public async createAnswer(req: NextRequest, body: Partial<Answer>): Promise<NextResponse> {
         const answerData: Partial<Answer> = body;
+        console.log('answer', answerData);
 
-        if (!answerData.idQuizz || !answerData.idQuestion || !answerData.content || !answerData.explication) {
+        if (!answerData.id_quizz || !answerData.id_question || !answerData.content) {
+            console.log('not all data');
             return NextResponse.json({ message: 'Données de réponse manquantes.' }, { status: 400 });
         }
 
         try {
             const createdResult = await this.answerService.create(answerData);
             if (!createdResult) {
+                console.log('not created', createdResult);
                 return NextResponse.json({ message: 'Échec de la création de la réponse.' }, { status: 400 });
             }
             return NextResponse.json({ message: 'Réponse créé avec succès.' }, { status: 201 });
