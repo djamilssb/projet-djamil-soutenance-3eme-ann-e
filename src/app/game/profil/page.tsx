@@ -9,36 +9,28 @@ interface UserData {
   username: string;
   password: string;
   childPassword: string;
-  creationDate: string;
-  _password?: string;
-  _childPassword?: string;
+  created_at: string;
 }
 
 export default function CompteUser() {
   const router = useRouter();
+  const [editable, setEditable] = useState<boolean>(false);
   const [userData, setUserData] = useState<UserData>({
-    email: "didi.heko@gmail.com",
-    username: "London2012",
-    password: "**********",
-    childPassword: "**********",
-    creationDate: "22/09/20",
+    email: "",
+    username: "",
+    password: "",
+    childPassword: "",
+    created_at: "",
   });
 
   useEffect(() => {
-    const savedUserData = localStorage.getItem("userData");
-    if (savedUserData) {
-      const parsedData = JSON.parse(savedUserData);
-      
-      setUserData({
-        ...parsedData,
-        password: "**********",
-        childPassword: "**********",
-      });
-    }
+    // @TODO: Fetch user data from API
+    //setUserData(userFromApi)
+
   }, []);
 
   const handleModifier = () => {
-    router.push("/modifier-compte");
+    router.push("/modifications");
   };
 
   return (
@@ -71,17 +63,17 @@ export default function CompteUser() {
           
           <div className="flex justify-between items-center">
             <p className="text-lg">Mot de passe :</p>
-            <p className="text-lg">**********</p>
+            <p className="text-lg">{userData.password}</p>
           </div>
           
           <div className="flex justify-between items-center">
             <p className="text-lg">Mot de passe enfant :</p>
-            <p className="text-lg">**********</p>
+            <p className="text-lg">{userData.childPassword}</p>
           </div>
           
           <div className="flex justify-between items-center">
             <p className="text-lg">Date de création :</p>
-            <p className="text-lg">{userData.creationDate}</p>
+            <p className="text-lg">{userData.created_at}</p>
           </div>
         </div>
         
