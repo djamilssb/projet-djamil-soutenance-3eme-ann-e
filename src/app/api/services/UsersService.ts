@@ -46,6 +46,7 @@ class UsersService {
                 throw new Error("User not found");
             }
 
+            // Créer un objet pour les données à mettre à jour (sans les champs de vérification)
             const updateData: Partial<Users> = {
                 email: userData.email,
                 username: userData.username,
@@ -55,31 +56,27 @@ class UsersService {
 
             // Vérification et mise à jour du mot de passe principal
             if (userData.password && userData.currentPassword) {
-                const isCurrentPasswordValid = await bcrypt.compare(
-                    userData.currentPassword,  
-                    currentUser.password || '' 
-                );
+                // Vérifier que le mot de passe actuel correspond au hash en base
+                const isCurrentPasswordValid = await bcrypt.compare(userData.currentPassword, currentUser.password || '');
                 
                 if (!isCurrentPasswordValid) {
                     throw new Error("invalid_current_password");
                 }
 
-                // Hasher le nouveau mot de passe avant de le sauvegarder
+                // Hasher le nouveau mot de passe
                 updateData.password = await bcrypt.hash(userData.password, 14);
             }
 
             // Vérification et mise à jour du mot de passe enfant
             if (userData.password_kids && userData.currentPassword_kids) {
-                const isCurrentKidsPasswordValid = await bcrypt.compare(
-                    userData.currentPassword_kids,
-                    currentUser.password_kids || '' 
-                );
+                // Vérifier que le mot de passe enfant actuel correspond au hash en base
+                const isCurrentKidsPasswordValid = await bcrypt.compare(userData.currentPassword_kids, currentUser.password_kids || '');
                 
                 if (!isCurrentKidsPasswordValid) {
                     throw new Error("invalid_current_kids_password");
                 }
 
-                // Hasher le nouveau mot de passe enfant avant de le sauvegarder
+                // Hasher le nouveau mot de passe enfant
                 updateData.password_kids = await bcrypt.hash(userData.password_kids, 14);
             }
 
@@ -92,6 +89,7 @@ class UsersService {
         } catch (e) {
             console.error("Error in update:", e);
             
+            // Relancer les erreurs spécifiques de mot de passe
             if (e instanceof Error && (e.message === "invalid_current_password" || e.message === "invalid_current_kids_password")) {
                 throw e;
             }

@@ -11,12 +11,14 @@ interface UserData {
   email: string;
   username: string;
   password: string;
+  password_kids: string;
   created_at: string;
   phone: string;
   address: string;
   avatar_id?: number;
   avatar_url?: string;
   currentPassword?: string;
+  currentPassword_kids?: string;
 }
 
 export default function CompteUser() {
@@ -24,20 +26,24 @@ export default function CompteUser() {
   const queryClient = useQueryClient();
   const [editable, setEditable] = useState<boolean>(false);
   const [passwordError, setPasswordError] = useState<string>("");
+  const [kidsPasswordError, setKidsPasswordError] = useState<string>("");
   const [showAvatarMenu, setShowAvatarMenu] = useState<boolean>(false);
   
   const [userData, setUserData] = useState<UserData>({
     email: "",
     username: "",
     password: "",
+    password_kids: "",
     created_at: "",
     phone: "",
     address: "",
     avatar_id: 0,
     avatar_url: "/avatar-default.png",
     currentPassword: "",
+    currentPassword_kids: "",
   });
   const [isPasswordModified, setIsPasswordModified] = useState(false);
+  const [isKidsPasswordModified, setIsKidsPasswordModified] = useState(false);
 
   // Récupérer les données utilisateur avec TanStack Query
   const { data, isLoading, isError } = useQuery({
@@ -78,6 +84,10 @@ export default function CompteUser() {
           setPasswordError("Le mot de passe actuel est incorrect");
           throw new Error("invalid_current_password");
         }
+        if (errorData.error === "invalid_current_kids_password") {
+          setKidsPasswordError("Le mot de passe enfant actuel est incorrect");
+          throw new Error("invalid_current_kids_password");
+        }
         throw new Error('Échec de la mise à jour des données utilisateur');
       }
       
@@ -91,12 +101,15 @@ export default function CompteUser() {
       setUserData(prevData => ({
         ...prevData,
         password: '********',
+        password_kids: '********',
         currentPassword: "",
+        currentPassword_kids: "",
       }));
       setIsPasswordModified(false);
+      setIsKidsPasswordModified(false);
     },
     onError: (error: any) => {
-      if (error.message !== "invalid_current_password") {
+      if (error.message !== "invalid_current_password" && error.message !== "invalid_current_kids_password") {
         console.error('Erreur lors de la mise à jour des données:', error);
         alert('Erreur lors de la mise à jour du profil');
       }
@@ -112,15 +125,18 @@ export default function CompteUser() {
         email: data.email || "",
         username: data.username || "",
         password: "********",
+        password_kids: "********",
         created_at: data.created_at || "",
         phone: data.phone || "",
         address: data.address || "",
         avatar_id: savedAvatarId ? parseInt(savedAvatarId) : 1,
         avatar_url: savedAvatarUrl || "/avatar-default.png",
         currentPassword: "",
+        currentPassword_kids: "",
       });
       
       setIsPasswordModified(false);
+      setIsKidsPasswordModified(false);
     }
   }, [data]);
 
@@ -136,6 +152,7 @@ export default function CompteUser() {
     } else {
       setEditable(true);
       setPasswordError("");
+      setKidsPasswordError("");
     }
   };
 
@@ -144,6 +161,10 @@ export default function CompteUser() {
     
     if (name === 'password' && value !== '********') {
       setIsPasswordModified(true);
+    }
+    
+    if (name === 'password_kids' && value !== '********') {
+      setIsKidsPasswordModified(true);
     }
     
     setUserData({ ...userData, [name]: value });
@@ -165,11 +186,18 @@ export default function CompteUser() {
   const handleSubmit = async () => {
     try {
       setPasswordError("");
+      setKidsPasswordError("");
       
       const isPasswordChanged = userData.password !== '********';
+      const isKidsPasswordChanged = userData.password_kids !== '********';
       
       if (isPasswordChanged && (!userData.currentPassword || userData.currentPassword.trim() === "")) {
         setPasswordError("Veuillez entrer votre mot de passe actuel pour confirmer le changement");
+        return;
+      }
+      
+      if (isKidsPasswordChanged && (!userData.currentPassword_kids || userData.currentPassword_kids.trim() === "")) {
+        setKidsPasswordError("Veuillez entrer le mot de passe enfant actuel pour confirmer le changement");
         return;
       }
 
@@ -179,7 +207,9 @@ export default function CompteUser() {
         phone: string;
         address: string;
         password?: string;
+        password_kids?: string;
         currentPassword?: string;
+        currentPassword_kids?: string;
       }
       
       const dataToSend: UpdateData = {
@@ -192,6 +222,11 @@ export default function CompteUser() {
       if (isPasswordChanged) {
         dataToSend.password = userData.password;
         dataToSend.currentPassword = userData.currentPassword;
+      }
+      
+      if (isKidsPasswordChanged) {
+        dataToSend.password_kids = userData.password_kids;
+        dataToSend.currentPassword_kids = userData.currentPassword_kids;
       }
       
       updateUserMutation.mutate(dataToSend);
@@ -367,6 +402,47 @@ export default function CompteUser() {
               
               {passwordError && (
                 <div className="text-red-500 text-center">{passwordError}</div>
+              )}
+            </>
+          )}
+          
+          {!editable && (
+            <div className="flex justify-between items-center">
+              <p className="text-lg">Mot de passe enfant :</p>
+              <p className="text-lg">{userData.password_kids}</p>
+            </div>
+          )}
+          
+          {editable && (
+            <>
+              {isKidsPasswordModified && (
+                <div className="flex justify-between items-center">
+                  <p className="text-lg">Mot de passe enfant actuel :</p>
+                  <input
+                    type="password"
+                    name="currentPassword_kids"
+                    value={userData.currentPassword_kids || ""}
+                    onChange={handleInputChange}
+                    placeholder="Tapez exactement le mot de passe enfant actuel"
+                    className="bg-gray-800 text-white rounded px-3 py-1"
+                  />
+                </div>
+              )}
+              
+              <div className="flex justify-between items-center">
+                <p className="text-lg">{isKidsPasswordModified ? "Nouveau mot de passe enfant :" : "Mot de passe enfant :"}</p>
+                <input
+                  type="password"
+                  name="password_kids"
+                  value={userData.password_kids}
+                  onChange={handleInputChange}
+                  placeholder="Nouveau mot de passe enfant"
+                  className="bg-gray-800 text-white rounded px-3 py-1"
+                />
+              </div>
+              
+              {kidsPasswordError && (
+                <div className="text-red-500 text-center">{kidsPasswordError}</div>
               )}
             </>
           )}
