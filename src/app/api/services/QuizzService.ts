@@ -117,6 +117,24 @@ class QuizzService {
             throw new Error(`Erreur lors de la récupération des quizz pour le département ${departementId}`);
         }
     }
+
+    public async getAllQuizByIdUser(userId: number): Promise<any[]> {
+    try {
+        return await this.quizzRepository.getAllQuizByIdUser(userId);
+    } catch(e) {
+        console.error("Error in getAllQuizByIdUser:", e);
+        throw new Error(`Erreur lors de la récupération des quizz pour l'utilisateur ${userId}`);
+    }
+}
+
+public async getQuizzesWhereIdUserIsNull(): Promise<any[]> {
+    try {
+        return await this.quizzRepository.getQuizzesWhereIdUserIsNull();
+    } catch (error) {
+        console.error('Error in getQuizzesWhereIdUserIsNull:', error);
+        throw new Error('Failed to retrieve official quizzes');
+    }
+}
 }
 
 export default QuizzService;

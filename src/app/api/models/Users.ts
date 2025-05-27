@@ -1,13 +1,13 @@
 class Users {
-    public id?: number;
-    public username?: string;
-    public email?: string;
-    public password?: string;
-    public password_kids?: string;
-    public created_at?: string;
-    public phone?: string;
-    public address?: string;
-    public id_avatar?: number;
+    id?: number;
+    username?: string;
+    email?: string;
+    password?: string;
+    password_kids?: string;
+    created_at?: string;
+    phone?: string;
+    address?: string;
+    id_avatar?: number;
 
     constructor(data: Partial<Users>) {
         this.id = data.id;
