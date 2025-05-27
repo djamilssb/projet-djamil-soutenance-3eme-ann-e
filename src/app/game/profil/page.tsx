@@ -278,16 +278,16 @@ export default function CompteUser() {
         </div>
         
         <div className="flex flex-col items-center mb-6">
-          <div className="relative w-24 h-24 rounded-full overflow-hidden border-4 border-teal-400 mb-3">
+          <div className="relative w-24 h-24 rounded-full overflow-hidden mb-3">
             <Image
-              src={userData.avatar_url || "https://via.placeholder.com/150"}
+              src={userData.avatar_url || "avatar-default.png"}
               alt="Avatar utilisateur"
               fill
               className="object-cover"
               onError={(e) => {
                 const target = e.target as HTMLImageElement;
                 target.onerror = null;
-                target.src = "https://via.placeholder.com/150";
+                target.src = "avatar-default.png";
               }}
             />
           </div>
