@@ -1,3 +1,4 @@
+import bcrypt from "bcrypt";
 import Users from "../models/Users";
 import UserRepository from "../repositories/UsersRepository";
 
@@ -33,19 +34,68 @@ class UsersService {
         }
     }
 
-    public async update(id: number, user: Partial<Users>): Promise<boolean> {
+    public async update(id: number, userData: any): Promise<boolean> {
         try {
             if (!id || isNaN(id)) {
                 throw new Error("Invalid user ID");
             }
 
-            const updated = await this.userRepository.update(id, user);
+            // Récupérer l'utilisateur actuel pour vérifier les mots de passe
+            const currentUser = await this.userRepository.getById(id);
+            if (!currentUser) {
+                throw new Error("User not found");
+            }
+
+            const updateData: Partial<Users> = {
+                email: userData.email,
+                username: userData.username,
+                phone: userData.phone,
+                address: userData.address
+            };
+
+            // Vérification et mise à jour du mot de passe principal
+            if (userData.password && userData.currentPassword) {
+                const isCurrentPasswordValid = await bcrypt.compare(
+                    userData.currentPassword,  
+                    currentUser.password || '' 
+                );
+                
+                if (!isCurrentPasswordValid) {
+                    throw new Error("invalid_current_password");
+                }
+
+                // Hasher le nouveau mot de passe avant de le sauvegarder
+                updateData.password = await bcrypt.hash(userData.password, 14);
+            }
+
+            // Vérification et mise à jour du mot de passe enfant
+            if (userData.password_kids && userData.currentPassword_kids) {
+                const isCurrentKidsPasswordValid = await bcrypt.compare(
+                    userData.currentPassword_kids,
+                    currentUser.password_kids || '' 
+                );
+                
+                if (!isCurrentKidsPasswordValid) {
+                    throw new Error("invalid_current_kids_password");
+                }
+
+                // Hasher le nouveau mot de passe enfant avant de le sauvegarder
+                updateData.password_kids = await bcrypt.hash(userData.password_kids, 14);
+            }
+
+            // Mettre à jour uniquement les données validées (sans les champs currentPassword)
+            const updated = await this.userRepository.update(id, updateData);
 
             if (!updated) throw new Error("Error while updating the user");
 
             return updated;
         } catch (e) {
             console.error("Error in update:", e);
+            
+            if (e instanceof Error && (e.message === "invalid_current_password" || e.message === "invalid_current_kids_password")) {
+                throw e;
+            }
+            
             throw new Error("Error while updating the user");
         }
     }
@@ -69,3 +119,6 @@ class UsersService {
 }
 
 export default UsersService;
+
+
+
