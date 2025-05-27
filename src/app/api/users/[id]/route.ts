@@ -1,71 +1,26 @@
 import { NextRequest, NextResponse } from "next/server";
-import UsersService from "../../services/UsersService";
+import UsersController from "../../controllers/UsersController";
 
-const usersService = new UsersService();
+const usersController = new UsersController();
 
-export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
-    try {
-        const id = parseInt(params.id);
-        const userData = await req.json();
+export async function GET(req: NextRequest, context: { params: Promise<{ id: string }> }): Promise<NextResponse> {
+    const { id } = await context.params;
+    const userId = parseInt(id, 10);
 
-        const updated = await usersService.update(id, userData);
-
-        if (!updated) {
-            return NextResponse.json(
-                { error: "Failed to update user" },
-                { status: 400 }
-            );
-        }
-
-        return NextResponse.json(
-            { message: "User updated successfully" },
-            { status: 200 }
-        );
-    } catch (e) {
-        console.error("Failed to update user:", e);
-        
-        // Gérer les erreurs spécifiques de mot de passe
-        if (e instanceof Error) {
-            if (e.message === "invalid_current_password") {
-                return NextResponse.json(
-                    { error: "invalid_current_password", message: "Le mot de passe actuel est incorrect" },
-                    { status: 400 }
-                );
-            }
-            
-            if (e.message === "invalid_current_kids_password") {
-                return NextResponse.json(
-                    { error: "invalid_current_kids_password", message: "Le mot de passe enfant actuel est incorrect" },
-                    { status: 400 }
-                );
-            }
-        }
-
-        return NextResponse.json(
-            { error: "Internal server error" },
-            { status: 500 }
-        );
-    }
+    return await usersController.getById(userId);
 }
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
-    try {
-        const id = parseInt(params.id);
-        const user = await usersService.getById(id);
+export async function PUT(req: NextRequest, context: { params: Promise<{ id: string }> }): Promise<NextResponse> {
+    const { id } = await context.params;
+    const userId = parseInt(id, 10);
+    const newData = await req.json();
 
-        if (!user) {
-            return NextResponse.json(
-                { error: "User not found" },
-                { status: 404 }
-            );
-        }
+    return await usersController.update(userId, newData);
+}
 
-        return NextResponse.json(user, { status: 200 });
-    } catch (e) {
-        console.error("Failed to get user:", e);
-        return NextResponse.json(
-            { error: "Internal server error" },
-            { status: 500 }
-        );
-    }
+export async function DELETE(req: NextRequest, context: { params: Promise<{ id: string }> }): Promise<NextResponse> {
+    const { id } = await context.params;
+    const userId = parseInt(id, 10);
+
+    return await usersController.delete(userId);
 }
