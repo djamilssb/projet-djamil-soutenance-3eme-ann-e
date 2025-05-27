@@ -44,7 +44,6 @@ export default function CompteUser() {
   const [isPasswordModified, setIsPasswordModified] = useState(false);
   const [isKidsPasswordModified, setIsKidsPasswordModified] = useState(false);
 
-  // Récupérer les données utilisateur avec TanStack Query
   const { data, isLoading, isError } = useQuery({
     queryKey: ["userData"],
     queryFn: async () => {
@@ -64,7 +63,6 @@ export default function CompteUser() {
     }
   });
 
-  // Mutation pour mettre à jour les données utilisateur
   const updateUserMutation = useMutation({
     mutationFn: async (dataToSend: any) => {
       const userId = localStorage.getItem('user_id');
@@ -172,6 +170,7 @@ export default function CompteUser() {
       avatar_id: avatarId,
       avatar_url: avatarUrl
     });
+    setShowAvatarMenu(false);
   };
 
   const handleSubmit = async () => {
@@ -257,11 +256,11 @@ export default function CompteUser() {
     <>
       {showAvatarMenu && (
         <MenuAvatar 
-          onAvatarSelect={handleAvatarSelect} 
-          onClose={() => setShowAvatarMenu(false)} 
+          onAvatarSelect={handleAvatarSelect}
+          onClose={() => setShowAvatarMenu(false)}
         />
       )}
-    
+      
       <div className="absolute top-5 left-5">
         <ArrowBack />
       </div>
@@ -270,24 +269,22 @@ export default function CompteUser() {
           <h2 className="text-2xl font-bold">Mon Compte</h2>
         </div>
         
-        {/* Avatar section */}
         <div className="flex flex-col items-center mb-6">
-          <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-teal-400 mb-3">
+          <div className="relative w-24 h-24 rounded-full overflow-hidden border-4 border-teal-400 mb-3">
             <Image
               src={userData.avatar_url || "/default-avatar.png"}
               alt="Avatar utilisateur"
-              width={96}
-              height={96}
-              className="w-full h-full object-cover"
+              fill
+              className="object-cover"
             />
           </div>
           
           {editable && (
             <button 
               onClick={() => setShowAvatarMenu(true)}
-              className="bg-teal-400 hover:bg-teal-500 text-black text-sm font-semibold py-1 px-4 rounded-full"
+              className="bg-transparent border border-white px-4 py-2 rounded text-white hover:bg-white hover:text-black cursor-pointer"
             >
-              Changer l'avatar
+              Modifier l&apos;avatar
             </button>
           )}
         </div>
