@@ -11,6 +11,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Metadata } from "next";
+import { isEmailValid, isPasswordValid, isPhoneValid, isUsernameValid } from "@/utils/regexp/input";
 
 const metadata: Metadata = {
   title: "Créer un compte | Kidstrotter",
@@ -94,6 +95,10 @@ const formOpts = formOptions({
 
 function SignUp() {
   const [avatarUrl, setAvatarUrl] = useState<string>("/default_avatar.webp");
+  const [ hasEmailValid, setHasEmailValid ] = useState<boolean>(true);
+  const [ hasUsernameValid, setHasUsernameValid ] = useState<boolean>(true);
+  const [ hasPasswordValid, setHasPasswordValid ] = useState<boolean>(true);
+  const [ hasPhoneValid, setHasPhoneValid ] = useState<boolean>(true);
   const {isModaleVisible, openModale, closeModale} = useModale();
   const router = useRouter();
 
@@ -102,20 +107,37 @@ function SignUp() {
   onSuccess: (result) => {
     if (result) {
       router.push("/connexion");
-    } else {
-      alert("Erreur lors de l'inscription. Vérifie tes informations.");
-    }
-  }
+  }},
 });
 
   const form = useForm({
     ...formOpts,
     onSubmit: async ({ value }) => {
+
+      if (!isUsernameValid(value.username)) {
+        setHasUsernameValid(false);
+        return;
+      };
+
+      if (!isEmailValid(value.email)) {
+        setHasEmailValid(false);
+        return;
+      };
+
+      if (!isPasswordValid(value.password)) {
+        setHasPasswordValid(false);
+        return;
+      };
+
+      if (!isPhoneValid(value.phone)) {
+        setHasPhoneValid(false);
+        return;
+      };
+
       const newUser = new Users({
         username: value.username,
         email: value.email,
         password: value.password,
-        password_kids: value.password_kids,
         id_avatar: value.id_avatar,
         address: value.address,
         phone: value.phone,
@@ -152,43 +174,73 @@ function SignUp() {
                 <form.Field
                   name="username"
                   children={(field) => (
-                    <input
-                      type="text"
-                      placeholder="Nom d'utilisateur"
-                      value={field.state.value}
-                      onChange={(e) => field.handleChange(e.target.value)}
-                      className="w-full h-12 p-3 rounded bg-[var(--grayed-input)] text-white"
-                      required
-                    />
+                    <div>
+                      <input
+                        type="text"
+                        placeholder="Nom d'utilisateur"
+                        value={field.state.value}
+                        onChange={(e) => {
+                          field.handleChange(e.target.value);
+                          setHasUsernameValid(true);
+                        }}
+                        className={`w-full h-12 p-3 rounded bg-[var(--grayed-input)] text-white ${!hasUsernameValid ? "border-2 border-red-500" : ""}`}
+                        required
+                      />
+                      {!hasUsernameValid && (
+                        <p className="text-red-500 text-sm mt-1">
+                          Le nom d'utilisateur doit contenir au moins 3 caractères alphanumériques.
+                        </p>
+                      )}
+                    </div>
                   )}
                 />
                 <form.Field
                   name="email"
                   children={(field) => (
-                    <input
-                      type="email"
-                      placeholder="monemail@gmail.com"
-                      value={field.state.value}
-                      onChange={(e) => field.handleChange(e.target.value)}
-                      className="w-full h-12 p-3 rounded bg-[var(--grayed-input)] text-white"
-                      required
-                    />
+                    <div>
+                      <input
+                        type="email"
+                        placeholder="monemail@gmail.com"
+                        value={field.state.value}
+                        onChange={(e) => {
+                          field.handleChange(e.target.value);
+                          setHasEmailValid(true);
+                        }}
+                        className={`w-full h-12 p-3 rounded bg-[var(--grayed-input)] text-white ${!hasEmailValid ? "border-2 border-red-500" : ""}`}
+                        required
+                      />
+                      {!hasEmailValid && (
+                        <p className="text-red-500 text-sm mt-1">
+                          Veuillez entrer une adresse email valide.
+                        </p>
+                      )}
+                    </div>
                   )}
                 />
                 <form.Field
                   name="password"
                   children={(field) => (
-                    <input
-                      type="password"
-                      placeholder="Mot de passe"
-                      value={field.state.value}
-                      onChange={(e) => field.handleChange(e.target.value)}
-                      className="w-full h-12 p-3 rounded bg-[var(--grayed-input)] text-white"
-                      required
-                    />
+                    <div>
+                      <input
+                        type="password"
+                        placeholder="Mot de passe"
+                        value={field.state.value}
+                        onChange={(e) => {
+                          field.handleChange(e.target.value);
+                          setHasPasswordValid(true);
+                        }}
+                        className={`w-full h-12 p-3 rounded bg-[var(--grayed-input)] text-white ${!hasPasswordValid ? "border-2 border-red-500" : ""}`}
+                        required
+                      />
+                      {!hasPasswordValid && (
+                        <p className="text-red-500 text-sm mt-1">
+                          Le mot de passe doit contenir au moins 12 caractères.
+                        </p>
+                      )}
+                    </div>
                   )}
                 />
-                <form.Field
+                {/* <form.Field
                   name="password_kids"
                   children={(field) => (
                     <input
@@ -199,7 +251,7 @@ function SignUp() {
                       className="h-12 p-3 rounded bg-[var(--grayed-input)] text-white"
                     />
                   )}
-                />
+                /> */}
                 <form.Field
                   name="address"
                   children={(field) => (
@@ -215,13 +267,23 @@ function SignUp() {
                 <form.Field
                   name="phone"
                   children={(field) => (
-                    <input
-                      type="tel"
-                      placeholder="Numéro de téléphone"
-                      value={field.state.value}
-                      onChange={(e) => field.handleChange(e.target.value)}
-                      className="w-full h-12 p-3 rounded bg-[var(--grayed-input)] text-white"
-                    />
+                    <div>
+                      <input
+                        type="tel"
+                        placeholder="Numéro de téléphone"
+                        value={field.state.value}
+                        onChange={(e) => {
+                          field.handleChange(e.target.value);
+                          setHasPhoneValid(true);
+                        }}
+                        className={`w-full h-12 p-3 rounded bg-[var(--grayed-input)] text-white ${!hasPhoneValid ? "border-2 border-red-500" : ""}`}
+                      />
+                      {!hasPhoneValid && (
+                        <p className="text-red-500 text-sm mt-1">
+                          Veuillez entrer un numéro de téléphone valide.
+                        </p>
+                      )}
+                    </div>
                   )}
                 />
               </div>
@@ -234,6 +296,7 @@ function SignUp() {
                   alt="Avatar"
                   fill
                   className="object-cover"
+               
                 />
               </div>
               <button

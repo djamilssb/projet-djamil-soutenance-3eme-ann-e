@@ -8,6 +8,8 @@ import Link from "next/link";
 import BlackContainer from "../components/BlackContainer";
 import Auth from "../api/models/Auth";
 import { Metadata } from "next";
+import { isEmailValid, isPasswordValid } from "@/utils/regexp/input";
+import { useState } from "react";
 
 const metadata: Metadata = {
   title: "Connexion | Kidstrotter",
@@ -145,7 +147,7 @@ function SignInForm() {
                 )}
               />
 
-              <label className="mb-1" htmlFor="password_kids">
+              {/* <label className="mb-1" htmlFor="password_kids">
                 Mot de passe enfant
               </label>
               <form.Field
@@ -159,7 +161,7 @@ function SignInForm() {
                     className="bg-[var(--grayed-input)] w-80 h-12 rounded p-2 mb-3"
                   />
                 )}
-              />
+              /> */}
 
               <Link href={"/forget-password"}>
                 <p className="text-base text-center mt-2 mb-2 underline">
