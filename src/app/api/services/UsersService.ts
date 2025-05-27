@@ -51,7 +51,8 @@ class UsersService {
                 email: userData.email,
                 username: userData.username,
                 phone: userData.phone,
-                address: userData.address
+                address: userData.address,
+                id_avatar: userData.avatar_id
             };
 
             // Vérification et mise à jour du mot de passe principal

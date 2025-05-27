@@ -206,6 +206,7 @@ export default function CompteUser() {
         username: string;
         phone: string;
         address: string;
+        avatar_id?: number;
         password?: string;
         password_kids?: string;
         currentPassword?: string;
@@ -216,7 +217,8 @@ export default function CompteUser() {
         email: userData.email,
         username: userData.username,
         phone: userData.phone,
-        address: userData.address
+        address: userData.address,
+        avatar_id: userData.avatar_id
       };
       
       if (isPasswordChanged) {
