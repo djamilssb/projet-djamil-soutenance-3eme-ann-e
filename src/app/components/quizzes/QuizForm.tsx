@@ -11,10 +11,13 @@ import Quizz from "@/app/api/models/Quizz";
 import Question from "@/app/api/models/Question";
 import Answer from "@/app/api/models/Answer";
 import Loader from '../Loader';
+import showHideLoader from "@/utils/showHideLoader";
 
 interface QuizQuestion {
+    id?: number,
     text: string;
     answers: {
+        id?: number,
         text: string;
         correct: boolean;
     }[];
@@ -103,7 +106,7 @@ function validateForm(isFormValid: boolean): boolean {
                 });
                 isFormValid = false;
             }
-        } else if (element.type === 'select-one') {
+        } else if (element.type === 'select-one') { // select validation
             const parent = element.closest('.form-line');
 
             if (element.value == "0") {
@@ -111,7 +114,7 @@ function validateForm(isFormValid: boolean): boolean {
             } else {
                 console.warn(`Missing .form-line for: ${element.name}`);
             }
-        } else {
+        } else { // others validation
             const parent = element.closest('.form-line');
             if (!element.value.trim()) {
                 if (parent) {
@@ -149,12 +152,6 @@ function checkValidFields() {
     });
 };
 
-function showHideLoader(show: boolean) {
-    const loader = document.querySelector('.loader-wrap');
-
-    show ? loader?.classList.add('active') : loader?.classList.remove('active');
-}
-
 export default function QuizForm({ data }: QuizFormProps): React.JSX.Element {
     const mutation = useMutation({
         mutationFn: fetchQuizCreate,
@@ -186,6 +183,12 @@ export default function QuizForm({ data }: QuizFormProps): React.JSX.Element {
                 })
     
                 showHideLoader(false);
+                setShowSuccess(true);
+
+                setTimeout(() => {
+                    router.push('/account/quizzes');
+                }, 3000);
+
                 console.log("All questions and answers created successfully");
             } catch (err) {
                 console.error("Error creating questions or answers:", err);
@@ -194,6 +197,7 @@ export default function QuizForm({ data }: QuizFormProps): React.JSX.Element {
     });
     
     const [questionNumber, setQuestionNumber] = useState(1);
+    const [questionsList, setQuestonsList] = useState<QuizQuestion[]>([]);
     const [showSuccess, setShowSuccess] = useState(false); 
     
     const router = useRouter();
@@ -203,6 +207,7 @@ export default function QuizForm({ data }: QuizFormProps): React.JSX.Element {
 
     useEffect(() => {
         if (data && data.questions) {
+            setQuestonsList(data.questions);
             setQuestionNumber(data.questions.length);
         }
     }, [data]);
@@ -245,14 +250,26 @@ export default function QuizForm({ data }: QuizFormProps): React.JSX.Element {
             });
             showHideLoader(true);
             mutation.mutate(quiz);
-
-            setShowSuccess(true);
-
-            setTimeout(() => {
-                router.push('/account/quizzes');
-            }, 1000);
         }
     };
+
+    const updateQuestionsList = (id: number) => {
+        console.info('deleting question...', id);
+
+        if (!data || !data.questions) return;
+
+        const updatedQuestions = data.questions.filter(q => q.id !== id);
+
+        setQuestonsList(updatedQuestions);
+
+        setQuestionNumber(updatedQuestions.length || 1);
+    };
+
+    const handleModify = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        console.info('form modify');
+    }
 
     useEffect(() => {
         const form = document.getElementById("quiz-create") as HTMLFormElement;
@@ -264,8 +281,8 @@ export default function QuizForm({ data }: QuizFormProps): React.JSX.Element {
     }, []);
 
     return (
-        <form id="quiz-create" className="quiz-form" onSubmit={handleSubmit}>
-            <Loader title="Création est en cours..." />
+        <form id="quiz-create" className="quiz-form" onSubmit={data ? handleModify : handleSubmit}>
+            <Loader title={data ? "Modification est en cours..." : "Création est en cours..."} />
             <div className="form-body">
                 <QuizFormInput
                     props={{
@@ -318,7 +335,7 @@ export default function QuizForm({ data }: QuizFormProps): React.JSX.Element {
                 </div>
                 <div className="form-line">
                     <label>Description</label>
-                    <textarea name="description" required value={data?.description ?? ''}></textarea>
+                    <textarea name="description" required defaultValue={data?.description ?? ''}></textarea>
                 </div>
                 <QuizFormInput
                     props={{
@@ -336,15 +353,17 @@ export default function QuizForm({ data }: QuizFormProps): React.JSX.Element {
                         <QuizQuestionInput
                             key={index}
                             props={{
+                                id: questionsList?.[index]?.id || 0,
                                 iType: 'text',
                                 iClass: '',
                                 iName: `question_${index + 1}`,
                                 label: `Question ${index + 1} :`,
                                 iIndex: index + 1,
                                 required: true,
-                                defaultValue: data?.questions[index].text ?? '',
-                                answers: data?.questions[index].answers ?? undefined
+                                defaultValue: questionsList?.[index]?.text || '',
+                                answers: questionsList?.[index]?.answers ?? []
                             }}
+                            onDelete={updateQuestionsList}
                         />
                     ))}
                 </div>

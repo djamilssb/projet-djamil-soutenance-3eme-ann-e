@@ -1,6 +1,7 @@
 import React from 'react';
 
 interface Input {
+    id?: number,
     iType: string,
     iClass?: string,
     iName: string,
@@ -27,8 +28,8 @@ export default function QuizFormInput({ props }: { props: Input}): React.JSX.Ele
                     type={props.iType}
                     id={props.iName}
                     name={props.iName}
-                    min="1"
-                    defaultValue={props.defaultValue}
+                    min={props.defaultValue ? props.defaultValue : 1}
+                    value={props.defaultValue}
                     onChange={handleChange}
                 />
             ) : (

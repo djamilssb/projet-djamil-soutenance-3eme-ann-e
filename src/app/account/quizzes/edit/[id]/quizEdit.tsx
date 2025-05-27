@@ -97,6 +97,8 @@ export default function QuizEdit(): React.JSX.Element {
         queryKey: ['questions', id],
         queryFn: async () => {
             const qList = await fetchQuestionsByQuiz(id);
+            // sort questions by order_index
+            qList.sort((a: Question, b: Question) => a.order_index! - b.order_index!);
 
             const answersList = await Promise.all(
                 qList.map(async (qItem: Question) => {
@@ -122,8 +124,10 @@ export default function QuizEdit(): React.JSX.Element {
         description: quizData.description,
         department: quizData.id_departement,
         questions: questions!.map(q => ({
+            id: q.id,
             text: q.content,
             answers: q.answers.map((a: Answer) => ({
+                id: a.id,
                 text: a.content,
                 correct: a.is_correct,
             })),
