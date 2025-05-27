@@ -1,24 +1,37 @@
 "use client"; //s'execute côté client
-import { useState, useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useQuery } from '@tanstack/react-query';
-import QueryClientProvider from '@/app/components/QueryClientProvider';
-import Image from 'next/image';
-import './style.css';
-import { mockQuizzes, mockQuestions, mockAnswers } from '@/app/__tests__/quizMockData';
+import { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
+import QueryClientProvider from "@/app/components/QueryClientProvider";
+import Image from "next/image";
+import "./style.css";
+import {
+  mockQuizzes,
+  mockQuestions,
+  mockAnswers,
+} from "@/app/__tests__/quizMockData";
 
 // ===== FONCTIONS UTILITAIRES =====
 // Fonction avatar selon l'ID
 const getAvatarImage = (id: number): string => {
-  switch(id) {
-    case 1: return "/alien1.png";
-    case 2: return "/AlienVert 1.png";
-    default: return "/alien1.png";
+  switch (id) {
+    case 1:
+      return "/alien1.png";
+    case 2:
+      return "/AlienVert 1.png";
+    default:
+      return "/alien1.png";
   }
 };
 
 // ===== COMPOSANT PRINCIPAL =====
-function QuizGameContent({ quizId, avatarId }: { quizId: number, avatarId: number }) {
+function QuizGameContent({
+  quizId,
+  avatarId,
+}: {
+  quizId: number;
+  avatarId: number;
+}) {
   // ===== ÉTATS DU COMPOSANT =====
   const router = useRouter();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -29,32 +42,34 @@ function QuizGameContent({ quizId, avatarId }: { quizId: number, avatarId: numbe
 
   // ===== EFFET POUR MASQUER LE LAYOUT =====
   useEffect(() => {
-    const footer = document.querySelector('footer');
+    const footer = document.querySelector("footer");
     if (footer) {
-      footer.style.display = 'none';
+      footer.style.display = "none";
     }
 
-    const layoutBg = document.querySelector('.absolute.top-0.left-0.w-full.h-full.-z-10');
+    const layoutBg = document.querySelector(
+      ".absolute.top-0.left-0.w-full.h-full.-z-10"
+    );
     if (layoutBg) {
-      (layoutBg as HTMLElement).style.display = 'none';
+      (layoutBg as HTMLElement).style.display = "none";
     }
 
     return () => {
       if (footer) {
-        footer.style.display = '';
+        footer.style.display = "";
       }
       if (layoutBg) {
-        (layoutBg as HTMLElement).style.display = '';
+        (layoutBg as HTMLElement).style.display = "";
       }
     };
   }, []);
 
   // ===== REQUÊTES API AVEC REACT QUERY =====
   // Récupérer info quiz
-  const { 
-    data: quizInfo, 
-    isLoading: quizLoading, 
-    isError: quizError 
+  const {
+    data: quizInfo,
+    isLoading: quizLoading,
+    isError: quizError,
   } = useQuery({
     queryKey: ["quiz", quizId],
     queryFn: async () => {
@@ -65,11 +80,14 @@ function QuizGameContent({ quizId, avatarId }: { quizId: number, avatarId: numbe
         }
         return await response.json();
       } catch (error) {
-        console.error("Erreur lors du chargement des informations du quiz:", error);
-        if (process.env.NODE_ENV === 'development') {
+        console.error(
+          "Erreur lors du chargement des informations du quiz:",
+          error
+        );
+        if (process.env.NODE_ENV === "development") {
           console.log("Utilisation des données quiz mock en développement");
           setUseFallbackData(true);
-          const mockQuiz = mockQuizzes.find(q => q.id === quizId);
+          const mockQuiz = mockQuizzes.find((q) => q.id === quizId);
           return mockQuiz || mockQuizzes[0];
         }
         throw error;
@@ -78,10 +96,10 @@ function QuizGameContent({ quizId, avatarId }: { quizId: number, avatarId: numbe
   });
 
   // Récupérer questions depuis l'API
-  const { 
-    data: questions, 
-    isLoading: questionsLoading, 
-    isError: questionsError
+  const {
+    data: questions,
+    isLoading: questionsLoading,
+    isError: questionsError,
   } = useQuery({
     queryKey: ["questions", quizId],
     queryFn: async () => {
@@ -95,10 +113,10 @@ function QuizGameContent({ quizId, avatarId }: { quizId: number, avatarId: numbe
       } catch (error) {
         console.error("Erreur lors du chargement des questions:", error);
         // mock si bdd offkine ou erreur
-        if (process.env.NODE_ENV === 'development') {
+        if (process.env.NODE_ENV === "development") {
           console.log("Utilisation des données mock en développement");
           setUseFallbackData(true);
-          return mockQuestions.filter(q => q.idQuizz === quizId);
+          return mockQuestions.filter((q) => q.idQuizz === quizId);
         }
         throw error;
       }
@@ -109,18 +127,24 @@ function QuizGameContent({ quizId, avatarId }: { quizId: number, avatarId: numbe
   const {
     data: answers,
     isLoading: answersLoading,
-    isError: answersError
+    isError: answersError,
   } = useQuery({
-    queryKey: ["answers", questions?.[currentQuestionIndex]?.id, currentQuestionIndex],
+    queryKey: [
+      "answers",
+      questions?.[currentQuestionIndex]?.id,
+      currentQuestionIndex,
+    ],
     queryFn: async () => {
       try {
         if (useFallbackData) {
           return mockAnswers[currentQuestionIndex] || [];
         }
-        
+
         if (!questions?.[currentQuestionIndex]?.id) return [];
-        
-        const response = await fetch(`/api/answers?questionId=${questions[currentQuestionIndex].id}`);
+
+        const response = await fetch(
+          `/api/answers?questionId=${questions[currentQuestionIndex].id}`
+        );
         if (!response.ok) {
           throw new Error(`Erreur serveur: ${response.status}`);
         }
@@ -128,7 +152,7 @@ function QuizGameContent({ quizId, avatarId }: { quizId: number, avatarId: numbe
       } catch (error) {
         console.error("Erreur lors du chargement des réponses:", error);
         // Fallback vers mock
-        if (process.env.NODE_ENV === 'development') {
+        if (process.env.NODE_ENV === "development") {
           return mockAnswers[currentQuestionIndex] || [];
         }
         throw error;
@@ -141,11 +165,11 @@ function QuizGameContent({ quizId, avatarId }: { quizId: number, avatarId: numbe
   // Gérer la sélection d'une réponse
   const handleAnswerSelect = (answer: any) => {
     if (showFeedback) return;
-    
+
     setSelectedAnswer(answer);
     setShowFeedback(true);
-    
-    if (answer.isCorrect) {
+
+    if (answer.is_correct) {
       setScore(score + 1);
     }
   };
@@ -157,13 +181,15 @@ function QuizGameContent({ quizId, avatarId }: { quizId: number, avatarId: numbe
   const handleNextQuestion = () => {
     setSelectedAnswer(null);
     setShowFeedback(false);
-    
+
     if (currentQuestionIndex < totalQuestions - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
       // Sauvegarder le score
       saveScore();
-      router.push(`/game/quiz/resultat?quizId=${quizId}&score=${score}&total=${totalQuestions}&avatarId=${avatarId}`);
+      router.push(
+        `/game/quiz/resultat?quizId=${quizId}&score=${score}&total=${totalQuestions}&avatarId=${avatarId}`
+      );
     }
   };
 
@@ -177,7 +203,7 @@ function QuizGameContent({ quizId, avatarId }: { quizId: number, avatarId: numbe
     try {
       const characterId = 1;
       const userId = 1;
-      
+
       const response = await fetch("/api/savequizz", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -188,11 +214,11 @@ function QuizGameContent({ quizId, avatarId }: { quizId: number, avatarId: numbe
           score: score,
         }),
       });
-      
+
       if (!response.ok) {
         throw new Error(`Erreur HTTP: ${response.status}`);
       }
-      
+
       console.log("Score sauvegardé avec succès!");
     } catch (error) {
       console.error("Erreur lors de la sauvegarde du score:", error);
@@ -201,7 +227,7 @@ function QuizGameContent({ quizId, avatarId }: { quizId: number, avatarId: numbe
 
   // Retourner au menu principal
   const handleReturnToMenu = () => {
-    router.push('/game');
+    router.push("/game");
   };
 
   // ===== GESTION DES ERREURS ET CHARGEMENT =====
@@ -213,13 +239,16 @@ function QuizGameContent({ quizId, avatarId }: { quizId: number, avatarId: numbe
             src="/paris.png"
             alt="Background du quiz"
             fill
-            style={{ objectFit: 'cover', opacity: 0.5 }}
+            style={{ objectFit: "cover", opacity: 0.5 }}
             priority
           />
         </div>
         <div className="error-container">
           <h2>Ce quiz n'est pas disponible pour le moment</h2>
-          <p>Nous rencontrons des difficultés techniques. Merci de réessayer plus tard.</p>
+          <p>
+            Nous rencontrons des difficultés techniques. Merci de réessayer plus
+            tard.
+          </p>
           <button onClick={handleReturnToMenu} className="return-button">
             Retourner au menu
           </button>
@@ -237,7 +266,7 @@ function QuizGameContent({ quizId, avatarId }: { quizId: number, avatarId: numbe
             src="/paris.png"
             alt="Background du quiz"
             fill
-            style={{ objectFit: 'cover' }}
+            style={{ objectFit: "cover" }}
             priority
           />
         </div>
@@ -257,7 +286,7 @@ function QuizGameContent({ quizId, avatarId }: { quizId: number, avatarId: numbe
             src="/paris.png"
             alt="Background du quiz"
             fill
-            style={{ objectFit: 'cover', opacity: 0.5 }}
+            style={{ objectFit: "cover", opacity: 0.5 }}
             priority
           />
         </div>
@@ -286,19 +315,15 @@ function QuizGameContent({ quizId, avatarId }: { quizId: number, avatarId: numbe
           src={backgroundImage}
           alt="Background du quiz"
           fill
-          style={{ objectFit: 'cover' }}
+          style={{ objectFit: "cover" }}
           priority
         />
       </div>
-      
+
       {/* Contenu du quiz */}
       <div className="quizz-content">
         {/* Personnage dynamique */}
-        <img 
-          src={avatarImage}
-          alt="Avatar du quiz"
-          className="character"
-        />
+        <img src={avatarImage} alt="Avatar du quiz" className="character" />
 
         {/* Boîte de question */}
         <div className="question-container">
@@ -306,48 +331,56 @@ function QuizGameContent({ quizId, avatarId }: { quizId: number, avatarId: numbe
           <p className="question-progress">
             Question {currentQuestionIndex + 1}/{totalQuestions}
           </p>
-          
+
           <p className="question-text">
             <strong>Question :</strong> {currentQuestion.content}
           </p>
-          
+
           <div className="answer-grid">
-            {answers && answers.map((answer: any, index: number) => (
-              <button
-                key={answer.id || index}
-                onClick={() => handleAnswerSelect(answer)}
-                className={`answer-button ${
-                  selectedAnswer?.id === answer.id
-                    ? answer.isCorrect ? "correct" : "incorrect"
-                    : ""
-                }`}
-                disabled={showFeedback}
-              >
-                {String.fromCharCode(97 + index)}. {answer.content}
-              </button>
-            ))}
+            {answers &&
+              answers.map((answer: any, index: number) => (
+                <button
+                  key={answer.id || index}
+                  onClick={() => handleAnswerSelect(answer)}
+                  className={`answer-button ${
+                    selectedAnswer?.id === answer.id
+                      ? answer.is_correct
+                        ? "correct"
+                        : "incorrect"
+                      : ""
+                  }`}
+                  disabled={showFeedback}
+                >
+                  {String.fromCharCode(97 + index)}. {answer.content}
+                </button>
+              ))}
           </div>
-          
+
           {/* Feedback et bouton suivant */}
           {showFeedback && (
             <div className="feedback-container">
-              <p className={`feedback-text ${selectedAnswer?.isCorrect ? "correct" : "incorrect"}`}>
-                {selectedAnswer?.isCorrect ? "Bonne réponse!" : "Mauvaise réponse!"}
+              <p
+                className={`feedback-text ${
+                  selectedAnswer?.is_correct ? "correct" : "incorrect"
+                }`}
+              >
+                {selectedAnswer?.is_correct
+                  ? "Bonne réponse!"
+                  : "Mauvaise réponse!"}
                 {selectedAnswer?.explication && (
                   <span className="feedback-explanation">
                     {selectedAnswer.explication}
                   </span>
                 )}
               </p>
-              <button
-                onClick={handleNextQuestion}
-                className="next-button"
-              >
-                {currentQuestionIndex < totalQuestions - 1 ? "Question suivante" : "Voir mon score"}
+              <button onClick={handleNextQuestion} className="next-button">
+                {currentQuestionIndex < totalQuestions - 1
+                  ? "Question suivante"
+                  : "Voir mon score"}
               </button>
             </div>
           )}
-          
+
           {/* Message en mode développement */}
           {useFallbackData && (
             <div className="dev-message">
@@ -364,12 +397,12 @@ function QuizGameContent({ quizId, avatarId }: { quizId: number, avatarId: numbe
 export default function QuizzPage() {
   // Utilisation de useSearchParams pour récupérer les paramètres d'URL
   const searchParams = useSearchParams();
-  
+
   // Récupération des paramètres d'URL
-  const quizIdParam = searchParams?.get('quizId') || "1";
+  const quizIdParam = searchParams?.get("quizId") || "1";
   const quizId = parseInt(quizIdParam);
-  
-  const avatarIdParam = searchParams?.get('avatarId') || "1";
+
+  const avatarIdParam = searchParams?.get("avatarId") || "1";
   const avatarId = parseInt(avatarIdParam);
 
   // Rendu avec QueryClientProvider (gestion des requêtes)

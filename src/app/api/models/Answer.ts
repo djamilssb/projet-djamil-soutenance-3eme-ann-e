@@ -1,4 +1,4 @@
-class Answer3 {
+class Answer{
     id?: number;
     id_quizz?: number;
     id_question?: number;
@@ -12,14 +12,17 @@ class Answer3 {
     constructor(data?: any) {
         if (data) {
             this.id = data.id;
-            this.idQuizz = data.id_quizz;
-            this.idQuestion = data.id_question;
-            this.orderIndex = data.order_index;
+            this.id_quizz = data.id_quizz;
+            this.id_question = data.id_question;
+            this.order_index = data.order_index;
             this.content = data.content;
             this.explication = data.explication;
-            this.isCorrect = Boolean(data.is_correct); // ← Conversion importante ici
-            this.createdAt = data.created_at ? new Date(data.created_at) : undefined;
-            this.updatedAt = data.updated_at ? new Date(data.updated_at) : undefined;
+            
+            // ⭐ CORRECTION ICI - Conversion robuste
+            this.is_correct = Boolean(Number(data.is_correct));
+            
+            this.created_at = data.created_at ? new Date(data.created_at) : undefined;
+            this.updated_at = data.updated_at ? new Date(data.updated_at) : undefined;
         }
     };
 
@@ -77,4 +80,4 @@ class Answer3 {
     }
 }
 
-export default Answer3;
+export default Answer;
