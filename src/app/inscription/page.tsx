@@ -72,7 +72,6 @@ interface SignUpFormData {
   username: string;
   email: string;
   password: string;
-  password_kids: string;
   id_avatar?: number;
   address: string;
   phone: string;
@@ -82,7 +81,6 @@ const defaultSignUpData: SignUpFormData = {
   username: "",
   email: "",
   password: "",
-  password_kids: "",
   id_avatar: undefined,
   address: "",
   phone: "",
@@ -115,7 +113,6 @@ function SignUp() {
         username: value.username,
         email: value.email,
         password: value.password,
-        password_kids: value.password_kids,
         id_avatar: value.id_avatar,
         address: value.address,
         phone: value.phone,
@@ -185,18 +182,6 @@ function SignUp() {
                       onChange={(e) => field.handleChange(e.target.value)}
                       className="w-full h-12 p-3 rounded bg-[var(--grayed-input)] text-white"
                       required
-                    />
-                  )}
-                />
-                <form.Field
-                  name="password_kids"
-                  children={(field) => (
-                    <input
-                      type="password"
-                      placeholder="Mot de passe enfant"
-                      value={field.state.value}
-                      onChange={(e) => field.handleChange(e.target.value)}
-                      className="h-12 p-3 rounded bg-[var(--grayed-input)] text-white"
                     />
                   )}
                 />
