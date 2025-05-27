@@ -4,6 +4,8 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import ArrowBack from "@/app/components/ArrowBack";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import Image from "next/image";
+import MenuAvatar from "./components/MenuAvatar";
 
 interface UserData {
   email: string;
@@ -11,8 +13,10 @@ interface UserData {
   password: string;
   password_kids: string;
   created_at: string;
-  phone: string;       
-  address: string;     
+  phone: string;
+  address: string;
+  avatar_id?: number;
+  avatar_url?: string;
   currentPassword?: string;
   currentPassword_kids?: string;
 }
@@ -23,14 +27,18 @@ export default function CompteUser() {
   const [editable, setEditable] = useState<boolean>(false);
   const [passwordError, setPasswordError] = useState<string>("");
   const [kidsPasswordError, setKidsPasswordError] = useState<string>("");
+  const [showAvatarMenu, setShowAvatarMenu] = useState<boolean>(false);
+  
   const [userData, setUserData] = useState<UserData>({
     email: "",
     username: "",
     password: "",
     password_kids: "",
     created_at: "",
-    phone: "",        // Initialisation du champ téléphone
-    address: "",      // Initialisation du champ adresse
+    phone: "",
+    address: "",
+    avatar_id: 0,
+    avatar_url: "/avatar-default.png",
     currentPassword: "",
     currentPassword_kids: "",
   });
@@ -57,7 +65,6 @@ export default function CompteUser() {
     }
   });
 
-  // Mutation pour mettre à jour les données utilisateur
   const updateUserMutation = useMutation({
     mutationFn: async (dataToSend: any) => {
       const userId = localStorage.getItem('user_id');
@@ -73,13 +80,13 @@ export default function CompteUser() {
       
       if (!response.ok) {
         const errorData = await response.json();
-        if (errorData.error === "invalid_password") {
-          setPasswordError("Mot de passe actuel incorrect");
-          throw new Error("invalid_password");
+        if (errorData.error === "invalid_current_password") {
+          setPasswordError("Le mot de passe actuel est incorrect");
+          throw new Error("invalid_current_password");
         }
-        if (errorData.error === "invalid_kids_password") {
-          setKidsPasswordError("Mot de passe enfant actuel incorrect");
-          throw new Error("invalid_kids_password");
+        if (errorData.error === "invalid_current_kids_password") {
+          setKidsPasswordError("Le mot de passe enfant actuel est incorrect");
+          throw new Error("invalid_current_kids_password");
         }
         throw new Error('Échec de la mise à jour des données utilisateur');
       }
@@ -90,6 +97,7 @@ export default function CompteUser() {
       setEditable(false);
       queryClient.invalidateQueries({ queryKey: ['userData'] });
       alert('Profil mis à jour avec succès !');
+      
       setUserData(prevData => ({
         ...prevData,
         password: '********',
@@ -101,7 +109,7 @@ export default function CompteUser() {
       setIsKidsPasswordModified(false);
     },
     onError: (error: any) => {
-      if (error.message !== "invalid_password" && error.message !== "invalid_kids_password") {
+      if (error.message !== "invalid_current_password" && error.message !== "invalid_current_kids_password") {
         console.error('Erreur lors de la mise à jour des données:', error);
         alert('Erreur lors de la mise à jour du profil');
       }
@@ -110,6 +118,9 @@ export default function CompteUser() {
 
   useEffect(() => {
     if (data) {
+      const savedAvatarUrl = localStorage.getItem('user_avatar_url');
+      const savedAvatarId = localStorage.getItem('user_avatar_id');
+      
       setUserData({
         email: data.email || "",
         username: data.username || "",
@@ -118,6 +129,8 @@ export default function CompteUser() {
         created_at: data.created_at || "",
         phone: data.phone || "",
         address: data.address || "",
+        avatar_id: savedAvatarId ? parseInt(savedAvatarId) : 1,
+        avatar_url: savedAvatarUrl || "/avatar-default.png",
         currentPassword: "",
         currentPassword_kids: "",
       });
@@ -157,6 +170,19 @@ export default function CompteUser() {
     setUserData({ ...userData, [name]: value });
   };
 
+  const handleAvatarSelect = (avatarId: number, avatarUrl: string) => {
+    setUserData({
+      ...userData,
+      avatar_id: avatarId,
+      avatar_url: avatarUrl
+    });
+    
+    localStorage.setItem('user_avatar_url', avatarUrl);
+    localStorage.setItem('user_avatar_id', avatarId.toString());
+    
+    setShowAvatarMenu(false);
+  };
+
   const handleSubmit = async () => {
     try {
       setPasswordError("");
@@ -174,12 +200,13 @@ export default function CompteUser() {
         setKidsPasswordError("Veuillez entrer le mot de passe enfant actuel pour confirmer le changement");
         return;
       }
-      
+
       interface UpdateData {
         email: string;
         username: string;
         phone: string;
         address: string;
+        avatar_id?: number;
         password?: string;
         password_kids?: string;
         currentPassword?: string;
@@ -190,7 +217,8 @@ export default function CompteUser() {
         email: userData.email,
         username: userData.username,
         phone: userData.phone,
-        address: userData.address
+        address: userData.address,
+        avatar_id: userData.avatar_id
       };
       
       if (isPasswordChanged) {
@@ -236,12 +264,44 @@ export default function CompteUser() {
 
   return (
     <>
+      {showAvatarMenu && (
+        <MenuAvatar 
+          onAvatarSelect={handleAvatarSelect}
+          onClose={() => setShowAvatarMenu(false)}
+        />
+      )}
+      
       <div className="absolute top-5 left-5">
         <ArrowBack />
       </div>
       <div className="bg-black/80 text-white p-8 rounded-lg shadow-lg w-full max-w-md">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold">Mon Compte</h2>
+        </div>
+        
+        <div className="flex flex-col items-center mb-6">
+          <div className="relative w-24 h-24 rounded-full overflow-hidden mb-3">
+            <Image
+              src={userData.avatar_url || "avatar-default.png"}
+              alt="Avatar utilisateur"
+              fill
+              className="object-cover"
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.onerror = null;
+                target.src = "avatar-default.png";
+              }}
+            />
+          </div>
+          
+          {editable && (
+            <button 
+              onClick={() => setShowAvatarMenu(true)}
+              className="bg-transparent border border-white px-4 py-2 rounded text-white hover:bg-white hover:text-black cursor-pointer"
+            >
+              Modifier l&apos;avatar
+            </button>
+          )}
         </div>
         
         <div className="space-y-6">
@@ -324,7 +384,7 @@ export default function CompteUser() {
                     name="currentPassword"
                     value={userData.currentPassword || ""}
                     onChange={handleInputChange}
-                    placeholder="Requis pour validation"
+                    placeholder="Tapez exactement votre mot de passe actuel"
                     className="bg-gray-800 text-white rounded px-3 py-1"
                   />
                 </div>
@@ -348,7 +408,6 @@ export default function CompteUser() {
             </>
           )}
           
-          {/* Section mot de passe enfant */}
           {!editable && (
             <div className="flex justify-between items-center">
               <p className="text-lg">Mot de passe enfant :</p>
@@ -356,7 +415,6 @@ export default function CompteUser() {
             </div>
           )}
           
-          {/* En mode édition - section mot de passe enfant */}
           {editable && (
             <>
               {isKidsPasswordModified && (
@@ -367,7 +425,7 @@ export default function CompteUser() {
                     name="currentPassword_kids"
                     value={userData.currentPassword_kids || ""}
                     onChange={handleInputChange}
-                    placeholder="Requis pour validation"
+                    placeholder="Tapez exactement le mot de passe enfant actuel"
                     className="bg-gray-800 text-white rounded px-3 py-1"
                   />
                 </div>

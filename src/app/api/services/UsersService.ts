@@ -51,7 +51,8 @@ class UsersService {
                 email: userData.email,
                 username: userData.username,
                 phone: userData.phone,
-                address: userData.address
+                address: userData.address,
+                id_avatar: userData.avatar_id
             };
 
             // Vérification et mise à jour du mot de passe principal
@@ -67,20 +68,16 @@ class UsersService {
                 updateData.password = await bcrypt.hash(userData.password, 14);
             }
 
-            // Vérification et mise à jour du mot de passe enfant
             if (userData.password_kids && userData.currentPassword_kids) {
-                // Vérifier que le mot de passe enfant actuel correspond au hash en base
                 const isCurrentKidsPasswordValid = await bcrypt.compare(userData.currentPassword_kids, currentUser.password_kids || '');
                 
                 if (!isCurrentKidsPasswordValid) {
                     throw new Error("invalid_current_kids_password");
                 }
 
-                // Hasher le nouveau mot de passe enfant
                 updateData.password_kids = await bcrypt.hash(userData.password_kids, 14);
             }
 
-            // Mettre à jour uniquement les données validées (sans les champs currentPassword)
             const updated = await this.userRepository.update(id, updateData);
 
             if (!updated) throw new Error("Error while updating the user");
