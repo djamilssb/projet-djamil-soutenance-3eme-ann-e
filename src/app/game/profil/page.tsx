@@ -11,8 +11,8 @@ interface UserData {
   password: string;
   password_kids: string;
   created_at: string;
-  phone: string;       // Ajout du numéro de téléphone
-  address: string;     // Ajout de l'adresse
+  phone: string;       
+  address: string;     
   currentPassword?: string;
   currentPassword_kids?: string;
 }
@@ -34,6 +34,8 @@ export default function CompteUser() {
     currentPassword: "",
     currentPassword_kids: "",
   });
+  const [isPasswordModified, setIsPasswordModified] = useState(false);
+  const [isKidsPasswordModified, setIsKidsPasswordModified] = useState(false);
 
   // Récupérer les données utilisateur avec TanStack Query
   const { data, isLoading, isError } = useQuery({
@@ -95,6 +97,8 @@ export default function CompteUser() {
         currentPassword: "",
         currentPassword_kids: "",
       }));
+      setIsPasswordModified(false);
+      setIsKidsPasswordModified(false);
     },
     onError: (error: any) => {
       if (error.message !== "invalid_password" && error.message !== "invalid_kids_password") {
@@ -104,7 +108,6 @@ export default function CompteUser() {
     }
   });
 
-  // Mettre à jour l'état local avec les données de l'API
   useEffect(() => {
     if (data) {
       setUserData({
@@ -113,15 +116,17 @@ export default function CompteUser() {
         password: "********",
         password_kids: "********",
         created_at: data.created_at || "",
-        phone: data.phone || "",      // Récupération du téléphone
-        address: data.address || "",  // Récupération de l'adresse
+        phone: data.phone || "",
+        address: data.address || "",
         currentPassword: "",
         currentPassword_kids: "",
       });
+      
+      setIsPasswordModified(false);
+      setIsKidsPasswordModified(false);
     }
   }, [data]);
 
-  // Redirection en cas d'erreur
   useEffect(() => {
     if (isError) {
       router.push('/connexion');
@@ -133,7 +138,6 @@ export default function CompteUser() {
       handleSubmit();
     } else {
       setEditable(true);
-      // Réinitialiser les messages d'erreur lors du passage en mode édition
       setPasswordError("");
       setKidsPasswordError("");
     }
@@ -141,52 +145,54 @@ export default function CompteUser() {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+    
+    if (name === 'password' && value !== '********') {
+      setIsPasswordModified(true);
+    }
+    
+    if (name === 'password_kids' && value !== '********') {
+      setIsKidsPasswordModified(true);
+    }
+    
     setUserData({ ...userData, [name]: value });
   };
 
   const handleSubmit = async () => {
     try {
-      // Réinitialisation des erreurs
       setPasswordError("");
       setKidsPasswordError("");
       
-      // Vérification des modifications de mot de passe
       const isPasswordChanged = userData.password !== '********';
       const isKidsPasswordChanged = userData.password_kids !== '********';
       
-      // Vérification du mot de passe principal si modifié
       if (isPasswordChanged && (!userData.currentPassword || userData.currentPassword.trim() === "")) {
         setPasswordError("Veuillez entrer votre mot de passe actuel pour confirmer le changement");
         return;
       }
       
-      // Vérification du mot de passe enfant si modifié
       if (isKidsPasswordChanged && (!userData.currentPassword_kids || userData.currentPassword_kids.trim() === "")) {
         setKidsPasswordError("Veuillez entrer le mot de passe enfant actuel pour confirmer le changement");
         return;
       }
       
-      // Définir un type qui inclut toutes les propriétés possibles
       interface UpdateData {
         email: string;
         username: string;
-        phone: string;     // Ajout du téléphone dans les données à envoyer
-        address: string;   // Ajout de l'adresse dans les données à envoyer
+        phone: string;
+        address: string;
         password?: string;
         password_kids?: string;
         currentPassword?: string;
         currentPassword_kids?: string;
       }
       
-      // Initialiser avec les propriétés obligatoires
       const dataToSend: UpdateData = {
         email: userData.email,
         username: userData.username,
-        phone: userData.phone,     // Inclure le téléphone dans les données à envoyer
-        address: userData.address  // Inclure l'adresse dans les données à envoyer
+        phone: userData.phone,
+        address: userData.address
       };
       
-      // Ajout des mots de passe uniquement s'ils ont été modifiés
       if (isPasswordChanged) {
         dataToSend.password = userData.password;
         dataToSend.currentPassword = userData.currentPassword;
@@ -197,7 +203,6 @@ export default function CompteUser() {
         dataToSend.currentPassword_kids = userData.currentPassword_kids;
       }
       
-      // Utiliser la mutation pour mettre à jour les données
       updateUserMutation.mutate(dataToSend);
       
     } catch (error) {
@@ -221,7 +226,6 @@ export default function CompteUser() {
     }
   };
 
-  // Afficher un spinner pendant le chargement
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -232,7 +236,6 @@ export default function CompteUser() {
 
   return (
     <>
-      {/* ArrowBack déplacé en dehors du carré */}
       <div className="absolute top-5 left-5">
         <ArrowBack />
       </div>
@@ -272,7 +275,6 @@ export default function CompteUser() {
             )}
           </div>
           
-          {/* Section téléphone - Nouveau champ ajouté */}
           <div className="flex justify-between items-center">
             <p className="text-lg">Téléphone :</p>
             {editable ? (
@@ -289,7 +291,6 @@ export default function CompteUser() {
             )}
           </div>
           
-          {/* Section adresse - Nouveau champ ajouté */}
           <div className="flex justify-between items-center">
             <p className="text-lg">Adresse :</p>
             {editable ? (
@@ -306,74 +307,88 @@ export default function CompteUser() {
             )}
           </div>
           
-          {/* Section mot de passe principal */}
-          <div className="flex justify-between items-center">
-            <p className="text-lg">Mot de passe :</p>
-            {editable ? (
-              <input
-                type="password"
-                name="password"
-                value={userData.password}
-                onChange={handleInputChange}
-                placeholder="Nouveau mot de passe"
-                className="bg-gray-800 text-white rounded px-3 py-1"
-              />
-            ) : (
-              <p className="text-lg">{userData.password}</p>
-            )}
-          </div>
-          
-          {editable && userData.password !== "********" && (
+          {!editable && (
             <div className="flex justify-between items-center">
-              <p className="text-lg">Mot de passe actuel :</p>
-              <input
-                type="password"
-                name="currentPassword"
-                value={userData.currentPassword || ""}
-                onChange={handleInputChange}
-                placeholder="Requis pour validation"
-                className="bg-gray-800 text-white rounded px-3 py-1"
-              />
+              <p className="text-lg">Mot de passe :</p>
+              <p className="text-lg">{userData.password}</p>
             </div>
           )}
           
-          {passwordError && (
-            <div className="text-red-500 text-center">{passwordError}</div>
+          {editable && (
+            <>
+              {isPasswordModified && (
+                <div className="flex justify-between items-center">
+                  <p className="text-lg">Mot de passe actuel :</p>
+                  <input
+                    type="password"
+                    name="currentPassword"
+                    value={userData.currentPassword || ""}
+                    onChange={handleInputChange}
+                    placeholder="Requis pour validation"
+                    className="bg-gray-800 text-white rounded px-3 py-1"
+                  />
+                </div>
+              )}
+              
+              <div className="flex justify-between items-center">
+                <p className="text-lg">{isPasswordModified ? "Nouveau mot de passe :" : "Mot de passe :"}</p>
+                <input
+                  type="password"
+                  name="password"
+                  value={userData.password}
+                  onChange={handleInputChange}
+                  placeholder="Nouveau mot de passe"
+                  className="bg-gray-800 text-white rounded px-3 py-1"
+                />
+              </div>
+              
+              {passwordError && (
+                <div className="text-red-500 text-center">{passwordError}</div>
+              )}
+            </>
           )}
           
           {/* Section mot de passe enfant */}
-          <div className="flex justify-between items-center">
-            <p className="text-lg">Mot de passe enfant :</p>
-            {editable ? (
-              <input
-                type="password"
-                name="password_kids"
-                value={userData.password_kids}
-                onChange={handleInputChange}
-                placeholder="Nouveau mot de passe enfant"
-                className="bg-gray-800 text-white rounded px-3 py-1"
-              />
-            ) : (
-              <p className="text-lg">{userData.password_kids}</p>
-            )}
-          </div>
-          
-          {editable && userData.password_kids !== "********" && (
+          {!editable && (
             <div className="flex justify-between items-center">
-              <p className="text-lg">Mot de passe enfant actuel :</p>
-              <input
-                type="password"
-                name="currentPassword_kids"
-                value={userData.currentPassword_kids || ""}
-                onChange={handleInputChange}
-                placeholder="Requis pour validation"
-                className="bg-gray-800 text-white rounded px-3 py-1"
-              />
+              <p className="text-lg">Mot de passe enfant :</p>
+              <p className="text-lg">{userData.password_kids}</p>
             </div>
           )}
           
-          {kidsPasswordError && (
-            <div className="text-red-500 text-center">{kidsPasswordError}</div>
+          {/* En mode édition - section mot de passe enfant */}
+          {editable && (
+            <>
+              {isKidsPasswordModified && (
+                <div className="flex justify-between items-center">
+                  <p className="text-lg">Mot de passe enfant actuel :</p>
+                  <input
+                    type="password"
+                    name="currentPassword_kids"
+                    value={userData.currentPassword_kids || ""}
+                    onChange={handleInputChange}
+                    placeholder="Requis pour validation"
+                    className="bg-gray-800 text-white rounded px-3 py-1"
+                  />
+                </div>
+              )}
+              
+              <div className="flex justify-between items-center">
+                <p className="text-lg">{isKidsPasswordModified ? "Nouveau mot de passe enfant :" : "Mot de passe enfant :"}</p>
+                <input
+                  type="password"
+                  name="password_kids"
+                  value={userData.password_kids}
+                  onChange={handleInputChange}
+                  placeholder="Nouveau mot de passe enfant"
+                  className="bg-gray-800 text-white rounded px-3 py-1"
+                />
+              </div>
+              
+              {kidsPasswordError && (
+                <div className="text-red-500 text-center">{kidsPasswordError}</div>
+              )}
+            </>
           )}
           
           <div className="flex justify-between items-center">
