@@ -11,7 +11,7 @@ interface QuizListItemProps {
 export default function QuizListItem(props: QuizListItemProps): React.JSX.Element {
     // Déterminer l'URL et le texte du bouton en fonction du mode
     const buttonConfig = props.mode === 'play' 
-        ? { url: `/game/quiz/questions?quizId=${props.id}`, text: 'JOUER' }
+        ? { url: `/game/quiz/choix-du-personnage?quizId=${props.id}`, text: 'JOUER' }
         : { url: `/account/quizzes/edit/${props.id}`, text: 'Modifier' };
     
     return (

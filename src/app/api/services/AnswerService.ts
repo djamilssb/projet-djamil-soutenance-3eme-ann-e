@@ -99,7 +99,7 @@ class AnswerService {
 
     public async getAnswersByQuestion(idQuestion: number): Promise<Answer[]> {
         try {
-            const rows = await this.answerRepository.getAnswersByQuestion(idQuestion);
+            const rows = await this.answerRepository.getByQuestionId(idQuestion);
             if (!rows) throw new Error("Error while fetching answers");
 
             return rows;

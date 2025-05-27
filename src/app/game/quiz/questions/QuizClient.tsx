@@ -8,7 +8,7 @@ import { mockQuestions, mockAnswers, mockQuizzes, MockAnswer } from "../../../__
 import "./style.css";
 
 // Composant principal du Quiz
-export default function QuizClient({ quizId }: { quizId: number }) {
+export default function QuizClient({ quizId, avatarId }: { quizId: number, avatarId: number }) {
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
@@ -20,13 +20,13 @@ export default function QuizClient({ quizId }: { quizId: number }) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <QuizContent quizId={quizId} />
+      <QuizContent quizId={quizId} avatarId={avatarId} />
     </QueryClientProvider>
   );
 }
 
 // Sous-composant qui contient la logique du quiz
-function QuizContent({ quizId }: { quizId: number }) {
+function QuizContent({ quizId, avatarId }: { quizId: number, avatarId: number }) {
   const router = useRouter();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
@@ -288,7 +288,7 @@ function QuizContent({ quizId }: { quizId: number }) {
   
   // Images dynamiques du quiz
   const backgroundImage = quizInfo.backgroundImage || "/paris.png";
-  const avatarImage = quizInfo.avatarImage || "/alien1.png";
+  const avatarImage = getAvatarImage(avatarId);
 
   return (
     <div className="quiz-fullscreen">
@@ -371,3 +371,12 @@ function QuizContent({ quizId }: { quizId: number }) {
     </div>
   );
 }
+
+// Ajouter une fonction de mapping d'avatar
+const getAvatarImage = (id: number): string => {
+  switch(id) {
+    case 1: return "/alien1.png";
+    case 2: return "/AlienVert 1.png";
+    default: return "/alien1.png";
+  }
+};
