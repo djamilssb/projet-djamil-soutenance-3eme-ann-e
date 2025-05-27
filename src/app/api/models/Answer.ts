@@ -1,4 +1,4 @@
-class Answer {
+class Answer{
     id?: number;
     id_quizz?: number;
     id_question?: number;
@@ -9,8 +9,21 @@ class Answer {
     created_at?: Date;
     updated_at?: Date;
 
-    constructor(data?: Partial<Answer>) {
-        Object.assign(this, data)
+    constructor(data?: any) {
+        if (data) {
+            this.id = data.id;
+            this.id_quizz = data.id_quizz;
+            this.id_question = data.id_question;
+            this.order_index = data.order_index;
+            this.content = data.content;
+            this.explication = data.explication;
+            
+            // ⭐ CORRECTION ICI - Conversion robuste
+            this.is_correct = Boolean(Number(data.is_correct));
+            
+            this.created_at = data.created_at ? new Date(data.created_at) : undefined;
+            this.updated_at = data.updated_at ? new Date(data.updated_at) : undefined;
+        }
     };
 
     public getId(): number | undefined {

@@ -4,12 +4,15 @@ class Quizz {
     id_departement?: number;
     title?: string;
     description?: string;
-    is_custom?: boolean;
-    nbr_question?: number;
-    image_url?: string;
+
+    is_custom?: boolean;          
+    nbr_question?: number;       
+    is_active?: number;           
+    image_url?: string;           
     created_at?: Date;
     updated_at?: Date;
     questions?: { text: FormDataEntryValue; answers: { text: string; correct: boolean; }[]; }[];
+
 
     constructor(data?: Partial<Quizz>) {
         Object.assign(this, data)
@@ -35,9 +38,18 @@ class Quizz {
         return this.description;
     }
 
-    public getNbrQuestions(): number | undefined {
+    public getIsCustom(): boolean | undefined {
+        return this.is_custom;
+    }
+
+    public getNbrQuestion(): number | undefined {
         return this.nbr_question;
     }
+
+    public getIsActive(): number | undefined {
+        return this.is_active;
+    }
+
 
     public getImageUrl(): string | undefined {
         return this.image_url;
@@ -71,12 +83,21 @@ class Quizz {
         this.description = description;
     }
 
-    public setNbrQuestions(nbr_questions: number): void {
-        this.nbr_question = nbr_questions;
+    public setIsCustom(is_custom: boolean): void {
+        this.is_custom = is_custom;
     }
 
-    public setImageUrl(url: string): void {
-        this.image_url = url;
+    public setNbrQuestion(nbr_question: number): void {
+        this.nbr_question = nbr_question;
+    }
+
+    public setIsActive(is_active: number): void {
+        this.is_active = is_active;
+    }
+
+    public setImageUrl(image_url: string): void {
+        this.image_url = image_url;
+
     }
 
     public setCreatedAt(created_at: Date): void {
@@ -94,8 +115,11 @@ class Quizz {
             id_departement: this.id_departement,
             title: this.title,
             description: this.description,
-            nbr_question: this.nbr_question,
+
             is_custom: this.is_custom,
+            nbr_question: this.nbr_question,
+            is_active: this.is_active,
+
             image_url: this.image_url,
             created_at: this.created_at,
             updated_at: this.updated_at
