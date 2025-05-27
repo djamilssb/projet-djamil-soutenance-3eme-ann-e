@@ -115,9 +115,22 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
   width: 100%;
   height: 100%;
   padding: 0 1rem;
+}
+.return-nav {
+  position: fixed;
+  top: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0 50px 20px;
+}
+.return-nav .avatar img {
+  border-radius: 50%;
 }
 .black-wrap {
   width: 100%;
@@ -241,7 +254,28 @@ main {
   height: 35px;
   padding: 0 16px;
   background: #5e5e5e80;
+  border: 2px solid transparent;
   text-align: center;
+}
+.quiz-form .form-line.error input,
+.quiz-form .form-line.error textarea,
+.quiz-form .form-line.error select {
+  border-color: var(--alert-danger-color);
+}
+.quiz-form .form-line textarea {
+  width: 80%;
+  height: 100px;
+  padding: 0 16px;
+  background: #5e5e5e80;
+  border: 2px solid transparent;
+  resize: none;
+}
+.quiz-form .form-line select {
+  width: 80%;
+  height: 35px;
+  padding: 0 16px;
+  background: #5e5e5e80;
+  border: 2px solid transparent;
 }
 
 .quiz-form .questions {
@@ -264,6 +298,9 @@ main {
 }
 .quiz-form .question-block .form-line.answer {
   padding-left: 2rem;
+}
+.quiz-form .answer-wrap .check-label.error {
+  border-bottom: 1px solid var(--alert-danger-color);
 }
 .quiz-form .question-block .form-line label {
   margin-bottom: 0.5rem;
@@ -305,6 +342,49 @@ main {
   background: var(--alert-warning-color);
 }
 
+/* progress bar */
+.loader-wrap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+}
+.loader-wrap.active {
+  display: flex;
+}
+.loader-wrap .loader-container {
+  width: 50%;
+  height: 20px;
+  background-color: #158C7C;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+}
+.loader-wrap .loader-bar {
+  height: 100%;
+  width: 0%;
+  background-color: #24F2D6;
+  animation: progressAnimation 2s ease-out forwards;
+  animation-iteration-count: infinite;
+}
+.loader-wrap .title {
+  margin-bottom: 10px;
+  font-size: 20px;
+  color: #fff;
+}
+
+@keyframes progressAnimation {
+  from { width: 0%; }
+  to { width: 100%; }
+}
+
 @media (min-width: 640px) {
   .black-wrap {
     width: 90%;
@@ -339,6 +419,9 @@ main {
   .quiz-form .form-line input {
     width: 50%;
     max-width: 200px;
+    height: 65px;
+  }
+  .quiz-form .form-line select {
     height: 65px;
   }
 }

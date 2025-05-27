@@ -4,13 +4,15 @@ class Quizz {
     id_departement?: number;
     title?: string;
     description?: string;
+
     is_custom?: boolean;          
     nbr_question?: number;       
     is_active?: number;           
     image_url?: string;           
     created_at?: Date;
     updated_at?: Date;
-    
+    questions?: { text: FormDataEntryValue; answers: { text: string; correct: boolean; }[]; }[];
+
 
     constructor(data?: Partial<Quizz>) {
         Object.assign(this, data)
@@ -47,6 +49,7 @@ class Quizz {
     public getIsActive(): number | undefined {
         return this.is_active;
     }
+
 
     public getImageUrl(): string | undefined {
         return this.image_url;
@@ -94,6 +97,7 @@ class Quizz {
 
     public setImageUrl(image_url: string): void {
         this.image_url = image_url;
+
     }
 
     public setCreatedAt(created_at: Date): void {
@@ -111,9 +115,11 @@ class Quizz {
             id_departement: this.id_departement,
             title: this.title,
             description: this.description,
+
             is_custom: this.is_custom,
             nbr_question: this.nbr_question,
             is_active: this.is_active,
+
             image_url: this.image_url,
             created_at: this.created_at,
             updated_at: this.updated_at

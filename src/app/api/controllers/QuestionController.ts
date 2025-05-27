@@ -54,8 +54,9 @@ class QuestionController {
 
     public async createQuestion(req: NextRequest, body: Partial<Question>): Promise<NextResponse> {
         const questionData: Partial<Question> = body;
+        console.log('question', questionData);
 
-        if (!questionData.idQuizz || !questionData.content) {
+        if (!questionData.id_quizz || !questionData.content) {
             return NextResponse.json({ message: 'Données de questions manquantes.' }, { status: 400 });
         }
 
@@ -64,7 +65,7 @@ class QuestionController {
             if (!createdResult) {
                 return NextResponse.json({ message: 'Échec de la création de la question.' }, { status: 400 });
             }
-            return NextResponse.json({ message: 'Question créé avec succès.' }, { status: 201 });
+            return NextResponse.json({ message: 'Question créé avec succès.', result: createdResult }, { status: 201 });
         } catch (error) {
             console.error('Failed to create question:', error);
             return NextResponse.json({ message: 'Impossible de créer la question.' }, { status: 500 });

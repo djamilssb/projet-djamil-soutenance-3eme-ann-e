@@ -36,7 +36,7 @@ class AnswerService {
     public async create(answer: Partial<Answer>): Promise<boolean> {
         try {
 
-            if (!answer.idQuizz || !answer.idQuestion || !answer.explication || !answer.orderIndex || !answer.content?.trim()) throw new Error("Données de la réponse incomplètes");
+            if (!answer.id_quizz || !answer.id_question || !answer.content?.trim()) throw new Error("Données de la réponse incomplètes");
 
             const createdResult = await this.answerRepository.create(answer);
 

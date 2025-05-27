@@ -1,10 +1,10 @@
 class Question {
     id?: number;
-    idQuizz?: number;
-    orderIndex?: number;
+    id_quizz?: number;
+    order_index?: number;
     content?: string;
-    createdAt?: Date;
-    updatedAt?: Date;
+    created_at?: Date;
+    updated_at?: Date;
 
     constructor(data?: Partial<Question>) {
         Object.assign(this, data)
@@ -15,11 +15,11 @@ class Question {
     };
 
     public getQuizzId(): number | undefined {
-        return this.idQuizz;
+        return this.id_quizz;
     };
     
     public getOrderIndex(): number | undefined {
-        return this.orderIndex;
+        return this.order_index;
     };
 
     public getContent(): string | undefined {
@@ -27,12 +27,23 @@ class Question {
     };
 
     public setOrderIndex(index: number): void {
-        this.orderIndex = index;
+        this.order_index = index;
     };
 
     public setContent(text: string): void {
         this.content = text;
     };
+
+    public toJSON(): object {
+        return {
+            id: this.id,
+            id_quizz: this.id_quizz,
+            content: this.content,
+            order_index: this.order_index,
+            created_at: this.created_at,
+            updated_at: this.updated_at
+        };
+    }
 }
 
 export default Question;

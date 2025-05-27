@@ -37,6 +37,7 @@ class QuizzService {
     }
 
     public async create(quizz: Partial<Quizz>): Promise<boolean> {
+        console.log('quiz', quizz);
         try {
             if (!quizz.title?.trim() || !quizz.id_user) {
                 throw new Error("Données du quizz incomplètes");
