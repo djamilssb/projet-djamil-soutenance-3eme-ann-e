@@ -47,17 +47,29 @@ class QuizzRepository {
     }
 
     public async getAllQuizByIdUser(userId: number): Promise<any[]> {
-    // Requête qui récupère les quiz créés par l'utilisateur OU les quiz génériques
-    const query = `
-        SELECT q.*, u.name as userName 
-        FROM kt_quizzes q 
-        LEFT JOIN kt_users u ON q.id_user = u.id
-        WHERE q.is_active = 1 AND (q.id_user = ? OR q.id_user IS NULL)
-        ORDER BY q.created_at DESC
-    `;
-    
-    return await executeQuery(query, [userId]);
-}
+        // Requête qui récupère les quiz créés par l'utilisateur OU les quiz génériques
+        const query = `
+            SELECT q.*, u.name as userName 
+            FROM kt_quizzes q 
+            LEFT JOIN kt_users u ON q.id_user = u.id
+            WHERE q.is_active = 1 AND (q.id_user = ? OR q.id_user IS NULL)
+            ORDER BY q.created_at DESC
+        `;
+        
+        return await executeQuery(query, [userId]);
+    }
+
+    public async getQuizzesWhereIdUserIsNull(): Promise<any[]> {
+        const query = `
+            SELECT q.*, u.username as userName 
+            FROM kt_quizzes q
+            LEFT JOIN kt_users u ON q.id_user = u.id
+            WHERE q.id_user IS NULL AND q.is_active = 1
+            ORDER BY q.created_at DESC
+        `;
+        
+        return await executeQuery(query, []);
+    }
 }
 
 export default QuizzRepository;

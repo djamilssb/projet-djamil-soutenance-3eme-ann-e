@@ -11,10 +11,10 @@ export default function QuizzListPage() {
   return (
     <div className="quizz-container">
       <h1>Liste des Quiz</h1>
-      {}
       <QuizList 
-        isCustom={false} 
-        showCreateButton={false} 
+        idUserNull={true} // Logique simple: id_user=NULL
+        showCreateButton={false}
+        mode="play" // Pour afficher un bouton JOUER au lieu de Modifier
       />
     </div>
   );
