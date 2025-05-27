@@ -7,7 +7,13 @@ export const metadata: Metadata = {
   description: "Welcome to the select character page!",
 };
 
-export default function ChoiceCharacter(): React.JSX.Element {
+export default function ChoiceCharacter({
+  searchParams,
+}: {
+  searchParams: { quizId?: string };
+}): React.JSX.Element {
+  const quizId = searchParams?.quizId || "1";
+
   return (
     <div>
       <h1 hidden>Choisir un personnage</h1>
@@ -17,7 +23,7 @@ export default function ChoiceCharacter(): React.JSX.Element {
         </h2>
 
         <div className="flex flex-row gap-16">
-          <Link href="/character/1">
+          <Link href={`/game/quiz/questions?quizId=${quizId}&avatarId=1`}>
             <div className="cursor-pointer hover:scale-105 transition-transform">
               <Image
                 src="/alien1.png"
@@ -28,7 +34,7 @@ export default function ChoiceCharacter(): React.JSX.Element {
             </div>
           </Link>
 
-          <Link href="/character/2">
+          <Link href={`/game/quiz/questions?quizId=${quizId}&avatarId=2`}>
             <div className="cursor-pointer hover:scale-105 transition-transform">
               <Image
                 src="/AlienVert 1.png"

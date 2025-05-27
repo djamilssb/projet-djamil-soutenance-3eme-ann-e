@@ -10,10 +10,30 @@ class QuizzController {
 
     public async getAll(req: NextRequest): Promise<NextResponse> {
         try {
-            const quizzes = await this.quizzService.getAll();
-            return NextResponse.json(quizzes, { status: 200 });
+            const url = new URL(req.url);
+            const idUserNullParam = url.searchParams.get('idUserNull');
+            const userIdParam = url.searchParams.get('userId');
+            
+            // Filtrer par id_user=NULL
+            if (idUserNullParam === '1') {
+                const officialQuizzes = await this.quizzService.getQuizzesWhereIdUserIsNull();
+                return NextResponse.json(officialQuizzes, { status: 200 });
+            }
+            
+            // Si userId est spécifié, récupérer les quiz de cet utilisateur
+            if (userIdParam) {
+                const userId = parseInt(userIdParam);
+                if (!isNaN(userId)) {
+                    const userQuizzes = await this.quizzService.getByUserId(userId);
+                    return NextResponse.json(userQuizzes, { status: 200 });
+                }
+            }
+            
+            // Sinon, récupérer tous les quiz
+            const allQuizzes = await this.quizzService.getAll();
+            return NextResponse.json(allQuizzes, { status: 200 });
         } catch (error) {
-            console.error('Failed to retrieve all quizzes:', error);
+            console.error('Failed to retrieve quizzes:', error);
             return NextResponse.json({ message: 'Impossible de récupérer les quizz.' }, { status: 500 });
         }
     }
@@ -113,6 +133,31 @@ class QuizzController {
             return NextResponse.json({ message: 'Impossible de récupérer les quizz du département.' }, { status: 500 });
         }
     }
+
+    public async getAllQuizByIdUser(req: NextRequest): Promise<NextResponse> {
+    try {
+        // Extraire les paramètres de l'URL
+        const url = new URL(req.url);
+        const userIdParam = url.searchParams.get('userId');
+        
+        // Si aucun ID utilisateur n'est fourni, retourner une erreur
+        if (!userIdParam) {
+            return NextResponse.json({ message: 'ID utilisateur requis.' }, { status: 400 });
+        }
+        
+        const userId = parseInt(userIdParam);
+        if (isNaN(userId)) {
+            return NextResponse.json({ message: 'ID utilisateur invalide.' }, { status: 400 });
+        }
+        
+        // Récupérer les quiz créés par cet utilisateur OU les quiz génériques (id_user NULL)
+        const quizzes = await this.quizzService.getAllQuizByIdUser(userId);
+        return NextResponse.json(quizzes, { status: 200 });
+    } catch (error) {
+        console.error('Failed to retrieve quizzes:', error);
+        return NextResponse.json({ message: 'Impossible de récupérer les quizz.' }, { status: 500 });
+    }
+}
 }
 
 export default QuizzController;

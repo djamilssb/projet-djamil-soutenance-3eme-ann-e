@@ -1,4 +1,4 @@
-class Answer {
+class Answer3 {
     id?: number;
     id_quizz?: number;
     id_question?: number;
@@ -9,8 +9,18 @@ class Answer {
     created_at?: Date;
     updated_at?: Date;
 
-    constructor(data?: Partial<Answer>) {
-        Object.assign(this, data)
+    constructor(data?: any) {
+        if (data) {
+            this.id = data.id;
+            this.idQuizz = data.id_quizz;
+            this.idQuestion = data.id_question;
+            this.orderIndex = data.order_index;
+            this.content = data.content;
+            this.explication = data.explication;
+            this.isCorrect = Boolean(data.is_correct); // ← Conversion importante ici
+            this.createdAt = data.created_at ? new Date(data.created_at) : undefined;
+            this.updatedAt = data.updated_at ? new Date(data.updated_at) : undefined;
+        }
     };
 
     public getId(): number | undefined {
@@ -67,4 +77,4 @@ class Answer {
     }
 }
 
-export default Answer;
+export default Answer3;
