@@ -4,6 +4,8 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import ArrowBack from "@/app/components/ArrowBack";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import Image from "next/image";
+import MenuAvatar from "./components/MenuAvatar";
 
 interface UserData {
   email: string;
@@ -11,8 +13,10 @@ interface UserData {
   password: string;
   password_kids: string;
   created_at: string;
-  phone: string;       
-  address: string;     
+  phone: string;
+  address: string;
+  avatar_id?: number;
+  avatar_url?: string;
   currentPassword?: string;
   currentPassword_kids?: string;
 }
@@ -23,14 +27,17 @@ export default function CompteUser() {
   const [editable, setEditable] = useState<boolean>(false);
   const [passwordError, setPasswordError] = useState<string>("");
   const [kidsPasswordError, setKidsPasswordError] = useState<string>("");
+  const [showAvatarMenu, setShowAvatarMenu] = useState<boolean>(false);
   const [userData, setUserData] = useState<UserData>({
     email: "",
     username: "",
     password: "",
     password_kids: "",
     created_at: "",
-    phone: "",        // Initialisation du champ téléphone
-    address: "",      // Initialisation du champ adresse
+    phone: "",
+    address: "",
+    avatar_id: 0,
+    avatar_url: "/default-avatar.png",
     currentPassword: "",
     currentPassword_kids: "",
   });
@@ -118,6 +125,8 @@ export default function CompteUser() {
         created_at: data.created_at || "",
         phone: data.phone || "",
         address: data.address || "",
+        avatar_id: data.avatar_id || 1,
+        avatar_url: data.avatar_url || "/default-avatar.png", 
         currentPassword: "",
         currentPassword_kids: "",
       });
@@ -157,6 +166,14 @@ export default function CompteUser() {
     setUserData({ ...userData, [name]: value });
   };
 
+  const handleAvatarSelect = (avatarId: number, avatarUrl: string) => {
+    setUserData({
+      ...userData,
+      avatar_id: avatarId,
+      avatar_url: avatarUrl
+    });
+  };
+
   const handleSubmit = async () => {
     try {
       setPasswordError("");
@@ -180,6 +197,7 @@ export default function CompteUser() {
         username: string;
         phone: string;
         address: string;
+        avatar_id?: number;
         password?: string;
         password_kids?: string;
         currentPassword?: string;
@@ -190,7 +208,8 @@ export default function CompteUser() {
         email: userData.email,
         username: userData.username,
         phone: userData.phone,
-        address: userData.address
+        address: userData.address,
+        avatar_id: userData.avatar_id
       };
       
       if (isPasswordChanged) {
@@ -236,12 +255,41 @@ export default function CompteUser() {
 
   return (
     <>
+      {showAvatarMenu && (
+        <MenuAvatar 
+          onAvatarSelect={handleAvatarSelect} 
+          onClose={() => setShowAvatarMenu(false)} 
+        />
+      )}
+    
       <div className="absolute top-5 left-5">
         <ArrowBack />
       </div>
       <div className="bg-black/80 text-white p-8 rounded-lg shadow-lg w-full max-w-md">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold">Mon Compte</h2>
+        </div>
+        
+        {/* Avatar section */}
+        <div className="flex flex-col items-center mb-6">
+          <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-teal-400 mb-3">
+            <Image
+              src={userData.avatar_url || "/default-avatar.png"}
+              alt="Avatar utilisateur"
+              width={96}
+              height={96}
+              className="w-full h-full object-cover"
+            />
+          </div>
+          
+          {editable && (
+            <button 
+              onClick={() => setShowAvatarMenu(true)}
+              className="bg-teal-400 hover:bg-teal-500 text-black text-sm font-semibold py-1 px-4 rounded-full"
+            >
+              Changer l'avatar
+            </button>
+          )}
         </div>
         
         <div className="space-y-6">
