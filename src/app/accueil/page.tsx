@@ -67,7 +67,7 @@ export default function Home(): React.JSX.Element {
     <>
       <h1 hidden>Accueil</h1>
 
-      <section className="flex flex-col sm:flex-row items-center justify-center h-[calc(100vh-120px)] px-4 sm:px-0 levitate gap-4 sm:gap-6">
+      <section className="flex flex-col sm:flex-row items-center justify-center h-[calc(100vh-120px)] px-4 sm:px-0  gap-4 sm:gap-6">
         {/* Image alien - TAILLES RÉDUITES */}
         <Image
           src="/alien1.png"
@@ -87,7 +87,7 @@ export default function Home(): React.JSX.Element {
               alt="Spaceship"
               width={150}
               height={150}
-              className="absolute right-0 top-0 z-25 w-[19vw] translate-x-20 -translate-y-25"
+              className="absolute right-0 top-0 z-25 w-[19vw] translate-x-20 -translate-y-25 levitate"
             />
 
             {/* Titre - TAILLE RÉDUITE */}
@@ -102,7 +102,7 @@ export default function Home(): React.JSX.Element {
 
             {/* Bouton - TAILLE RÉDUITE */}
             <Link href="/auth">
-              <button className="bg-[var(--secondary-color)] hover:bg-[var(--hover-secondary)] text-white text-sm sm:text-base lg:text-lg xl:text-xl font-bold px-4 py-2 sm:px-6 sm:py-3 lg:px-8 lg:py-4 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl mt-4">
+              <button className="bg-[var(--secondary-color)] hover:bg-[var(--hover-secondary)] text-black text-sm sm:text-base lg:text-lg xl:text-xl font-bold px-4 py-2 sm:px-6 sm:py-3 lg:px-8 lg:py-4 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl mt-4">
                 Commencer l&apos;aventure
               </button>
             </Link>
