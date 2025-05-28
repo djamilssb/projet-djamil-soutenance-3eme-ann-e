@@ -84,15 +84,19 @@ export default function QuizEdit(): React.JSX.Element {
     // }
 
     const { id } = useParams();
-    // const [data, setData] = useState<any>(null);
-    // const [isLoading, setIsLoading] = useState(true);
 
+    /**
+     * Get quiz data from BDD
+     */
     const { data: quizData, isLoading: loadingQuiz } = useQuery({
         queryKey: ['quiz', id],
         queryFn: () => fetchQuizById(id),
         enabled: !!id,
     });
 
+    /**
+     * Get questions and answers from BDD
+     */
     const { data: questions, isLoading: loadingQuestions } = useQuery({
         queryKey: ['questions', id],
         queryFn: async () => {
@@ -116,22 +120,27 @@ export default function QuizEdit(): React.JSX.Element {
         enabled: !!id,
     });
 
+    // form data for quiz edit page
     const formData = quizData && questions ? {
-        quiz_name: quizData.title,
-        quiz_author: 'beaverok',
-        quiz_date: formatDate(quizData.created_at),
-        quiz_image: quizData.image_url,
-        description: quizData.description,
-        department: quizData.id_departement,
+        data: {
+            quiz_id: Number(id).toString(),
+            quiz_name: quizData.title,
+            quiz_author: 'beaverok',
+            quiz_date: formatDate(quizData.created_at),
+            quiz_image: quizData.image_url,
+            description: quizData.description,
+            department: quizData.id_departement,
+        },
         questions: questions!.map(q => ({
-            id: q.id,
-            text: q.content,
-            answers: q.answers.map((a: Answer) => ({
-                id: a.id,
-                text: a.content,
-                correct: a.is_correct,
-            })),
-        }))
+                id: q.id,
+                text: q.content,
+                answers: q.answers.map((a: Answer) => ({
+                    id: a.id,
+                    text: a.content,
+                    correct: a.is_correct,
+                })),
+            })
+        )
     } : null;
 
     useEffect(() => {
@@ -141,7 +150,7 @@ export default function QuizEdit(): React.JSX.Element {
     return (
         <>
             {/* <div className="page-bg"></div> */}
-            {!loadingQuiz && !loadingQuestions? <QuizForm data={formData}/> 
+            {!loadingQuiz && !loadingQuestions? <QuizForm formData={formData}/> 
                 : <Loader title="Récupération des données de quiz..." active={true} />}
         </>
     );

@@ -80,7 +80,7 @@ export default function QuizQuestionInput({ props, onDelete }: { props: Input, o
                         props={{
                             iType: 'text',
                             iClass: 'answer',
-                            iName: `answer_${props.iIndex}_${index}`,
+                            iName: props.answers && props.answers[index] ? `answer_${props.answers[index].id}` : `answer_${props.iIndex}_${index}`,
                             label: `Réponse ${index + 1} :`,
                             required: true,
                             defaultValue: props.answers != undefined && props.answers?.length > 0 ? props.answers[index].text : ''
@@ -90,7 +90,7 @@ export default function QuizQuestionInput({ props, onDelete }: { props: Input, o
                         <input 
                             type="radio" 
                             name={`right-${props.iIndex}`} 
-                            defaultValue={index}
+                            defaultValue={props.answers && props.answers[index] ? props.answers[index].id : index}
                             required
                             defaultChecked={props.answers && props.answers.length > 0 && props.answers[index].correct ? true : false}
                         />

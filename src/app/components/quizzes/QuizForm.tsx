@@ -19,7 +19,7 @@ import fetchAnswerUpdate from "@/utils/fetcher/quiz/fetchAnswerUpdate";
 interface QuizQuestion {
     id?: number,
     text: string;
-    answers: {
+    answers?: {
         id?: number,
         text: string;
         correct: boolean;
@@ -33,9 +33,6 @@ interface QuizData {
     quiz_image: string;
     description: string;
     department: string;
-}
-interface QuizFormProps {
-    data?: QuizData | null;
 }
 
 // transforms timestamp from bdd to input date format
@@ -124,9 +121,10 @@ function checkValidFields(): void {
     });
 };
 
-export default function QuizForm({ data }: QuizFormProps): React.JSX.Element {
+export default function QuizForm({ formData }: { formData: {data: QuizData, questions: QuizQuestion[]} | null }): React.JSX.Element {
     const [questionNumber, setQuestionNumber] = useState(1);
     const [questionsList, setQuestionsList] = useState<QuizQuestion[]>([]);
+    const [answersList, setAnswersList] = useState<{id?: number, text: string, correct: boolean}[]>([]);
     const [showSuccess, setShowSuccess] = useState(false); 
     
     const router = useRouter();
@@ -168,8 +166,6 @@ export default function QuizForm({ data }: QuizFormProps): React.JSX.Element {
                 answers,
             });
         }
-
-        console.info('q list', questions);
     
         return {
             data: {
@@ -182,6 +178,126 @@ export default function QuizForm({ data }: QuizFormProps): React.JSX.Element {
                 quiz_image: formData.quiz_image as string,
             },
             questions: questions
+        };
+    }
+
+    /**
+     * Transforms form data after updating quiz
+     * @param formData
+     * @returns quiz object
+     */
+    function transformFormEditData(formData: { [k: string]: FormDataEntryValue }): { data: QuizData, questions: QuizQuestion[] } {
+        const questions: QuizQuestion[] = [];
+        const answers: {id?: number, text: string, correct: boolean}[] = [];
+        
+        // Extract all unique question IDs from both `question_*` and `answer_*` keys
+        const questionIds = new Set<number>();
+        const answerIds = new Set<number>();
+        // TODO const newQuestions: string[] = [];
+        // TODO const newAnswers: string[] = [];
+        const rightAnswerIds = [];
+        
+        Object.keys(formData).forEach(key => {
+            // Check for question keys (e.g., "question_15")
+            if (key.startsWith('question_')) {
+                const partQ = key.split('_');
+                const questionId = parseInt(partQ[1]);
+                if (!isNaN(questionId) && partQ.length == 2) questionIds.add(questionId);
+                // TODO if (partQ.length > 2) newQuestions.push(key);
+            }
+            // Check for answer keys (e.g., "answer_15")
+            else if (key.startsWith('answer_')) {
+                const partA = key.split('_');
+                const answerId = parseInt(partA[1]);
+                if (!isNaN(answerId) && partA.length == 2) answerIds.add(answerId);
+                // TODO if (partA.length > 2) newAnswers.push(key);
+            }
+        });
+        
+        // Process each question for update
+        for (const questionId of questionIds) {
+            const questionKey = `question_${questionId}`;
+            
+            const questionText = formData[questionKey] as string;
+            
+            // Skip if required fields are missing
+            if (!questionText) continue;
+            
+            questions.push({
+                id: questionId,  // Keep the original ID
+                text: questionText
+            });
+        }
+
+        // Process each answer for update
+        let cnt = 1;
+        for (const answerId of answerIds) {
+            const answerKey = `answer_${answerId}`;
+            const rightAnswerKey = `right-${cnt}`;
+            
+            const answerText = formData[answerKey] as string;
+            const rightAnswerIndex = formData[rightAnswerKey] as string;
+            
+            // Skip if required fields are missing
+            if (!answerText) continue;
+
+            if (rightAnswerIndex !== undefined) rightAnswerIds.push(formData[rightAnswerKey]);
+            
+            answers.push({
+                id: answerId,  
+                text: answerText,
+                correct: rightAnswerIds.includes(answerId.toString()),
+            });
+
+            cnt++;
+        }
+
+        // TODO: Process new question
+        /*
+        let rightIndexes = [];
+        for (const questionId of newQuestions) {
+            // rightIndexes.push(`right-${questionId}`);
+
+            const questionText = formData[questionId] as string;
+            
+            // Skip if required fields are missing
+            if (!questionText) continue;
+            
+            questions.push({
+                text: questionText
+            });
+        }*/
+
+        // TODO: Process new answer
+        /*
+        let cntA = 1;
+        for (const answerId of newAnswers) {
+            const answerText = formData[answerId] as string;
+            
+            if (!answerText) continue;
+            
+            answers.push({
+                text: answerText,
+                correct: rightAnswerIds.includes(answerId.toString()),
+            });
+
+            cntA++;
+        }*/
+
+        console.info('new data', questions, answers);
+        setAnswersList(answers);
+        
+        return {
+            data: {
+                quiz_id: formData.quiz_id as string,
+                quiz_name: formData.quiz_name as string,
+                quiz_author: formData.quiz_author as string,
+                quiz_date: formData.quiz_date as string,
+                description: formData.description as string,
+                department: formData.department as string,
+                quiz_image: formData.quiz_image as string,
+            },
+            questions,
         };
     }
     /**
@@ -209,7 +325,7 @@ export default function QuizForm({ data }: QuizFormProps): React.JSX.Element {
     
                     if (questionId != null) {
                         // if there is an id we create answers for each question
-                        question.answers.map(answer => {
+                        question?.answers?.map(answer => {
                             const newAnswer = new Answer({
                                 "id_quizz": quizId,
                                 "id_question": questionId,
@@ -245,52 +361,56 @@ export default function QuizForm({ data }: QuizFormProps): React.JSX.Element {
             console.log("Quiz updated:", quizId);
     
             try {
-                for (const [index, q] of questionsList.entries() ?? []) {
-                    if (q.id) {
-                        // update question and answers if we found question id
-                        const question = new Question({
-                            id: q.id,
+                for (const [index, question] of questionsList.entries() ?? []) {
+                    console.info('fetch question update', question);
+                    if (question.id) {
+                        // update questions and answers if we found question id
+                        const updatedQuestion = new Question({
+                            id: question.id,
                             id_quizz: quizId,
-                            content: q.text as string,
+                            content: question.text as string,
                             order_index: index + 1
                         });
 
-                        await fetchQuestionUpdate(question);
+                        await fetchQuestionUpdate(updatedQuestion);
 
-                        for (const a of q.answers) {
-                            const answer = new Answer({
-                                id: a.id,
-                                id_quizz: quizId,
-                                id_question: q.id,
-                                content: a.text,
-                                is_correct: a.correct
+                        for (const answer of answersList) {
+                            const updatedAnswer = new Answer({
+                                id: answer.id,
+                                content: answer.text,
+                                is_correct: answer.correct
                             });
     
-                            await fetchAnswerUpdate(answer);
+                            await fetchAnswerUpdate(updatedAnswer);
                         }
-                    } else {
+                    } 
+                    // TODO
+                    /*else {
                         // add new questions and answers
-                        const question = new Question({
+                        const newQuestion = new Question({
                             id_quizz: quizId,
-                            content: q.text as string,
+                            content: question.text as string,
                             order_index: index + 1
                         });
 
-                        const questionId = await fetchQuestionCreate(question);
+                        const questionId = await fetchQuestionCreate(newQuestion);
+
+                        console.info('add new question', questionId, quizId);
+                        console.info('answers', answersList);
     
                         if (questionId != null) {
-                            for (const a of q.answers) {
-                                const answer = new Answer({
+                            for (const answer of answersList) {
+                                const newAnswer = new Answer({
                                     id_quizz: quizId,
                                     id_question: questionId,
-                                    content: a.text,
-                                    is_correct: a.correct
+                                    content: answer.text,
+                                    is_correct: answer.correct
                                 });
         
-                                await fetchAnswerCreate(answer);
+                                await fetchAnswerCreate(newAnswer);
                             }
                         }
-                    }
+                    }*/
                 }
     
                 showHideLoader(false);
@@ -309,12 +429,12 @@ export default function QuizForm({ data }: QuizFormProps): React.JSX.Element {
 
     // we check if there is data with quiz or not
     // if there is data this is quiz update form, if not quiz creation form
-    // useEffect(() => {
-    //     if (data && questionsList.length > 0) {
-    //         setQuestonsList(data.questions);
-    //         setQuestionNumber(data.questions.length);
-    //     }
-    // }, [data]);
+    useEffect(() => {
+        if (formData && formData.questions.length > 0) {
+            setQuestionsList(questionsList);
+            setQuestionNumber(formData.questions.length);
+        }
+    }, [formData]);
 
     useEffect(() => {
         console.log('Questions list updated:', questionsList);
@@ -381,7 +501,7 @@ export default function QuizForm({ data }: QuizFormProps): React.JSX.Element {
     const updateQuestionsList = (id: number): void => {
         console.info('deleting question...', id);
 
-        if (!data || questionsList.length == 0) return;
+        if (!formData || questionsList.length == 0) return;
 
         const updatedQuestions = questionsList.filter(q => q.id !== id);
 
@@ -412,10 +532,10 @@ export default function QuizForm({ data }: QuizFormProps): React.JSX.Element {
         if (!validateForm()) {
             return;
         }
-        const res = transformFormData(formValues);
+        const res = transformFormEditData(formValues);
 
         if (res) {
-            const quiz = new Quizz({
+            const quizModified = new Quizz({
                 "id_user": userId,
                 "title": res.data.quiz_name,
                 "description": res.data.description,
@@ -425,16 +545,17 @@ export default function QuizForm({ data }: QuizFormProps): React.JSX.Element {
                 "is_custom": true,
             });
             showHideLoader(true);
-            // updateQuizMutation.mutate({ id: Number(res.quiz_id), data: quiz, questions: res.questions });
+            setQuestionsList(res.questions)
+            updateQuizMutation.mutate({ id: Number(res.data.quiz_id), data: quizModified });
         }
     }
 
     return (
-        <form id="quiz-create" className="quiz-form" onSubmit={data ? handleModify : handleSubmit}>
-            <Loader title={data ? "Modification est en cours..." : "Création est en cours..."} />
+        <form id="quiz-create" className="quiz-form" onSubmit={formData ? handleModify : handleSubmit}>
+            <Loader title={formData ? "Modification est en cours..." : "Création est en cours..."} />
             <div className="form-body">
                 {/* get quiz id */}
-                {data ? <input type="hidden" name="quiz_id" value={data.quiz_id} /> : null}
+                {formData ? <input type="hidden" name="quiz_id" value={formData.data.quiz_id} /> : null}
 
                 <QuizFormInput
                     props={{
@@ -443,7 +564,7 @@ export default function QuizForm({ data }: QuizFormProps): React.JSX.Element {
                         label: 'Nom du quizz',
                         iClass: '',
                         required: true,
-                        defaultValue: data?.quiz_name ?? ''
+                        defaultValue: formData?.data.quiz_name ?? ''
                     }}
                 />
                 <QuizFormInput
@@ -452,7 +573,7 @@ export default function QuizForm({ data }: QuizFormProps): React.JSX.Element {
                         iClass: 'date',
                         iName: 'quiz_date',
                         label: 'Date de création',
-                        defaultValue: data?.quiz_date ? data.quiz_date : getCurrentDate(),
+                        defaultValue: formData?.data.quiz_date ? formData.data.quiz_date : getCurrentDate(),
                         readonly: true,
                     }}
                 />
@@ -463,7 +584,7 @@ export default function QuizForm({ data }: QuizFormProps): React.JSX.Element {
                         iName: 'quiz_author',
                         label: 'Nom du créateur',
                         required: true,
-                        defaultValue: data?.quiz_author ?? userName
+                        defaultValue: formData?.data.quiz_author ?? userName
                     }}
                 />
                 <QuizFormInput
@@ -473,7 +594,7 @@ export default function QuizForm({ data }: QuizFormProps): React.JSX.Element {
                         iName: 'quiz_image',
                         label: 'Url de l\'image',
                         required: true,
-                        defaultValue: data?.quiz_image ?? ""
+                        defaultValue: formData?.data.quiz_image ?? ""
                     }}
                 />
                 <div className="form-line">
@@ -481,13 +602,13 @@ export default function QuizForm({ data }: QuizFormProps): React.JSX.Element {
                     <select name="department" required>
                         <option value="0">Choisir</option>
                         {departments.map((el, key) => 
-                            <option value={el.id} key={key} selected={el.id.toString() == data?.department}>{el.name}</option>
+                            <option value={el.id} key={key} selected={el.id.toString() == formData?.data.department}>{el.name}</option>
                         )}
                     </select>
                 </div>
                 <div className="form-line">
                     <label>Description</label>
-                    <textarea name="description" required defaultValue={data?.description ?? ''}></textarea>
+                    <textarea name="description" required defaultValue={formData?.data.description ?? ''}></textarea>
                 </div>
                 <QuizFormInput
                     props={{
@@ -495,7 +616,8 @@ export default function QuizForm({ data }: QuizFormProps): React.JSX.Element {
                         iClass: 'q-number-wrap',
                         iName: 'q_number',
                         label: 'Nombre de question',
-                        defaultValue: questionNumber,
+                        defaultValue: formData?.questions.length ?? questionNumber,
+                        readonly: formData?.questions.length ? true : false,
                         onChange: handleQuestionNumberChange
                     }}
                 />
@@ -505,15 +627,15 @@ export default function QuizForm({ data }: QuizFormProps): React.JSX.Element {
                         <QuizQuestionInput
                             key={index}
                             props={{
-                                id: questionsList?.[index]?.id || 0,
+                                id: formData?.questions?.[index]?.id || 0,
                                 iType: 'text',
                                 iClass: '',
-                                iName: `question_${index + 1}`,
+                                iName: formData?.questions?.[index]?.id ? `question_${formData?.questions?.[index]?.id}` : `question_${index + 1}`,
                                 label: `Question ${index + 1} :`,
                                 iIndex: index + 1,
                                 required: true,
-                                defaultValue: questionsList?.[index]?.text || '',
-                                answers: questionsList?.[index]?.answers ?? []
+                                defaultValue: formData?.questions?.[index]?.text || '',
+                                answers: formData?.questions?.[index]?.answers ?? []
                             }}
                             onDelete={updateQuestionsList}
                         />
@@ -521,8 +643,8 @@ export default function QuizForm({ data }: QuizFormProps): React.JSX.Element {
                 </div>
             </div>
             <div className="form-footer">
-                {showSuccess && data == null ? <p className="note success levitate">Le quiz a été sauvegardé avec succès</p> : ''}
-                {showSuccess && data != null ? <p className="note success levitate">Le quiz a été modifié avec succès</p> : ''}
+                {showSuccess && formData == null ? <p className="note success levitate">Le quiz a été sauvegardé avec succès</p> : ''}
+                {showSuccess && formData != null ? <p className="note success levitate">Le quiz a été modifié avec succès</p> : ''}
                 <button type="submit" className="btn">Confirmer</button>
             </div>
         </form>
