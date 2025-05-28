@@ -97,7 +97,7 @@ export default function Home(): React.JSX.Element {
 
             {/* Sous-titre - TAILLE RÉDUITE */}
             <p className="text-white text-sm sm:text-base lg:text-lg xl:text-xl text-center mb-3 sm:mb-4 lg:mb-6 px-2">
-              Découvre les départements français en t&apos;amusant !
+              Créez un compte pour votre enfant afin qu'il s'amuse tout en développant sa culture générale grâce à des quizz ludiques et éducatifs !
             </p>
 
             {/* Bouton - TAILLE RÉDUITE */}
