@@ -80,14 +80,14 @@ export default function Home(): React.JSX.Element {
 
         {/* Contenu principal */}
         <div className="w-full sm:w-[43vw]">
-          <div className="flex flex-col relative justify-center items-center w-full sm:w-[35vw] bg-black opacity-[90%] rounded p-3 sm:p-4 lg:p-6 mt-15 sm:mt-12 lg:mt-16">
+          <div className="flex flex-col relative justify-center items-center w-full sm:w-[35vw] sm:h-[27vw] bg-black opacity-[90%] rounded p-3 sm:p-4 lg:p-6 mt-15 sm:mt-12 lg:mt-16">
             {/* Vaisseau - TAILLE RÉDUITE */}
             <Image
               src="/vaisseau.png"
               alt="Spaceship"
               width={150}
               height={150}
-              className="absolute right-0 top-0 z-25 w-[19vw] translate-x-20 -translate-y-20"
+              className="absolute right-0 top-0 z-25 w-[19vw] translate-x-20 -translate-y-25"
             />
 
             {/* Titre - TAILLE RÉDUITE */}
