@@ -2,26 +2,28 @@ import Link from "next/link";
 import React from "react";
 
 export function Footer(): React.JSX.Element {
-    return (
-        <section className="flex justify-between p-4 levitate">
-            <h2 hidden>Footer menu</h2>
-            <div className="bg-[var(--secondary-color)] flex max-w-fit gap-4 rounded bold">
-                <Link href="">
-                    <div className="hover:bg-[var(--hover-secondary)] p-2 rounded">
-                        <h3>Conditions générales d&apos;utilisation</h3>
-                    </div>
-                </Link>
-                <Link href="">
-                    <div className="hover:bg-[var(--hover-secondary)] p-2 rounded">
-                        <h3>Gestion des coockies</h3>
-                    </div>
-                </Link>
-            </div>  
-            <Link href="">
-                <div className="bg-[var(--secondary-color)] hover:bg-[var(--hover-secondary)] p-2 rounded">
-                    <button className="bold mr-2 cursor-pointer">Nous contacter</button>
-                </div>
-            </Link>
-        </section>
-    )
+  return (
+    <section className="flex flex-col sm:flex-row justify-between p-4 gap-4 sm:gap-0 levitate">
+      <h2 hidden>Footer menu</h2>
+      <div className="bg-[var(--secondary-color)] flex flex-col sm:flex-row max-w-fit gap-2 sm:gap-4 rounded bold">
+        <Link href="" className="w-full sm:w-auto text-center">
+          <div className="hover:bg-[var(--hover-secondary)] p-2 rounded">
+            <h3 className="text-sm sm:text-base">
+              Conditions générales d&apos;utilisation
+            </h3>
+          </div>
+        </Link>
+        <Link href="" className="w-full sm:w-auto text-center">
+          <div className="hover:bg-[var(--hover-secondary)] p-2 rounded">
+            <h3 className="text-sm sm:text-base">Gestion des cookies</h3>
+          </div>
+        </Link>
+      </div>
+      <Link href="" className="w-full sm:w-auto text-center">
+        <div className="bg-[var(--secondary-color)] hover:bg-[var(--hover-secondary)] p-2 rounded">
+          <button className="bold text-sm sm:text-base">Nous contacter</button>
+        </div>
+      </Link>
+    </section>
+  );
 }
