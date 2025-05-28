@@ -91,18 +91,18 @@ export default function Home(): React.JSX.Element {
             />
 
             {/* Titre - TAILLE RÉDUITE */}
-            <h2 className="text-white text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-bold text-center mb-2 sm:mb-3 lg:mb-4">
+            <h2 className="text-white text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-bold text-center mb-6 sm:mb-3 lg:mb-4">
               Bienvenue
             </h2>
 
             {/* Sous-titre - TAILLE RÉDUITE */}
-            <p className="text-white text-sm sm:text-base lg:text-lg xl:text-xl text-center mb-3 sm:mb-4 lg:mb-6 px-2">
+            <p className="text-white text-sm sm:text-base lg:text-lg xl:text-xl text-center mb-3 mt-6 sm:mb-4 lg:mb-6 px-2">
               Créez un compte pour votre enfant afin qu'il s'amuse tout en développant sa culture générale grâce à des quizz ludiques et éducatifs !
             </p>
 
             {/* Bouton - TAILLE RÉDUITE */}
             <Link href="/auth">
-              <button className="bg-[var(--secondary-color)] hover:bg-[var(--hover-secondary)] text-white text-sm sm:text-base lg:text-lg xl:text-xl font-bold px-4 py-2 sm:px-6 sm:py-3 lg:px-8 lg:py-4 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+              <button className="bg-[var(--secondary-color)] hover:bg-[var(--hover-secondary)] text-white text-sm sm:text-base lg:text-lg xl:text-xl font-bold px-4 py-2 sm:px-6 sm:py-3 lg:px-8 lg:py-4 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl mt-4">
                 Commencer l&apos;aventure
               </button>
             </Link>
