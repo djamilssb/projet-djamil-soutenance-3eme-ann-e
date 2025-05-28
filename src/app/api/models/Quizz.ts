@@ -11,7 +11,6 @@ class Quizz {
     image_url?: string;           
     created_at?: Date;
     updated_at?: Date;
-    questions?: { text: FormDataEntryValue; answers: { text: string; correct: boolean; }[]; }[];
 
 
     constructor(data?: Partial<Quizz>) {

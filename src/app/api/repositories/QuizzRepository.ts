@@ -18,7 +18,7 @@ class QuizzRepository {
     public async create(quizz: Partial<Quizz>): Promise<boolean> {
         const newQuizz = quizz;
         const result = await executeQuery("INSERT INTO kt_quizzes SET ?", [newQuizz]);
-        return result.affectedRows > 0;
+        return result;
     }
 
     public async update(id: number, quizz: Partial<Quizz>): Promise<boolean> {

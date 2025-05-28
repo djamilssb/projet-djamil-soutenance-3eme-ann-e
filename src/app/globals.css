@@ -303,7 +303,19 @@ main {
   border-bottom: 1px solid var(--alert-danger-color);
 }
 .quiz-form .question-block .form-line label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: none;
+  margin-right: 0;
   margin-bottom: 0.5rem;
+}
+.quiz-form .question-block .form-line svg {
+  cursor: pointer;
+}
+.quiz-form .question-block .form-line svg path {
+  fill: var(--alert-danger-color);
 }
 .quiz-form .question-block .form-line input {
   width: 100%;

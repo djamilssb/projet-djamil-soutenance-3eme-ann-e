@@ -54,7 +54,6 @@ class QuestionController {
 
     public async createQuestion(req: NextRequest, body: Partial<Question>): Promise<NextResponse> {
         const questionData: Partial<Question> = body;
-        console.log('question', questionData);
 
         if (!questionData.id_quizz || !questionData.content) {
             return NextResponse.json({ message: 'Données de questions manquantes.' }, { status: 400 });
