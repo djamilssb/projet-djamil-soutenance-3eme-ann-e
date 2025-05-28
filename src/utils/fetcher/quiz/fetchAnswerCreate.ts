@@ -1,7 +1,6 @@
 import Answer from "@/app/api/models/Answer";
 
 const fetchAnswerCreate = async (data: Answer): Promise<boolean> => {
-    console.error('answer data', data);
     return await fetch('/api/answers', {
         method: 'POST',
         headers: {
@@ -10,7 +9,6 @@ const fetchAnswerCreate = async (data: Answer): Promise<boolean> => {
         body: JSON.stringify(data),
     })
     .then(async (res: Response) => {
-        console.error('answer creating...', res.text);
         if (!res.ok) throw new Error('Failed to create answer');
         const json = await res.json();
 

@@ -9,14 +9,6 @@ class Quizz {
     image_url?: string;
     created_at?: Date;
     updated_at?: Date;
-    questions?: { 
-        id?: number,
-        text: FormDataEntryValue; answers: {
-            id?: number; 
-            text: string; 
-            correct: boolean; 
-        }[]; 
-    }[];
 
     constructor(data?: Partial<Quizz>) {
         Object.assign(this, data)

@@ -92,7 +92,7 @@ export default function QuizQuestionInput({ props, onDelete }: { props: Input, o
                             name={`right-${props.iIndex}`} 
                             defaultValue={index}
                             required
-                            checked={props.answers && props.answers.length > 0 && props.answers[index].correct ? true : false}
+                            defaultChecked={props.answers && props.answers.length > 0 && props.answers[index].correct ? true : false}
                         />
                         <span>Vrai</span>
                     </label>

@@ -12,7 +12,11 @@ interface Input {
     onChange?: (value: number) => void
 }
 export default function QuizFormInput({ props }: { props: Input}): React.JSX.Element {
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    /**
+     * Change number input value
+     * @param e - input element
+     */
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
         const newVal = Number(e.target.value);
 
         if (props.onChange) {
@@ -28,8 +32,8 @@ export default function QuizFormInput({ props }: { props: Input}): React.JSX.Ele
                     type={props.iType}
                     id={props.iName}
                     name={props.iName}
-                    min={props.defaultValue ? props.defaultValue : 1}
-                    value={props.defaultValue}
+                    min="1"
+                    defaultValue={props.defaultValue}
                     onChange={handleChange}
                 />
             ) : (
