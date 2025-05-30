@@ -3,8 +3,12 @@
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export function Navbar(): React.JSX.Element | null {
+
+  const router = useRouter();
+
   const pathname = usePathname();
 
   const hideNavbarOn = ["/choice-character", "/menu"];
@@ -23,7 +27,8 @@ export function Navbar(): React.JSX.Element | null {
           alt="Logo de KidsTrotter"
           height={140}
           width={140}
-          className="w-24 sm:w-32 lg:w-[140px] h-auto "
+          className="w-24 sm:w-32 lg:w-[140px] h-auto cursor-pointer"
+          onClick={() => router.push("/accueil")}
         />
         
         <Link href="/connexion">
