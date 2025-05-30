@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams } from 'next/navigation';
-import { Suspense } from 'react';
+import { Suspense, useState, useEffect } from 'react';
 import QuizList from '@/app/components/quizzes/QuizList';
 import './style.css';
 
@@ -9,30 +9,63 @@ import './style.css';
 function QuizListContent() {
   const searchParams = useSearchParams();
   const quizType = searchParams?.get('type') || 'generic';
+  
+  // État pour gérer l'ID utilisateur et le chargement
+  const [userId, setUserId] = useState<number | undefined>(undefined);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // Récupérer l'ID utilisateur depuis localStorage (seulement côté client)
-  const getUserId = (): number | undefined => {
-    if (typeof window !== 'undefined') {
-      const userIdStr = localStorage.getItem('userId');
-      return userIdStr ? parseInt(userIdStr) : undefined;
+  // Fonction pour récupérer l'ID utilisateur via l'API
+  const fetchUserId = async (): Promise<void> => {
+    try {
+      setIsLoading(true);
+      const tokenResponse = await fetch('/api/auth/token-id');
+      
+      if (!tokenResponse.ok) {
+        throw new Error('Utilisateur non connecté');
+      }
+      
+      const data = await tokenResponse.json();
+      setUserId(data.userId || data.id); // Adapter selon la structure de réponse
+    } catch (err) {
+      console.error('Erreur lors de la récupération de l\'ID utilisateur:', err);
+      setError('Impossible de récupérer les informations utilisateur');
+      setUserId(undefined);
+    } finally {
+      setIsLoading(false);
     }
-    return undefined;
   };
 
-  const userId = getUserId();
+  // Récupérer l'ID utilisateur au chargement du composant
+  useEffect(() => {
+    fetchUserId();
+  }, []);
 
   // Configuration selon le type de quiz
   const isGeneric = quizType === 'generic';
   const isPersonal = quizType === 'personal';
 
-  // Si quiz personnalisé mais utilisateur non connecté
-  if (isPersonal && !userId) {
+  // Affichage pendant le chargement
+  if (isLoading) {
+    return (
+      <div className="quizz-container">
+        <h1>Chargement...</h1>
+        <div style={{ color: 'white', textAlign: 'center', padding: '20px' }}>
+          <p>Récupération des informations utilisateur...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Si quiz personnalisé mais utilisateur non connecté ou erreur
+  if (isPersonal && (!userId || error)) {
     return (
       <div className="quizz-container">
         <h1>Mes Quiz Personnalisés</h1>
         <div style={{ color: 'white', textAlign: 'center', padding: '20px' }}>
           <p>Vous devez être connecté pour voir vos quiz personnalisés.</p>
           <p>Veuillez vous connecter pour accéder à cette fonctionnalité.</p>
+          {error && <p style={{ color: '#ff6b6b' }}>Erreur: {error}</p>}
         </div>
       </div>
     );
