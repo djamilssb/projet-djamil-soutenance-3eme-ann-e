@@ -49,13 +49,15 @@ class AuthController {
 
     public async signUp(body: Partial<Users>): Promise<NextResponse> {
         const userData: Partial<Users> = body;
-
-        if (!userData.id_avatar || !userData.username || !userData.password || !userData.password_kids || !userData.email || !userData.phone || !userData.address) {
+        console.log('begin signup')
+        if (!userData.username || !userData.password || !userData.email || !userData.phone || !userData.address) {
+            console.log('signup in return')
             return NextResponse.json({ message: "Missing user data." }, { status: 400 });
         }
 
         try {
             const created = await this.authService.signUp(userData);
+            console.log('try block in signup', created)
 
             if (!created) {
                 return NextResponse.json({ message: "Failed to create the user." }, { status: 400 });
