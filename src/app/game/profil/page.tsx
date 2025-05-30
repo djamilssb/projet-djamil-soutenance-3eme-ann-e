@@ -44,19 +44,20 @@ export default function CompteUser() {
   });
   const [isPasswordModified, setIsPasswordModified] = useState(false);
   const [isKidsPasswordModified, setIsKidsPasswordModified] = useState(false);
-
+  
   // Récupérer les données utilisateur avec TanStack Query
   const { data, isLoading, isError } = useQuery({
     queryKey: ["userData"],
     queryFn: async () => {
-      const userId = localStorage.getItem('user_id');
+      const tokenResponse = await fetch('/api/auth/token-id');
+      const tokenData = await tokenResponse.json();
       
-      if (!userId) {
+      if (!tokenData.id) {
         router.push('/connexion');
         throw new Error('Non authentifié');
       }
       
-      const response = await fetch(`/api/users/${userId}`);
+      const response = await fetch(`/api/users/${tokenData.id}`);
       if (!response.ok) {
         throw new Error('Erreur lors de la récupération des données utilisateur');
       }
@@ -67,10 +68,15 @@ export default function CompteUser() {
 
   const updateUserMutation = useMutation({
     mutationFn: async (dataToSend: any) => {
-      const userId = localStorage.getItem('user_id');
-      if (!userId) throw new Error('Non authentifié');
+      const tokenResponse = await fetch('/api/auth/token-id');
+      const tokenData = await tokenResponse.json();
+
+      if (!tokenData.id) {
+        router.push('/connexion');
+        throw new Error('Non authentifié');
+      }
       
-      const response = await fetch(`/api/users/${userId}`, {
+      const response = await fetch(`/api/users/${tokenData.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
