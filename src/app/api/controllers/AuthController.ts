@@ -66,6 +66,21 @@ class AuthController {
             return NextResponse.json({ message: "Failed to create the user." }, { status: 500 });
         };
     };
+
+    public async getUserIdByToken(token: string): Promise<NextResponse> {
+        try {
+            const userId = await this.authService.getUserIdByToken(token);
+
+            if (!userId) {
+                return NextResponse.json({ message: "Invalid token." }, { status: 401 });
+            }
+
+            return NextResponse.json({ id: userId }, { status: 200 });
+        } catch (error) {
+            console.error("Failed to get user ID by token:", error);
+            return NextResponse.json({ message: "An error occurred while retrieving the user ID." }, { status: 500 });
+        }
+    }
 };
 
 export default AuthController;
