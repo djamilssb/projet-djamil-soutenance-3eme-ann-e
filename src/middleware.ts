@@ -24,7 +24,6 @@ export const config = {
     "/api/users/:path*",
     "/api/departement/:path*",
     "/api/organizations/:path*",
-    "/api/avatar/:path*",
     "/api/characters/:path*",
     "/api/savequizz/:path*",
     "/api/quizz/:path*",
