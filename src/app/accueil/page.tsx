@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import "./style.css";
 
 export const metadata: Metadata = {
   title: "Kidstrotter | Quiz éducatifs pour enfants",
@@ -67,34 +67,43 @@ export default function Home(): React.JSX.Element {
     <>
       <h1 hidden>Accueil</h1>
 
-      <section className="flex flex-col sm:flex-row items-center justify-center min-h-[90vh] px-4 sm:px-0 levitate gap-8 sm:gap-0">
+      <section className="flex flex-col sm:flex-row items-center justify-center h-[calc(100vh-120px)] px-4 sm:px-0  gap-4 sm:gap-6">
+        {/* Image alien - TAILLES RÉDUITES */}
         <Image
           src="/alien1.png"
-          alt="Character"
+          alt="Alien character"
           width={580}
           height={580}
-          className="w-[280px] sm:w-[400px] lg:w-[580px] h-auto mt-8 sm:mt-20"
+          className="w-[32vw] h-auto"
+          priority
         />
+
+        {/* Contenu principal */}
         <div className="w-full sm:w-[43vw]">
-          <div className="flex flex-col relative justify-center items-center w-full sm:w-[35vw] min-h-[45vh] mt-4 sm:mt-54 bg-black opacity-[90%] rounded p-4 sm:p-8">
+          <div className="flex flex-col relative justify-center items-center w-full sm:w-[35vw] sm:h-[27vw] bg-black opacity-[90%] rounded p-3 sm:p-4 lg:p-6 mt-15 sm:mt-12 lg:mt-16">
+            {/* Vaisseau - TAILLE RÉDUITE */}
             <Image
               src="/vaisseau.png"
-              alt=""
-              height={400}
-              width={400}
-              className="absolute right-0 top-0 z-25 w-[25vw] translate-x-30 -translate-y-50 h-auto"
+              alt="Spaceship"
+              width={150}
+              height={150}
+              className="absolute right-0 top-0 z-25 w-[19vw] translate-x-20 -translate-y-25 levitate"
             />
-            <h2 className="text-white text-3xl sm:text-4xl lg:text-5xl text-center mt-4 mb-4 sm:mb-8">
-              Bienvenue !
+
+            {/* Titre - TAILLE RÉDUITE */}
+            <h2 className="text-white text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-bold text-center mb-6 sm:mb-3 lg:mb-4">
+              Bienvenue
             </h2>
-            <p className="text-white text-lg sm:text-xl lg:text-2xl mb-4 sm:mb-8 text-center">
-              Créez un compte pour votre enfant afin qu'il s'amuse tout en
-              développant sa culture générale grâce à des quizz ludiques et
-              éducatifs !
+
+            {/* Sous-titre - TAILLE RÉDUITE */}
+            <p className="text-white text-sm sm:text-base lg:text-lg xl:text-xl text-center mb-3 mt-6 sm:mb-4 lg:mb-6 px-2">
+              Créez un compte pour votre enfant afin qu'il s'amuse tout en développant sa culture générale grâce à des quizz ludiques et éducatifs !
             </p>
-            <Link href="/sign-in">
-              <button className="bg-[var(--secondary-color)] hover:bg-[var(--hover-secondary)] text-xl sm:text-2xl bold p-6 sm:p-12 rounded cursor-pointer">
-                Commencer à jouer
+
+            {/* Bouton - TAILLE RÉDUITE */}
+            <Link href="/auth">
+              <button className="bg-[var(--secondary-color)] hover:bg-[var(--hover-secondary)] text-black text-sm sm:text-base lg:text-lg xl:text-xl font-bold px-4 py-2 sm:px-6 sm:py-3 lg:px-8 lg:py-4 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl mt-4">
+                Commencer l&apos;aventure
               </button>
             </Link>
           </div>
