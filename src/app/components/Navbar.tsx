@@ -2,6 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
 
 export function Navbar(): React.JSX.Element | null {
   const pathname = usePathname();
@@ -24,15 +25,12 @@ export function Navbar(): React.JSX.Element | null {
           width={140}
           className="w-24 sm:w-32 lg:w-[140px] h-auto "
         />
-        <span
-          id="name-app"
-          className="text-[var(--tertiary-color)] bold text-xl sm:text-2xl lg:text-3xl"
-        >
-          KidsTrotter
-        </span>
-        <button className="w-full sm:w-auto bg-[var(--secondary-color)] hover:bg-[var(--hover-secondary)] bold p-3 sm:p-4 rounded cursor-pointer text-sm sm:text-base">
-          Se connecter/s&apos;inscrire
-        </button>
+        
+        <Link href="/connexion">
+          <button className="w-full sm:w-auto bg-[var(--secondary-color)] hover:bg-[var(--hover-secondary)] bold p-3 sm:p-4 rounded cursor-pointer text-sm sm:text-base">
+            Se connecter/s&apos;inscrire
+          </button>
+        </Link>
       </div>
     </nav>
   );
