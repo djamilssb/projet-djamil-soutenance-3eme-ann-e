@@ -16,7 +16,6 @@ export default function Menu(): React.JSX.Element {
       <h1 hidden>Menu Principal</h1>
 
       <section className="flex flex-col items-center justify-center h-[90vh] bg-cover bg-center relative">
-
         <div className="text-center mb-8">
           <h2
             id="name-app"
@@ -24,9 +23,6 @@ export default function Menu(): React.JSX.Element {
           >
             KidsTrotter
           </h2>
-          <p className="text-white text-sm sm:text-base lg:text-lg xl:text-xl text-center px-4">
-            Choisis ton aventure !
-          </p>
         </div>
 
         <div className="flex flex-col gap-6 items-center justify-center w-full max-w-md px-4">
