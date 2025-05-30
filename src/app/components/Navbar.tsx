@@ -15,14 +15,14 @@ export function Navbar(): React.JSX.Element | null {
   }
 
   return (
-    <nav className="mx-4 sm:mx-6 mt-2 levitate">
+    <nav className="mx-4 sm:mx-6 mt-2 ">
       <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-0 sm:justify-between">
         <Image
           src={"/kt-logo.png"}
           alt="Logo de KidsTrotter"
           height={140}
           width={140}
-          className="w-24 sm:w-32 lg:w-[140px] h-auto"
+          className="w-24 sm:w-32 lg:w-[140px] h-auto "
         />
         <span
           id="name-app"

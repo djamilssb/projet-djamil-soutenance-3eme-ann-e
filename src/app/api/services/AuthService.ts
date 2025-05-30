@@ -69,6 +69,24 @@ class AuthService {
             throw new Error("Error while creating the user");
         };
     };
+
+    public async getUserIdByToken(token: string): Promise<number | null> {
+      try {
+        if (!token) {
+          throw new Error("Token is required");
+        }
+
+        const decoded: any = jwt.verify(token, process.env.JWT_SECRET!);
+        if (!decoded || !decoded.id) {
+          throw new Error("Invalid token");
+        }
+
+        return decoded.id;
+      } catch (e) {
+        console.error("Error in getUserIdByToken:", e);
+        throw new Error("Error while retrieving user ID from token");
+      }
+    }
 };
 
 export default AuthService;
