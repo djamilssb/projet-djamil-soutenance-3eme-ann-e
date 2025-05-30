@@ -49,12 +49,15 @@ class AuthService {
 
     public async signUp(user: Partial<Users>): Promise<boolean> {
         try {
-            if (!user.id_avatar || !user.username?.trim() || !user.password?.trim() || !user.password_kids?.trim() || !user.email?.trim() || !user.phone?.trim() || !user.address?.trim()) {
+            if (!user.username?.trim() || !user.password?.trim() || !user.email?.trim() || !user.phone?.trim() || !user.address?.trim()) {
                 throw new Error("Incomplete user data");
             }
 
             user.password = await bcrypt.hash(user.password, 14);
-            user.password_kids = await bcrypt.hash(user.password_kids, 14);
+
+            if (user.password_kids) {
+                user.password_kids = await bcrypt.hash(user.password_kids, 14);
+            }
 
             const created = await this.authRepository.signUp(user);
 
