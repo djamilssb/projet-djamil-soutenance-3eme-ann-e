@@ -9,7 +9,7 @@ export const isEmailValid = (value: string): boolean => {
 };
 
 export const isPasswordValid = (value: string): boolean => {
-    const hasPasswordRegex: RegExp = /^.{12}$/;
+    const hasPasswordRegex: RegExp = /^.{12,}$/;
     return hasPasswordRegex.test(value);
 };
 
