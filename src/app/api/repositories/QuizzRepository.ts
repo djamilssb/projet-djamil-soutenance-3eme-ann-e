@@ -46,17 +46,14 @@ class QuizzRepository {
         return rows.map((row: object) => new Quizz(row));
     }
 
-    public async getAllQuizByIdUser(userId: number): Promise<any[]> {
-        // Requête qui récupère les quiz créés par l'utilisateur OU les quiz génériques
-        const query = `
-            SELECT q.*, u.name as userName 
-            FROM kt_quizzes q 
-            LEFT JOIN kt_users u ON q.id_user = u.id
-            WHERE q.is_active = 1 AND (q.id_user = ? OR q.id_user IS NULL)
-            ORDER BY q.created_at DESC
-        `;
-        
-        return await executeQuery(query, [userId]);
+    public async getAllQuizByIdUser(userId: number): Promise<Quizz[]> {
+        const rows = await executeQuery(`
+            SELECT * 
+            FROM kt_quizzes 
+            WHERE is_active = 1 AND id_user = ?
+            ORDER BY created_at DESC
+        `, [userId]);
+        return rows.map((row: object) => new Quizz(row));
     }
 
     public async getQuizzesWhereIdUserIsNull(): Promise<any[]> {

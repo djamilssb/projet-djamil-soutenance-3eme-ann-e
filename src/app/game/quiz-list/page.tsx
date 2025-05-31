@@ -26,7 +26,7 @@ function QuizListContent() {
       }
       
       const data = await tokenResponse.json();
-      setUserId(data.userId || data.id); // Adapter selon la structure de réponse
+      setUserId(data.userId || data.id);
     } catch (err) {
       console.error('Erreur lors de la récupération de l\'ID utilisateur:', err);
       setError('Impossible de récupérer les informations utilisateur');
