@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import "./style.css";
 
 export const metadata: Metadata = {
   title: "Select character",
@@ -15,9 +16,9 @@ export default function ChoiceCharacter({
   const quizId = searchParams?.quizId || "1";
 
   return (
-    <div>
+    <div className="choice-character-container">
       <h1 hidden>Choisir un personnage</h1>
-      <section className="choice-character-page flex flex-col items-center justify-center h-[90vh] bg-cover bg-center relative">
+      <section className="choice-character-page flex flex-col items-center justify-center h-full bg-cover bg-center relative">
         <h2 className="text-white text-3xl font-bold mb-8">
           Choisir un personnage :
         </h2>
