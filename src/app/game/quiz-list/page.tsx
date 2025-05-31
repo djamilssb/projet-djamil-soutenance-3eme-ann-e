@@ -48,10 +48,16 @@ function QuizListContent() {
   // Affichage pendant le chargement
   if (isLoading) {
     return (
-      <div className="quizz-container">
-        <h1>Chargement...</h1>
-        <div style={{ color: 'white', textAlign: 'center', padding: '20px' }}>
-          <p>Récupération des informations utilisateur...</p>
+      <div className="quiz-list-page">
+        <div className="quizz-container">
+          <div className="quiz-header">
+            <h1>Chargement...</h1>
+          </div>
+          <div className="quiz-content">
+            <div className="quiz-message">
+              <p>Récupération des informations utilisateur...</p>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -60,28 +66,40 @@ function QuizListContent() {
   // Si quiz personnalisé mais utilisateur non connecté ou erreur
   if (isPersonal && (!userId || error)) {
     return (
-      <div className="quizz-container">
-        <h1>Mes Quiz Personnalisés</h1>
-        <div style={{ color: 'white', textAlign: 'center', padding: '20px' }}>
-          <p>Vous devez être connecté pour voir vos quiz personnalisés.</p>
-          <p>Veuillez vous connecter pour accéder à cette fonctionnalité.</p>
-          {error && <p style={{ color: '#ff6b6b' }}>Erreur: {error}</p>}
+      <div className="quiz-list-page">
+        <div className="quizz-container">
+          <div className="quiz-header">
+            <h1>Mes Quiz Personnalisés</h1>
+          </div>
+          <div className="quiz-content">
+            <div className="quiz-message">
+              <p>Vous devez être connecté pour voir vos quiz personnalisés.</p>
+              <p>Veuillez vous connecter pour accéder à cette fonctionnalité.</p>
+              {error && <p className="quiz-error">Erreur: {error}</p>}
+            </div>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="quizz-container">
-      <h1>
-        {isGeneric ? 'Quiz Génériques' : 'Mes Quiz Personnalisés'}
-      </h1>
-      <QuizList 
-        idUserNull={isGeneric}           
-        userId={isPersonal ? userId : undefined}  
-        showCreateButton={false}        
-        mode="play"                     
-      />
+    <div className="quiz-list-page">
+      <div className="quizz-container">
+        <div className="quiz-header">
+          <h1>
+            {isGeneric ? 'Quiz Génériques' : 'Mes Quiz Personnalisés'}
+          </h1>
+        </div>
+        <div className="quiz-content">
+          <QuizList 
+            idUserNull={isGeneric}           
+            userId={isPersonal ? userId : undefined}  
+            showCreateButton={false}        
+            mode="play"                     
+          />
+        </div>
+      </div>
     </div>
   );
 }
@@ -89,7 +107,20 @@ function QuizListContent() {
 // Composant principal avec Suspense
 export default function QuizzListPage() {
   return (
-    <Suspense fallback={<div>Chargement...</div>}>
+    <Suspense fallback={
+      <div className="quiz-list-page">
+        <div className="quizz-container">
+          <div className="quiz-header">
+            <h1>Chargement...</h1>
+          </div>
+          <div className="quiz-content">
+            <div className="quiz-message">
+              <p>Chargement...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    }>
       <QuizListContent />
     </Suspense>
   );
