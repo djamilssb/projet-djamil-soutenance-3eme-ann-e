@@ -19,6 +19,24 @@ class AvatarService {
       throw new Error("Error while retrieving avatars");
     };
   };
+
+  public async getById(id: number): Promise<Avatar | null> {
+    try {
+      if (!id || isNaN(id)) {
+        throw new Error("Invalid avatar ID");
+      }
+
+      const avatar = await this.avatarRepository.getById(id);
+      if (!avatar) {
+        return null;
+      }
+
+      return avatar;
+    } catch (e) {
+      console.error("Error in getById:", e);
+      return null;
+    }
+  }
 };
 
 export default AvatarService;
