@@ -4,10 +4,10 @@ import Link from "next/link";
 import Image from 'next/image';
 
 export default function UserAvatar(): React.JSX.Element {
-    const image = "/avatar-default.png";
+    const image = "/default_avatar.webp";
 
     return (
-        <Link href="/account" className="avatar">
+        <Link href="/game/profil" className="avatar">
             <Image
                 src={image}
                 alt="Avatar"
