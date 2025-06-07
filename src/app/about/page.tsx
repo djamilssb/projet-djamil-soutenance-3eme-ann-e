@@ -21,7 +21,7 @@ export const metadata: Metadata = {
 
 export default function AboutPage(): React.JSX.Element {
   return (
-    <div className="about-container">
+    <div className="about-container about-page"> 
       <div className="about-content">
         <div className="about-wrapper">
           <div className="text-white scrollable-content">
