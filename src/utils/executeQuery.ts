@@ -1,4 +1,4 @@
-import connection from "../app/config/database";
+import connection from "@/configs/database";
 
 const executeQuery = async <T = any>(sql: string, params?: any[]) => {
     try {
