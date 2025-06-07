@@ -1,7 +1,37 @@
-import React from "react";
+"use client";
 
-export function Navbar(): React.JSX.Element {
-    return (
-        <nav></nav>
-    )
+import { usePathname } from "next/navigation";
+import Image from "next/image";
+import Link from "next/link";
+
+export function Navbar(): React.JSX.Element | null {
+  const pathname = usePathname();
+
+  const hideNavbarOn = ["/choice-character", "/menu"];
+
+  const urlSegments = pathname.split("/");
+
+  if (hideNavbarOn.includes(pathname) || urlSegments.includes("quizzes")) {
+    return null;
+  }
+
+  return (
+    <nav className="mx-4 sm:mx-6 mt-2 ">
+      <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-0 sm:justify-between">
+        <Image
+          src={"/kt-logo.png"}
+          alt="Logo de KidsTrotter"
+          height={140}
+          width={140}
+          className="w-24 sm:w-32 lg:w-[140px] h-auto "
+        />
+        
+        <Link href="/connexion">
+          <button className="w-full sm:w-auto bg-[var(--secondary-color)] hover:bg-[var(--hover-secondary)] bold p-3 sm:p-4 rounded cursor-pointer text-sm sm:text-base">
+            Se connecter/s&apos;inscrire
+          </button>
+        </Link>
+      </div>
+    </nav>
+  );
 }

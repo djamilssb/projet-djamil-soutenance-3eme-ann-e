@@ -1,0 +1,240 @@
+/* ========================================
+   QUIZ LAYOUT
+   ======================================== */
+
+/* Écran complet pour masquer le layout parent */
+.quiz-fullscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 100;
+  overflow: hidden;
+}
+
+/* Conteneur d'arrière-plan */
+.quiz-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 1;
+}
+
+/* Conteneur principal du quiz */
+.quizz-page {
+  position: relative;
+  width: 100%;
+  height: 90vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Arial', sans-serif;
+}
+
+/* Conteneur du contenu du quiz */
+.quizz-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+  height: 100vh;
+  z-index: 10;
+}
+
+/* ========================================
+   ÉLÉMENTS DU QUIZ
+   ======================================== */
+
+/* Style de l'image du personnage */
+.character {
+  height: 70vh;
+  max-height: 600px;
+  position: absolute;
+  bottom: 15vh;
+  left: 5vw;
+  z-index: 10;
+}
+
+/* Conteneur de la question */
+.question-container {
+  background-color: rgba(0, 0, 0, 0.85);
+  border: 2px solid #e74c3c;
+  padding: 20px 30px;
+  border-radius: 10px 10px 0 0;
+  color: white;
+  position: absolute;
+  bottom: 2%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  max-height: 50vh;
+  overflow-y: auto;
+  z-index: 20;
+}
+
+/* Indicateur de progression */
+.question-progress {
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+  text-align: left;
+}
+
+/* Texte de la question */
+.question-text {
+  margin-bottom: 15px;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+/* ========================================
+   GRILLE DE RÉPONSES
+   ======================================== */
+
+/* Conteneur des options de réponse en grille 2x2 */
+.answer-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 15px;
+  margin-top: 15px;
+}
+
+/* Style des boutons de réponse */
+.answer-button {
+  width: 100%;
+  text-align: left;
+  padding: 10px;
+  border-radius: 4px;
+  background-color: #374151;
+  cursor: pointer;
+  border: none;
+  color: white;
+}
+
+.answer-button:hover:not(:disabled) {
+  background-color: #4b5563;
+}
+
+.answer-button.correct {
+  background-color: #4ade80;
+}
+
+.answer-button.incorrect {
+  background-color: #ef4444;
+}
+
+/* ========================================
+   FEEDBACK ET NAVIGATION
+   ======================================== */
+
+/* Conteneur de feedback */
+.feedback-container {
+  margin-top: 20px;
+  text-align: left;
+}
+
+/* Texte de feedback */
+.feedback-text {
+  margin-bottom: 10px;
+}
+
+.feedback-text.correct {
+  color: #4ade80;
+}
+
+.feedback-text.incorrect {
+  color: #ef4444;
+}
+
+/* Explication */
+.feedback-explanation {
+  display: block;
+  margin-top: 8px;
+  font-size: 0.9rem;
+}
+
+/* Bouton suivant */
+.next-button {
+  margin-top: 15px;
+  padding: 10px 20px;
+  background: #3b82f6;
+  color: white;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+}
+
+.next-button:hover {
+  background: #2563eb;
+}
+
+/* ========================================
+   ÉCRANS D'ERREUR ET DE CHARGEMENT
+   ======================================== */
+
+.error-container {
+  background-color: rgba(0, 0, 0, 0.85);
+  border: 2px solid #e74c3c;
+  padding: 30px;
+  border-radius: 10px;
+  color: white;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  max-width: 500px;
+  text-align: center;
+  z-index: 20;
+}
+
+.error-container h2 {
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  color: #e74c3c;
+}
+
+.error-container p {
+  margin-bottom: 20px;
+}
+
+.return-button {
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.return-button:hover {
+  background-color: #2563eb;
+}
+
+.loading-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 20px;
+  border-radius: 10px;
+  z-index: 20;
+}
+
+.dev-message {
+  margin-top: 20px;
+  padding: 5px;
+  background-color: rgba(255, 165, 0, 0.2);
+  border: 1px solid orange;
+  color: orange;
+  font-size: 0.8rem;
+  text-align: center;
+}

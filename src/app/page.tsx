@@ -1,14 +1,9 @@
-'use client';
+import { redirect } from "next/navigation";
+import { initGenericQuizzes } from "../utils/initGenericQuizzes";
 
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-
-export default function Home() {
-  const router = useRouter();
-
-  useEffect(() => {
-    router.push("/home");
-  }, [router]);
-
-  return null;
+export default async function app() {
+  // Initialiser les quiz génériques au démarrage
+  await initGenericQuizzes();
+  
+  redirect("/accueil");
 }
