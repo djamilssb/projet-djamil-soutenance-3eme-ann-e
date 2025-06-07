@@ -8,12 +8,13 @@ export const metadata: Metadata = {
   description: "Welcome to the select character page!",
 };
 
-export default function ChoiceCharacter({
+export default async function ChoiceCharacter({
   searchParams,
 }: {
-  searchParams: { quizId?: string };
-}): React.JSX.Element {
-  const quizId = searchParams?.quizId || "1";
+  searchParams: Promise<{ quizId?: string }>;
+}): Promise<React.JSX.Element> {
+  const params = await searchParams;
+  const quizId = params?.quizId || "1";
 
   return (
     <div className="choice-character-container">
