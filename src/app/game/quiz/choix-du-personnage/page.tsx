@@ -1,23 +1,25 @@
 import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import "./style.css";
 
 export const metadata: Metadata = {
   title: "Select character",
   description: "Welcome to the select character page!",
 };
 
-export default function ChoiceCharacter({
+export default async function ChoiceCharacter({
   searchParams,
 }: {
-  searchParams: { quizId?: string };
-}): React.JSX.Element {
-  const quizId = searchParams?.quizId || "1";
+  searchParams: Promise<{ quizId?: string }>;
+}): Promise<React.JSX.Element> {
+  const params = await searchParams;
+  const quizId = params?.quizId || "1";
 
   return (
-    <div>
+    <div className="choice-character-container">
       <h1 hidden>Choisir un personnage</h1>
-      <section className="choice-character-page flex flex-col items-center justify-center h-[90vh] bg-cover bg-center relative">
+      <section className="choice-character-page flex flex-col items-center justify-center h-full bg-cover bg-center relative">
         <h2 className="text-white text-3xl font-bold mb-8">
           Choisir un personnage :
         </h2>

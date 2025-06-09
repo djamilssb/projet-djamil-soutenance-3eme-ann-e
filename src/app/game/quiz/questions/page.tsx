@@ -185,43 +185,9 @@ function QuizGameContent({
     if (currentQuestionIndex < totalQuestions - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
-      // Sauvegarder le score
-      saveScore();
       router.push(
         `/game/quiz/resultat?quizId=${quizId}&score=${score}&total=${totalQuestions}&avatarId=${avatarId}`
       );
-    }
-  };
-
-  // Sauvegarder le score dans la BDD
-  const saveScore = async () => {
-    if (useFallbackData) {
-      console.log("Mode test: Score non sauvegardé", { quizId, score });
-      return;
-    }
-
-    try {
-      const characterId = 1;
-      const userId = 1;
-
-      const response = await fetch("/api/savequizz", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          id_quizz: quizId,
-          id_user: userId,
-          id_character: characterId,
-          score: score,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Erreur HTTP: ${response.status}`);
-      }
-
-      console.log("Score sauvegardé avec succès!");
-    } catch (error) {
-      console.error("Erreur lors de la sauvegarde du score:", error);
     }
   };
 
@@ -301,12 +267,10 @@ function QuizGameContent({
     );
   }
 
-  // ===== VARIABLES POUR L'AFFICHAGE =====
   const currentQuestion = questions[currentQuestionIndex];
   const backgroundImage = quizInfo.backgroundImage || "/paris.png";
   const avatarImage = getAvatarImage(avatarId);
 
-  // ===== RENDU JSX =====
   return (
     <div className="quiz-fullscreen">
       {/* Image de fond dynamique */}

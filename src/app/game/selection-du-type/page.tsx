@@ -1,11 +1,12 @@
 import Link from "next/link";
 import React from "react";
 import Image from "next/image";
+import "./style.css";
 
 export default function ChoixQuizzPage(): React.JSX.Element {
   return (
-    <>
-      <section className="flex flex-col items-center justify-center h-[90vh] bg-cover bg-center">
+    <div className="selection-page-container">
+      <section className="flex flex-col items-center justify-center h-full bg-cover bg-center">
         <h2 className="text-white text-3xl font-bold mb-8">Définissez les thèmes :</h2>
         <div className="flex flex-row gap-12">
           <Link href="/game/quiz-list?type=generic">
@@ -20,6 +21,6 @@ export default function ChoixQuizzPage(): React.JSX.Element {
           </Link>
         </div>
       </section>
-    </>
+    </div>
   );
 }
