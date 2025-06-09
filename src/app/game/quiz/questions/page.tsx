@@ -1,4 +1,4 @@
-"use client"; //s'execute côté client
+"use client"; 
 import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
@@ -12,7 +12,7 @@ import {
 } from "@/app/__tests__/quizMockData";
 import Answer from "@/app/api/models/Answer";
 
-// ===== FONCTIONS UTILITAIRES =====
+
 // Fonction avatar selon l'ID
 const getAvatarImage = (id: number): string => {
   switch (id) {
@@ -41,7 +41,6 @@ function QuizGameContent({
   const [showFeedback, setShowFeedback] = useState(false);
   const [useFallbackData, setUseFallbackData] = useState(false);
 
-  // ===== EFFET POUR MASQUER LE LAYOUT =====
   useEffect(() => {
     const footer = document.querySelector("footer");
     if (footer) {
@@ -65,7 +64,7 @@ function QuizGameContent({
     };
   }, []);
 
-  // ===== REQUÊTES API AVEC REACT QUERY =====
+
   // Récupérer info quiz
   const {
     data: quizInfo,
