@@ -16,19 +16,13 @@ export default function Menu(): React.JSX.Element {
       <h1 hidden>Menu Principal</h1>
 
       <section className="flex items-center justify-center h-[90vh] relative">
-        <div className="menu-container flex flex-col justify-center items-center w-[37vw] h-auto bg-black opacity-80 z-10 rounded-lg p-8 shadow-lg">
-          <div className="text-center mb-8">
-            <h2
-              id="name-app"
-              className="text-white text-3xl sm:text-2xl lg:text-3xl xl:text-4xl font-bold mb-4"
-            >
-              KidsTrotter
-            </h2>
-          </div>
-
-          <div className="flex flex-col gap-6 items-center justify-center w-full">
-            <Link href="/game/selection-du-type" className="w-full flex justify-center">
-              <button className="w-fit bg-[var(--secondary-color)] hover:bg-[var(--hover-secondary)] text-black text-lg sm:text-xl font-bold py-4 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center gap-4">
+        <div className="menu-container flex flex-col justify-center items-center w-[40vw] h-auto bg-black bg-opacity-50 z-10 rounded-lg p-8 shadow-lg">
+          <span id="name-app" className="text-[var(--tertiary-color)] bold">
+            KidsTrotter
+          </span>
+          <div className="text-white text-2xl flex flex-col space-y-6 text-center">
+            <Link href="/game/selection-du-type">
+              <button className="bg-[var(--secondary-color)] hover:bg-[var(--hover-secondary)] text-black text-xl font-bold py-4 px-8 rounded flex items-center justify-between gap-4 cursor-pointer">
                 Démarrer un quizz
                 <Image
                   src="/Circled Right.png"
@@ -38,9 +32,8 @@ export default function Menu(): React.JSX.Element {
                 />
               </button>
             </Link>
-
-            <Link href="/game/quiz/create" className="w-full flex justify-center">
-              <button className="w-fit bg-[var(--secondary-color)] hover:bg-[var(--hover-secondary)] text-black text-lg sm:text-xl font-bold py-4 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center gap-4">
+            <Link href="/account">
+              <button className="bg-[var(--secondary-color)] hover:bg-[var(--hover-secondary)] text-black text-xl font-bold py-4 px-8 rounded flex items-center justify-between gap-4 cursor-pointer">
                 Créer un quizz
                 <Image
                   src="/Circled Right.png"
@@ -50,9 +43,9 @@ export default function Menu(): React.JSX.Element {
                 />
               </button>
             </Link>
+            <Link href="/presentation">
+              <button className="bg-[var(--secondary-color)] hover:bg-[var(--hover-secondary)] text-black text-xl font-bold py-4 px-8 rounded flex items-center justify-between gap-4 cursor-pointer">
 
-            <Link href="/about" className="w-full flex justify-center">
-              <button className="w-fit bg-[var(--secondary-color)] hover:bg-[var(--hover-secondary)] text-black text-lg sm:text-xl font-bold py-4 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center gap-4">
                 Qu'est-ce que KidsTrotter ?
                 <Image
                   src="/Circled Right.png"

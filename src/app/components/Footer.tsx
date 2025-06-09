@@ -21,7 +21,7 @@ export function Footer(): React.JSX.Element {
       </div>
       <Link href="/construction" className="w-full sm:w-auto text-center">
         <div className="bg-[var(--secondary-color)] hover:bg-[var(--hover-secondary)] p-2 rounded">
-          <button className="bold text-sm sm:text-base">Nous contacter</button>
+          <button className="bold text-sm sm:text-base cursor-pointer">Nous contacter</button>
         </div>
       </Link>
     </section>
