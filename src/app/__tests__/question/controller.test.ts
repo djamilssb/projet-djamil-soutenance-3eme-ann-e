@@ -11,7 +11,7 @@ describe("QuestionController", () => {
 
     beforeEach(() => {
         
-        jest.spyOn(console, "error").mockImplementation(() => {});
+        // jest.spyOn(console, "error").mockImplementation(() => {});
         
         jest.clearAllMocks();
         
@@ -20,11 +20,15 @@ describe("QuestionController", () => {
         questionController["questionService"] = questionService;
     });
 
+    afterEach(() => {
+        jest.restoreAllMocks();
+    });
+
     // GET ALL QUESTIONS
     describe("getAllQuestions", () => {
         it("should return status 200 and a list of questions", async () => {
-            const qOne: Question = new Question({ id: 1, idQuizz: 1, orderIndex: 1, content: "Question 1" });
-            const qTwo: Question = new Question({ id: 2, idQuizz: 1, orderIndex: 2, content: "Question 2" });
+            const qOne: Question = new Question({ id: 1, id_quizz: 1, order_index: 1, content: "Question 1" });
+            const qTwo: Question = new Question({ id: 2, id_quizz: 1, order_index: 2, content: "Question 2" });
 
             questionService.getAll.mockResolvedValue([qOne, qTwo]);
 
@@ -54,7 +58,7 @@ describe("QuestionController", () => {
     // GET QUESTION BY ID
     describe("getQuestionById", () => {
         it("should return status 200 and a question", async () => {
-            const newQuestion: Question = new Question({ id: 1, idQuizz: 1, orderIndex: 1, content: "Question 1" });
+            const newQuestion: Question = new Question({ id: 1, id_quizz: 1, order_index: 1, content: "Question 1" });
             questionService.getById.mockResolvedValue(newQuestion);
 
             const req = {} as NextRequest;
@@ -62,7 +66,7 @@ describe("QuestionController", () => {
 
             expect(questionService.getById).toHaveBeenCalledWith(1);
             expect(response.status).toBe(200);
-            expect(await response.json()).toEqual({ id: 1, idQuizz: 1, orderIndex: 1, content: "Question 1" });
+            expect(await response.json()).toEqual({ id: 1, id_quizz: 1, order_index: 1, content: "Question 1" });
         });
 
         it("should return status 404 if question is not found", async () => {
@@ -92,8 +96,8 @@ describe("QuestionController", () => {
 
             const req = {} as NextRequest;
             const body = {
-                idQuizz: 1,
-                orderIndex: 1,
+                id_quizz: 1,
+                order_index: 1,
                 content: "Question 1",
             };
 
@@ -101,7 +105,7 @@ describe("QuestionController", () => {
 
             expect(questionService.create).toHaveBeenCalledWith(body);
             expect(response.status).toBe(201);
-            expect(await response.json()).toEqual({ message: "Question créé avec succès." });
+            expect(await response.json()).toEqual({ message: "Question créé avec succès.", result: true });
         });
 
         it("should return status 400 if required fields are missing", async () => {
@@ -119,8 +123,8 @@ describe("QuestionController", () => {
 
             const req = {} as NextRequest;
             const body = {
-                idQuizz: 1,
-                orderIndex: 1,
+                id_quizz: 1,
+                order_index: 1,
                 content: "Question 1",
             };
 
@@ -207,8 +211,8 @@ describe("QuestionController", () => {
     // GET QUESTIONS BY QUIZZ
     describe("getQuestionsByQuizz", () => {
         it("should return status 200 and a list of questions", async () => {
-            const qOne: Question = new Question({ id: 1, idQuizz: 1, orderIndex: 1, content: "Question 1" });
-            const qTwo: Question = new Question({ id: 2, idQuizz: 1, orderIndex: 2, content: "Question 2" });
+            const qOne: Question = new Question({ id: 1, id_quizz: 1, order_index: 1, content: "Question 1" });
+            const qTwo: Question = new Question({ id: 2, id_quizz: 1, order_index: 2, content: "Question 2" });
             const quizzId: number = 1;
 
             questionService.getQuestionsByQuizz.mockResolvedValue([qOne, qTwo]);
