@@ -45,6 +45,7 @@ export default function Menu(): React.JSX.Element {
             </Link>
             <Link href="/presentation">
               <button className="bg-[var(--secondary-color)] hover:bg-[var(--hover-secondary)] text-black text-xl font-bold py-4 px-8 rounded flex items-center justify-between gap-4 cursor-pointer">
+
                 Qu'est-ce que KidsTrotter ?
                 <Image
                   src="/Circled Right.png"
