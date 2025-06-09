@@ -18,6 +18,23 @@ class AvatarController {
             return NextResponse.json([{ message: 'Failed to retrieve avatars.' }], { status: 500 });
         };
     };
+
+    public async getById(id: number): Promise<NextResponse> {
+        if (!id || isNaN(id)) {
+            return NextResponse.json({ message: "Invalid avatar ID." }, { status: 400 });
+        }
+
+        try {
+            const avatar = await this.avatarService.getById(id);
+            if (!avatar) {
+                return NextResponse.json({ message: "Avatar not found." }, { status: 404 });
+            }
+            return NextResponse.json(avatar, { status: 200 });
+        } catch (error) {
+            console.error(`Failed to retrieve avatar with ID ${id}:`, error);
+            return NextResponse.json({ message: `Failed to retrieve avatar with ID ${id}.` }, { status: 500 });
+        }
+    }
 };
 
 export default AvatarController;

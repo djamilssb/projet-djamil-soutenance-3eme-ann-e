@@ -13,7 +13,7 @@ describe("Users Model", () => {
         expect(user.getId()).toBe(1);
         expect(user.getUsername()).toBe("testuser");
         expect(user.getPassword()).toBe("passwordtest");
-        expect(user.getPasswordKids()).toBe("passwordtest");
+        expect(user.getPassword_Kids()).toBe("passwordtest");
         expect(user.getEmail()).toBe("test@example.com");
     });
 });

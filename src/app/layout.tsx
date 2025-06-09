@@ -1,9 +1,9 @@
 import Image from "next/image";
 import "./globals.css";
-import { Navbar } from "./components/Navbar";
 import { Footer } from "./components/Footer";
 import { Irish_Grover } from "next/font/google";
 import type { Metadata } from "next";
+import Navbar from "./components/Navbar";
 
 // EXAMPLE FONT IMPORTS
 const irish = Irish_Grover({

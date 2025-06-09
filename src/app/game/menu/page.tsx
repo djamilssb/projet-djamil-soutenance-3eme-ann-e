@@ -4,7 +4,6 @@ import Link from "next/link";
 import React from "react";
 import "./style.css";
 
-// SPECIFICS METADATA FOR THE PAGE
 export const metadata: Metadata = {
   title: "Menu",
   description: "Page de menu de KidsTrotter",
@@ -12,59 +11,65 @@ export const metadata: Metadata = {
 
 export default function Menu(): React.JSX.Element {
   return (
-    <>
+    <div className="menu-page-container">
       <h1 hidden>Menu Principal</h1>
 
-      <section className="flex items-center justify-center h-[90vh] relative">
-        <div className="menu-container flex flex-col justify-center items-center w-[37vw] h-auto bg-black opacity-80 z-10 rounded-lg p-8 shadow-lg">
-          <div className="text-center mb-8">
+      <section className="flex items-center justify-center h-full relative">
+        <div className="menu-container flex flex-col justify-center items-center w-[90%] max-w-[500px] lg:w-[37vw] h-auto bg-black bg-opacity-80 z-10 rounded-lg p-6 lg:p-8 shadow-lg">
+          <div className="text-center mb-6 lg:mb-8">
             <h2
               id="name-app"
-              className="text-white text-3xl sm:text-2xl lg:text-3xl xl:text-4xl font-bold mb-4"
+              className="text-white text-2xl sm:text-3xl lg:text-4xl font-bold mb-4"
             >
               KidsTrotter
             </h2>
           </div>
 
-          <div className="flex flex-col gap-6 items-center justify-center w-full">
+          <div className="flex flex-col gap-4 lg:gap-6 items-center justify-center w-full">
             <Link href="/game/selection-du-type" className="w-full flex justify-center">
-              <button className="w-fit bg-[var(--secondary-color)] hover:bg-[var(--hover-secondary)] text-black text-lg sm:text-xl font-bold py-4 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center gap-4">
+              <button className="w-fit bg-[var(--secondary-color)] hover:bg-[var(--hover-secondary)] text-black text-base sm:text-lg lg:text-xl font-bold py-3 px-5 lg:py-4 lg:px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center gap-3 lg:gap-4">
                 Démarrer un quizz
                 <Image
                   src="/Circled Right.png"
                   alt="Flèche circulaire"
-                  width={24}
-                  height={24}
+                  width={20}
+                  height={20}
+                  className="lg:w-6 lg:h-6"
                 />
               </button>
             </Link>
-
-            <Link href="/game/quiz/create" className="w-full flex justify-center">
-              <button className="w-fit bg-[var(--secondary-color)] hover:bg-[var(--hover-secondary)] text-black text-lg sm:text-xl font-bold py-4 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center gap-4">
+            
+            <Link href="/account" className="w-full flex justify-center">
+              <button className="w-fit bg-[var(--secondary-color)] hover:bg-[var(--hover-secondary)] text-black text-base sm:text-lg lg:text-xl font-bold py-3 px-5 lg:py-4 lg:px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center gap-3 lg:gap-4">
                 Créer un quizz
                 <Image
                   src="/Circled Right.png"
                   alt="Flèche circulaire"
-                  width={24}
-                  height={24}
+                  width={20}
+                  height={20}
+                  className="lg:w-6 lg:h-6"
                 />
               </button>
             </Link>
+            <Link href="/presentation">
+              <button className="bg-[var(--secondary-color)] hover:bg-[var(--hover-secondary)] text-black text-xl font-bold py-4 px-8 rounded flex items-center justify-between gap-4 cursor-pointer">
 
             <Link href="/about" className="w-full flex justify-center">
-              <button className="w-fit bg-[var(--secondary-color)] hover:bg-[var(--hover-secondary)] text-black text-lg sm:text-xl font-bold py-4 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center gap-4">
+              <button className="w-fit bg-[var(--secondary-color)] hover:bg-[var(--hover-secondary)] text-black text-base sm:text-lg lg:text-xl font-bold py-3 px-5 lg:py-4 lg:px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center gap-3 lg:gap-4">
+
                 Qu'est-ce que KidsTrotter ?
                 <Image
                   src="/Circled Right.png"
                   alt="Flèche circulaire"
-                  width={24}
-                  height={24}
+                  width={20}
+                  height={20}
+                  className="lg:w-6 lg:h-6"
                 />
               </button>
             </Link>
           </div>
         </div>
       </section>
-    </>
+    </div>
   );
 }

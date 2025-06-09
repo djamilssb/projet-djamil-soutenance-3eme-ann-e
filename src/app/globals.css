@@ -200,12 +200,12 @@ main {
   background: #fff;
 }
 /* Handle */
-::-webkit-scrollbar-thumb {
+/* ::-webkit-scrollbar-thumb {
   background: #E6CF00;
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #a49507;
-}
+} */
 
 /* form quiz create */
 .quiz-form {

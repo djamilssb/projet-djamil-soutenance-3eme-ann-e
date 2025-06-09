@@ -4,12 +4,12 @@ describe("Answer Model", () => {
     it("should correctly initialize and return properties", () => {
         const answer = new Answer({
             id: 1,
-            idQuizz: 2,
-            idQuestion: 1,
-            orderIndex: 3,
+            id_quizz: 2,
+            id_question: 1,
+            order_index: 3,
             content: "test content",
             explication: "test explication",
-            isCorrect: false
+            is_correct: false
         });
 
         expect(answer.getId()).toBe(1);

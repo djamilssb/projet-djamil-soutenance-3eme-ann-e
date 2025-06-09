@@ -21,7 +21,7 @@ describe("SaveQuizzRepository", () => {
 
         const result = await repository.getAll();
 
-        expect(executeQuery).toHaveBeenCalledWith("SELECT * FROM kt_savequizz", []);
+        expect(executeQuery).toHaveBeenCalledWith("SELECT * FROM kt_quizz_users", []);
         expect(result).toHaveLength(2);
         expect(result[0]).toBeInstanceOf(SaveQuizz);
         expect(result[0].id).toBe(1);
@@ -33,7 +33,7 @@ describe("SaveQuizzRepository", () => {
 
         const result = await repository.getById(1);
 
-        expect(executeQuery).toHaveBeenCalledWith("SELECT * FROM kt_savequizz WHERE id = ?", [1]);
+        expect(executeQuery).toHaveBeenCalledWith("SELECT * FROM kt_quizz_users WHERE id = ?", [1]);
         expect(result).toBeInstanceOf(SaveQuizz);
         expect(result?.id).toBe(1);
     });
@@ -43,7 +43,7 @@ describe("SaveQuizzRepository", () => {
 
         const result = await repository.getById(999);
 
-        expect(executeQuery).toHaveBeenCalledWith("SELECT * FROM kt_savequizz WHERE id = ?", [999]);
+        expect(executeQuery).toHaveBeenCalledWith("SELECT * FROM kt_quizz_users WHERE id = ?", [999]);
         expect(result).toBeNull();
     });
 
@@ -53,7 +53,7 @@ describe("SaveQuizzRepository", () => {
         const saveQuizz = new SaveQuizz({ id_user: 1, id_quizz: 1, id_character: 1 });
         const result = await repository.create(saveQuizz);
 
-        expect(executeQuery).toHaveBeenCalledWith("INSERT INTO kt_savequizz SET ?", [saveQuizz]);
+        expect(executeQuery).toHaveBeenCalledWith("INSERT INTO kt_quizz_users SET ?", [saveQuizz]);
         expect(result).toBe(true);
     });
 
@@ -63,7 +63,7 @@ describe("SaveQuizzRepository", () => {
         const result = await repository.update(1, 1, 1, { score: 100 });
 
         expect(executeQuery).toHaveBeenCalledWith(
-            "UPDATE kt_savequizz SET ? WHERE id = ? AND id_user = ? AND id_quizz = ?",
+            "UPDATE kt_quizz_users SET ? WHERE id = ? AND id_user = ? AND id_quizz = ?",
             [{ score: 100 }, 1, 1, 1]
         );
         expect(result).toBe(true);
@@ -74,7 +74,7 @@ describe("SaveQuizzRepository", () => {
 
         const result = await repository.delete(1);
 
-        expect(executeQuery).toHaveBeenCalledWith("DELETE FROM kt_savequizz WHERE id = ?", [1]);
+        expect(executeQuery).toHaveBeenCalledWith("DELETE FROM kt_quizz_users WHERE id = ?", [1]);
         expect(result).toBe(true);
     });
 });
