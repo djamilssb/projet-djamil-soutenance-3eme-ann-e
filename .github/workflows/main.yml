@@ -1,0 +1,23 @@
+# .github/workflows/validate-pr-source.yml
+name: Validate PR source for main
+
+on:
+  pull_request:
+    branches:
+      - '**'
+
+jobs:
+  check-source-branch-for-main:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if target branch is main
+        run: |
+          echo "Base branch: ${{ github.base_ref }}"
+          echo "Head branch: ${{ github.head_ref }}"
+
+          if [[ "${{ github.base_ref }}" == "main" && "${{ github.head_ref }}" != "dev" ]]; then
+            echo "❌ Pull requests to 'main' are only allowed from 'dev'."
+            exit 1
+          fi
+
+          echo "✅ Pull request is allowed."

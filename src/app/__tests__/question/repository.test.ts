@@ -14,8 +14,8 @@ describe("QuestionRepository", () => {
 
     it("should retrieve all questions", async () => {
         const mockData = [
-            { id: 1, idQuizz: 1, orderIndex: 1, content: "Question 1" },
-            { id: 2, idQuizz: 1, orderIndex: 2, content: "Question 2" },
+            { id: 1, id_quizz: 1, order_index: 1, content: "Question 1" },
+            { id: 2, id_quizz: 1, order_iIndex: 2, content: "Question 2" },
         ];
         (executeQuery as jest.Mock).mockResolvedValue(mockData);
 
@@ -28,7 +28,7 @@ describe("QuestionRepository", () => {
     });
 
     it("should retrieve a question by ID", async () => {
-        const mockData = [{ id: 1, idQuizz: 1, orderIndex: 1, content: "Question 1" }];
+        const mockData = [{ id: 1, id_quizz: 1, order_index: 1, content: "Question 1" }];
         (executeQuery as jest.Mock).mockResolvedValue(mockData);
 
         const question = await questionRepository.getById(1);
@@ -48,7 +48,7 @@ describe("QuestionRepository", () => {
     });
 
     it("should create a question", async () => {
-        const mockData = new Question({ idQuizz: 1, orderIndex: 1, content: "Question 1" });
+        const mockData = new Question({ id_quizz: 1, order_index: 1, content: "Question 1" });
     
         (executeQuery as jest.Mock).mockResolvedValue({ affectedRows: 1 });
     
@@ -56,17 +56,17 @@ describe("QuestionRepository", () => {
     
         expect(executeQuery).toHaveBeenCalledWith("INSERT INTO kt_questions SET ?", [
             { 
-                idQuizz: 1, 
-                orderIndex: 1, 
+                id_quizz: 1, 
+                order_index: 1, 
                 content: "Question 1" 
             },
         ]);
-        expect(result).toBe(true);
+        expect(result).toStrictEqual({"affectedRows": 1});
     });
 
     it("should update a question", async () => {
 
-        const mockData = new Question({ id: 1, idQuizz: 1, orderIndex: 1, content: "Question 1" });
+        const mockData = new Question({ id: 1, id_quizz: 1, order_index: 1, content: "Question 1" });
         (executeQuery as jest.Mock).mockResolvedValue({ affectedRows: 1 });
 
         const result = await questionRepository.update(mockData.getId()!, mockData);
@@ -86,8 +86,8 @@ describe("QuestionRepository", () => {
 
     it("should retrieve all questions by quizz", async () => {
         const mockData = [
-            { id: 1, idQuizz: 1, orderIndex: 1, content: "Question 1" },
-            { id: 2, idQuizz: 1, orderIndex: 2, content: "Question 2" },
+            { id: 1, id_quizz: 1, order_index: 1, content: "Question 1" },
+            { id: 2, id_quizz: 1, order_index: 2, content: "Question 2" },
         ];
         (executeQuery as jest.Mock).mockResolvedValue(mockData);
 

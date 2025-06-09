@@ -38,8 +38,8 @@ export default function Menu(): React.JSX.Element {
                 />
               </button>
             </Link>
-
-            <Link href="/game/quiz/create" className="w-full flex justify-center">
+            
+            <Link href="/account" className="w-full flex justify-center">
               <button className="w-fit bg-[var(--secondary-color)] hover:bg-[var(--hover-secondary)] text-black text-base sm:text-lg lg:text-xl font-bold py-3 px-5 lg:py-4 lg:px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center gap-3 lg:gap-4">
                 Créer un quizz
                 <Image
@@ -51,9 +51,12 @@ export default function Menu(): React.JSX.Element {
                 />
               </button>
             </Link>
+            <Link href="/presentation">
+              <button className="bg-[var(--secondary-color)] hover:bg-[var(--hover-secondary)] text-black text-xl font-bold py-4 px-8 rounded flex items-center justify-between gap-4 cursor-pointer">
 
             <Link href="/about" className="w-full flex justify-center">
               <button className="w-fit bg-[var(--secondary-color)] hover:bg-[var(--hover-secondary)] text-black text-base sm:text-lg lg:text-xl font-bold py-3 px-5 lg:py-4 lg:px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center gap-3 lg:gap-4">
+
                 Qu'est-ce que KidsTrotter ?
                 <Image
                   src="/Circled Right.png"

@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     siteName: "Kidstrotter",
     images: [
       {
-        url: "https://kidstrotter.com/images/og-login.jpg", // à adapter ou générer
+        url: "https://kidstrotter.com/images/og-login.jpg",
         width: 1200,
         height: 630,
         alt: "Écran de connexion à Kidstrotter avec un fond spatial",
