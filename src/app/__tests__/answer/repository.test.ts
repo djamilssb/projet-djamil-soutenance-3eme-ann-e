@@ -16,21 +16,21 @@ describe("AnswerRepository", () => {
         const mockData = [
             { 
                 id: 1,
-                idQuizz: 2,
-                idQuestion: 1,
-                orderIndex: 3,
+                id_quizz: 2,
+                id_question: 1,
+                order_index: 3,
                 content: "test content 1",
                 explication: "test explication 1",
-                isCorrect: false
+                is_correct: false
             },
             { 
                 id: 2,
-                idQuizz: 2,
-                idQuestion: 1,
-                orderIndex: 2,
+                id_quizz: 2,
+                id_question: 1,
+                order_index: 2,
                 content: "test content 2",
                 explication: "test explication 2",
-                isCorrect: false
+                is_correct: false
             },
         ];
         (executeQuery as jest.Mock).mockResolvedValue(mockData);
@@ -46,12 +46,12 @@ describe("AnswerRepository", () => {
     it("should retrieve an answer by ID", async () => {
         const mockData = [{ 
             id: 1,
-            idQuizz: 2,
-            idQuestion: 1,
-            orderIndex: 3,
+            id_quizz: 2,
+            id_question: 1,
+            order_index: 3,
             content: "test content 1",
             explication: "test explication 1",
-            isCorrect: false
+            is_correct: false
          }];
         (executeQuery as jest.Mock).mockResolvedValue(mockData);
 
@@ -73,12 +73,12 @@ describe("AnswerRepository", () => {
 
     it("should create an answer", async () => {
         const mockData = new Answer({ 
-            idQuizz: 2,
-            idQuestion: 1,
-            orderIndex: 3,
+            id_quizz: 2,
+            id_question: 1,
+            order_index: 3,
             content: "test content 1",
             explication: "test explication 1",
-            isCorrect: false
+            is_correct: false
         });
     
         (executeQuery as jest.Mock).mockResolvedValue({ affectedRows: 1 });
@@ -87,12 +87,12 @@ describe("AnswerRepository", () => {
     
         expect(executeQuery).toHaveBeenCalledWith("INSERT INTO kt_answers SET ?", [
             { 
-                idQuizz: 2,
-                idQuestion: 1,
-                orderIndex: 3,
+                id_quizz: 2,
+                id_question: 1,
+                order_index: 3,
                 content: "test content 1",
                 explication: "test explication 1",
-                isCorrect: false 
+                is_correct: false 
             },
         ]);
         expect(result).toBe(true);
@@ -100,7 +100,7 @@ describe("AnswerRepository", () => {
 
     it("should update an answer", async () => {
 
-        const mockData = new Answer({ id: 1, idQuizz: 1, orderIndex: 1, content: "Answer 1" });
+        const mockData = new Answer({ id: 1, id_quizz: 1, order_index: 1, content: "Answer 1" });
         (executeQuery as jest.Mock).mockResolvedValue({ affectedRows: 1 });
 
         const result = await answerRepository.update(mockData.getId()!, mockData);
@@ -122,21 +122,21 @@ describe("AnswerRepository", () => {
         const mockData = [
             { 
                 id: 1, 
-                idQuizz: 2,
-                idQuestion: 1,
-                orderIndex: 3,
+                id_quizz: 2,
+                id_question: 1,
+                order_index: 3,
                 content: "test content 1",
                 explication: "test explication 1",
-                isCorrect: false 
+                is_correct: false 
             },
             { 
                 id: 2, 
-                idQuizz: 2,
-                idQuestion: 1,
-                orderIndex: 3,
+                id_quizz: 2,
+                id_question: 1,
+                order_index: 3,
                 content: "test content 2",
                 explication: "test explication 2",
-                isCorrect: false 
+                is_correct: false 
             },
         ];
         const quizzId: number = 2;
@@ -154,27 +154,27 @@ describe("AnswerRepository", () => {
         const mockData = [
             { 
                 id: 1, 
-                idQuizz: 2,
-                idQuestion: 1,
-                orderIndex: 3,
+                id_quizz: 2,
+                id_question: 1,
+                order_index: 3,
                 content: "test content 1",
                 explication: "test explication 1",
-                isCorrect: false 
+                is_correct: false 
             },
             { 
                 id: 2, 
-                idQuizz: 2,
-                idQuestion: 1,
-                orderIndex: 3,
+                id_quizz: 2,
+                id_question: 1,
+                order_index: 3,
                 content: "test content 2",
                 explication: "test explication 2",
-                isCorrect: false 
+                is_correct: false 
             },
         ];
         const qId: number = 1;
         (executeQuery as jest.Mock).mockResolvedValue(mockData);
 
-        const answers = await answerRepository.getAnswersByQuestion(qId);
+        const answers = await answerRepository.getByQuestionId(qId);
 
         expect(executeQuery).toHaveBeenCalledWith("SELECT * FROM kt_answers WHERE id_question = ?", [qId]);
         expect(answers).toHaveLength(2);

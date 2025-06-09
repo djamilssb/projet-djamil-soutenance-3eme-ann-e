@@ -21,7 +21,7 @@ describe("QuizzRepository", () => {
 
         const result = await repository.getAll();
 
-        expect(executeQuery).toHaveBeenCalledWith("SELECT * FROM quizz", []);
+        expect(executeQuery).toHaveBeenCalledWith("SELECT * FROM kt_quizzes", []);
         expect(result).toHaveLength(2);
         expect(result[0]).toBeInstanceOf(Quizz);
         expect(result[0].id).toBe(1);
@@ -35,7 +35,7 @@ describe("QuizzRepository", () => {
 
         const result = await repository.getById(1);
 
-        expect(executeQuery).toHaveBeenCalledWith("SELECT * FROM quizz WHERE id = ?", [1]);
+        expect(executeQuery).toHaveBeenCalledWith("SELECT * FROM kt_quizzes WHERE id = ?", [1]);
         expect(result).toBeInstanceOf(Quizz);
         expect(result?.id).toBe(1);
         expect(result?.title).toBe("Quiz 1");
@@ -46,7 +46,7 @@ describe("QuizzRepository", () => {
 
         const result = await repository.getById(999);
 
-        expect(executeQuery).toHaveBeenCalledWith("SELECT * FROM quizz WHERE id = ?", [999]);
+        expect(executeQuery).toHaveBeenCalledWith("SELECT * FROM kt_quizzes WHERE id = ?", [999]);
         expect(result).toBeNull();
     });
 
@@ -61,8 +61,8 @@ describe("QuizzRepository", () => {
         });
         const result = await repository.create(quizz);
 
-        expect(executeQuery).toHaveBeenCalledWith("INSERT INTO quizz SET ?", [quizz]);
-        expect(result).toBe(true);
+        expect(executeQuery).toHaveBeenCalledWith("INSERT INTO kt_quizzes SET ?", [quizz]);
+        expect(result).toStrictEqual({"affectedRows": 1});
     });
 
     it("should return false if quizz creation fails", async () => {
@@ -71,8 +71,8 @@ describe("QuizzRepository", () => {
         const quizz = new Quizz({ id_user: 1, title: "Failed Quiz" });
         const result = await repository.create(quizz);
 
-        expect(executeQuery).toHaveBeenCalledWith("INSERT INTO quizz SET ?", [quizz]);
-        expect(result).toBe(false);
+        expect(executeQuery).toHaveBeenCalledWith("INSERT INTO kt_quizzes SET ?", [quizz]);
+        expect(result).toStrictEqual({"affectedRows": 0});
     });
 
     it("should update a quizz", async () => {
@@ -82,7 +82,7 @@ describe("QuizzRepository", () => {
         const result = await repository.update(1, updates);
 
         expect(executeQuery).toHaveBeenCalledWith(
-            "UPDATE quizz SET ? WHERE id = ?",
+            "UPDATE kt_quizzes SET ? WHERE id = ?",
             [updates, 1]
         );
         expect(result).toBe(true);
@@ -95,7 +95,7 @@ describe("QuizzRepository", () => {
         const result = await repository.update(999, updates);
 
         expect(executeQuery).toHaveBeenCalledWith(
-            "UPDATE quizz SET ? WHERE id = ?",
+            "UPDATE kt_quizzes SET ? WHERE id = ?",
             [updates, 999]
         );
         expect(result).toBe(false);
@@ -106,7 +106,7 @@ describe("QuizzRepository", () => {
 
         const result = await repository.delete(1);
 
-        expect(executeQuery).toHaveBeenCalledWith("DELETE FROM quizz WHERE id = ?", [1]);
+        expect(executeQuery).toHaveBeenCalledWith("DELETE FROM kt_quizzes WHERE id = ?", [1]);
         expect(result).toBe(true);
     });
 
@@ -115,7 +115,7 @@ describe("QuizzRepository", () => {
 
         const result = await repository.delete(999);
 
-        expect(executeQuery).toHaveBeenCalledWith("DELETE FROM quizz WHERE id = ?", [999]);
+        expect(executeQuery).toHaveBeenCalledWith("DELETE FROM kt_quizzes WHERE id = ?", [999]);
         expect(result).toBe(false);
     });
 
@@ -128,7 +128,7 @@ describe("QuizzRepository", () => {
 
         const result = await repository.getByUserId(1);
 
-        expect(executeQuery).toHaveBeenCalledWith("SELECT * FROM quizz WHERE id_user = ?", [1]);
+        expect(executeQuery).toHaveBeenCalledWith("SELECT * FROM kt_quizzes WHERE id_user = ?", [1]);
         expect(result).toHaveLength(2);
         expect(result[0]).toBeInstanceOf(Quizz);
         expect(result[0].id_user).toBe(1);
@@ -140,7 +140,7 @@ describe("QuizzRepository", () => {
 
         const result = await repository.getByUserId(999);
 
-        expect(executeQuery).toHaveBeenCalledWith("SELECT * FROM quizz WHERE id_user = ?", [999]);
+        expect(executeQuery).toHaveBeenCalledWith("SELECT * FROM kt_quizzes WHERE id_user = ?", [999]);
         expect(result).toEqual([]);
         expect(result).toHaveLength(0);
     });
@@ -154,7 +154,7 @@ describe("QuizzRepository", () => {
 
         const result = await repository.getByDepartementId(1);
 
-        expect(executeQuery).toHaveBeenCalledWith("SELECT * FROM quizz WHERE id_departement = ?", [1]);
+        expect(executeQuery).toHaveBeenCalledWith("SELECT * FROM kt_quizzes WHERE id_departement = ?", [1]);
         expect(result).toHaveLength(2);
         expect(result[0]).toBeInstanceOf(Quizz);
         expect(result[0].id_departement).toBe(1);
@@ -166,7 +166,7 @@ describe("QuizzRepository", () => {
 
         const result = await repository.getByDepartementId(999);
 
-        expect(executeQuery).toHaveBeenCalledWith("SELECT * FROM quizz WHERE id_departement = ?", [999]);
+        expect(executeQuery).toHaveBeenCalledWith("SELECT * FROM kt_quizzes WHERE id_departement = ?", [999]);
         expect(result).toEqual([]);
         expect(result).toHaveLength(0);
     });

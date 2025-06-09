@@ -9,9 +9,7 @@ describe("Quizz Model", () => {
             id_departement: 3, 
             title: "Test Quiz", 
             description: "Description test", 
-            type: "QCM", 
-            nbr_questions: 10, 
-            difficukty_level: "Medium",
+            nbr_question: 10, 
             created_at: date,
             updated_at: date
         };
@@ -22,9 +20,7 @@ describe("Quizz Model", () => {
         expect(quizz.id_departement).toBe(3);
         expect(quizz.title).toBe("Test Quiz");
         expect(quizz.description).toBe("Description test");
-        expect(quizz.type).toBe("QCM");
-        expect(quizz.nbr_questions).toBe(10);
-        expect(quizz.difficukty_level).toBe("Medium");
+        expect(quizz.nbr_question).toBe(10);
         expect(quizz.created_at).toBe(date);
         expect(quizz.updated_at).toBe(date);
     });
@@ -47,9 +43,7 @@ describe("Quizz Model", () => {
         quizz.setIdDepartement(3);
         quizz.setTitle("Test Quiz");
         quizz.setDescription("Description test");
-        quizz.setType("QCM");
-        quizz.setNbrQuestions(10);
-        quizz.setDifficuktyLevel("Medium");
+        quizz.setNbrQuestion(10);
         quizz.setCreatedAt(createdDate);
         quizz.setUpdatedAt(updatedDate);
 
@@ -58,9 +52,7 @@ describe("Quizz Model", () => {
         expect(quizz.getIdDepartement()).toBe(3);
         expect(quizz.getTitle()).toBe("Test Quiz");
         expect(quizz.getDescription()).toBe("Description test");
-        expect(quizz.getType()).toBe("QCM");
-        expect(quizz.getNbrQuestions()).toBe(10);
-        expect(quizz.getDifficuktyLevel()).toBe("Medium");
+        expect(quizz.getNbrQuestion()).toBe(10);
         expect(quizz.getCreatedAt()).toEqual(createdDate);
         expect(quizz.getUpdatedAt()).toEqual(updatedDate);
     });
@@ -82,10 +74,8 @@ describe("Quizz Model", () => {
             id_user: 2, 
             id_departement: 3, 
             title: "Test Quiz", 
-            description: "Description test", 
-            type: "QCM", 
-            nbr_questions: 10, 
-            difficukty_level: "Medium",
+            description: "Description test",  
+            nbr_question: 10, 
             created_at: date,
             updated_at: date
         };
@@ -98,9 +88,7 @@ describe("Quizz Model", () => {
             id_departement: 3,
             title: "Test Quiz",
             description: "Description test",
-            type: "QCM",
-            nbr_questions: 10,
-            difficukty_level: "Medium",
+            nbr_question: 10,
             created_at: date,
             updated_at: date
         });
@@ -117,9 +105,7 @@ describe("Quizz Model", () => {
             id_departement: undefined,
             title: "Test Quiz",
             description: undefined,
-            type: undefined,
-            nbr_questions: undefined,
-            difficukty_level: undefined,
+            nbr_question: undefined,
             created_at: undefined,
             updated_at: undefined
         });

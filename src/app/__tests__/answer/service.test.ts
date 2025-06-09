@@ -18,18 +18,18 @@ describe("AnswerService", () => {
         const mockQuestions = [
             new Answer({ 
                 id: 1,
-                idQuizz: 2,
-                idQuestion: 1,
-                orderIndex: 3,
+                id_quizz: 2,
+                id_question: 1,
+                order_index: 3,
                 content: "test content 1",
                 explication: "test explication 1",
                 isCorrect: false
             }),
             new Answer({ 
                 id: 2,
-                idQuizz: 2,
-                idQuestion: 1,
-                orderIndex: 2,
+                id_quizz: 2,
+                id_question: 1,
+                order_index: 2,
                 content: "test content 2",
                 explication: "test explication 2",
                 isCorrect: true
@@ -47,9 +47,9 @@ describe("AnswerService", () => {
     it("should retrieve an answer by ID", async () => {
         const mockAnswer = new Answer({ 
             id: 1,
-            idQuizz: 2,
-            idQuestion: 1,
-            orderIndex: 3,
+            id_quizz: 2,
+            id_question: 1,
+            order_index: 3,
             content: "test content 1",
             explication: "test explication 1",
             isCorrect: false
@@ -66,21 +66,21 @@ describe("AnswerService", () => {
         answerRepository.create.mockResolvedValue(true);
 
         const result = await answerService.create({ 
-            idQuizz: 2,
-            idQuestion: 1,
-            orderIndex: 3,
+            id_quizz: 2,
+            id_question: 1,
+            order_index: 3,
             content: "test content 1",
             explication: "test explication 1",
-            isCorrect: false
+            is_correct: false
         });
 
         expect(answerRepository.create).toHaveBeenCalledWith({ 
-            idQuizz: 2,
-            idQuestion: 1,
-            orderIndex: 3,
+            id_quizz: 2,
+            id_question: 1,
+            order_index: 3,
             content: "test content 1",
             explication: "test explication 1",
-            isCorrect: false
+            is_correct: false
         });
         expect(result).toBe(true);
     });
@@ -88,9 +88,9 @@ describe("AnswerService", () => {
     it("should update an answer", async () => {
         answerRepository.update.mockResolvedValue(true);
 
-        const result = await answerService.update(1, { idQuizz: 1, orderIndex: 2, content: "Answer content" });
+        const result = await answerService.update(1, { id_quizz: 1, order_index: 2, content: "Answer content" });
 
-        expect(answerRepository.update).toHaveBeenCalledWith(1, { idQuizz: 1, orderIndex: 2, content: "Answer content" });
+        expect(answerRepository.update).toHaveBeenCalledWith(1, { id_quizz: 1, order_index: 2, content: "Answer content" });
         expect(result).toBe(true);
     });
 
@@ -107,21 +107,21 @@ describe("AnswerService", () => {
         const mockAnswers = [
             new Answer({ 
                 id: 1,
-                idQuizz: 2,
-                idQuestion: 1,
-                orderIndex: 3,
+                id_quizz: 2,
+                id_question: 1,
+                order_index: 3,
                 content: "test content 1",
                 explication: "test explication 1",
-                isCorrect: false
+                is_correct: false
             }),
             new Answer({ 
                 id: 1,
-                idQuizz: 2,
-                idQuestion: 1,
-                orderIndex: 2,
+                id_quizz: 2,
+                id_question: 1,
+                order_index: 2,
                 content: "test content 2",
                 explication: "test explication 2",
-                isCorrect: false
+                is_correct: false
             }),
         ];
         answerRepository.getAnswersByQuizz.mockResolvedValue(mockAnswers);
@@ -137,28 +137,28 @@ describe("AnswerService", () => {
         const mockAnswers = [
             new Answer({ 
                 id: 1,
-                idQuizz: 2,
-                idQuestion: 1,
-                orderIndex: 3,
+                id_quizz: 2,
+                id_question: 1,
+                order_index: 3,
                 content: "test content 1",
                 explication: "test explication 1",
-                isCorrect: false
+                is_correct: false
             }),
             new Answer({ 
                 id: 1,
-                idQuizz: 2,
-                idQuestion: 1,
-                orderIndex: 2,
+                id_quizz: 2,
+                id_question: 1,
+                order_index: 2,
                 content: "test content 2",
                 explication: "test explication 2",
-                isCorrect: false
+                is_correct: false
             }),
         ];
-        answerRepository.getAnswersByQuestion.mockResolvedValue(mockAnswers);
+        answerRepository.getByQuestionId.mockResolvedValue(mockAnswers);
 
         const answers = await answerService.getAnswersByQuestion(1);
 
-        expect(answerRepository.getAnswersByQuestion).toHaveBeenCalled();
+        expect(answerRepository.getByQuestionId).toHaveBeenCalled();
         expect(answers).toHaveLength(2);
         expect(answers[0].getQuestionId()).toBe(1);
     });

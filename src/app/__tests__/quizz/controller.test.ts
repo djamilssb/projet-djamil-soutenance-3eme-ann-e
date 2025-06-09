@@ -117,7 +117,7 @@ describe("QuizzController", () => {
 
             expect(quizzService.create).toHaveBeenCalledWith(body);
             expect(response.status).toBe(201);
-            expect(await response.json()).toEqual({ message: "Quizz créé avec succès." });
+            expect(await response.json()).toEqual({ message: "Quizz créé avec succès.", result: true });
         });
 
         it("should return status 400 for missing title", async () => {
