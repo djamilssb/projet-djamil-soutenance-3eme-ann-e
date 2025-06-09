@@ -277,9 +277,6 @@ export default function CompteUser() {
         />
       )}
       
-      <div className="absolute top-5 left-5">
-        <ArrowBack />
-      </div>
       <div className="bg-black/80 text-white p-8 rounded-lg shadow-lg w-full max-w-md">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold">Mon Compte</h2>

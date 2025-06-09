@@ -1,3 +1,4 @@
+import { cookies } from 'next/headers';
 import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -62,7 +63,15 @@ export const metadata: Metadata = {
   themeColor: "#2D2DFF",
 };
 
-export default function Home(): React.JSX.Element {
+async function checkAuthentication() {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('token');
+    return !!token;
+}
+
+export default async function Home(): Promise<React.JSX.Element> {
+  const isAuthenticated = await checkAuthentication();
+  
   return (
     <>
       <h1 hidden>Accueil</h1>
@@ -101,8 +110,8 @@ export default function Home(): React.JSX.Element {
             </p>
 
             {/* Bouton - TAILLE RÉDUITE */}
-            <Link href={"/game/menu"}>
-              <button className="bg-[var(--secondary-color)] hover:bg-[var(--hover-secondary)] text-black text-sm sm:text-base lg:text-lg xl:text-xl font-bold px-4 py-2 sm:px-6 sm:py-3 lg:px-8 lg:py-4 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl mt-4 cursor-pointer">
+            <Link href={isAuthenticated ? "/game/menu" : "/connexion"}>
+              <button className="bg-[var(--secondary-color)] hover:bg-[var(--hover-secondary)] text-black text-sm sm:text-base lg:text-lg xl:text-xl font-bold px-4 py-2 sm:px-6 sm:py-3 lg:px-8 lg:py-4 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl mt-4">
                 Commencer l&apos;aventure
               </button>
             </Link>
