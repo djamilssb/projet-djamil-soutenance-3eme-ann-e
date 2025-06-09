@@ -25,18 +25,18 @@ describe("AnswerController", () => {
         it("should return status 200 and a list of answers", async () => {
             const aOne: Answer = new Answer({ 
                 id: 1,
-                idQuizz: 2,
-                idQuestion: 1,
-                orderIndex: 3,
+                id_quizz: 2,
+                id_question: 1,
+                order_index: 3,
                 content: "test content 1",
                 explication: "test explication 1",
                 isCorrect: false
              });
             const aTwo: Answer = new Answer({ 
                 id: 2,
-                idQuizz: 2,
-                idQuestion: 1,
-                orderIndex: 2,
+                id_quizz: 2,
+                id_question: 1,
+                order_index: 2,
                 content: "test content 2",
                 explication: "test explication 2",
                 isCorrect: true
@@ -72,12 +72,12 @@ describe("AnswerController", () => {
         it("should return status 200 and an answer", async () => {
             const newAnswer: Answer = new Answer({ 
                 id: 1,
-                idQuizz: 2,
-                idQuestion: 1,
-                orderIndex: 3,
+                id_quizz: 2,
+                id_question: 1,
+                order_index: 3,
                 content: "test content 1",
                 explication: "test explication 1",
-                isCorrect: false
+                is_correct: false
             });
             answerService.getById.mockResolvedValue(newAnswer);
 
@@ -88,12 +88,12 @@ describe("AnswerController", () => {
             expect(response.status).toBe(200);
             expect(await response.json()).toEqual({ 
                 id: 1,
-                idQuizz: 2,
-                idQuestion: 1,
-                orderIndex: 3,
+                id_quizz: 2,
+                id_question: 1,
+                order_index: 3,
                 content: "test content 1",
                 explication: "test explication 1",
-                isCorrect: false
+                is_correct: false
             });
         });
 
@@ -124,9 +124,9 @@ describe("AnswerController", () => {
 
             const req = {} as NextRequest;
             const body = {
-                idQuizz: 2,
-                idQuestion: 1,
-                orderIndex: 3,
+                id_quizz: 2,
+                id_question: 1,
+                order_index: 3,
                 content: "test content 1",
                 explication: "test explication 1",
                 isCorrect: false
@@ -154,9 +154,9 @@ describe("AnswerController", () => {
 
             const req = {} as NextRequest;
             const body = {
-                idQuizz: 2,
-                idQuestion: 1,
-                orderIndex: 3,
+                id_quizz: 2,
+                id_question: 1,
+                order_index: 3,
                 content: "test content 1",
                 explication: "test explication 1",
                 isCorrect: false
@@ -247,21 +247,25 @@ describe("AnswerController", () => {
         it("should return status 200 and a list of answers", async () => {
             const aOne: Answer = new Answer({ 
                 id: 1,
-                idQuizz: 2,
-                idQuestion: 1,
-                orderIndex: 3,
+                id_quizz: 2,
+                id_question: 1,
+                order_index: 3,
                 content: "test content 1",
                 explication: "test explication 1",
-                isCorrect: false
+                is_correct: false,
+                created_at: undefined,
+                updated_at: undefined
             });
             const aTwo: Answer = new Answer({ 
                 id: 2,
-                idQuizz: 2,
-                idQuestion: 1,
-                orderIndex: 2,
+                id_quizz: 2,
+                id_question: 1,
+                order_index: 2,
                 content: "test content 2",
                 explication: "test explication 2",
-                isCorrect: true
+                is_correct: true,
+                created_at: undefined,
+                updated_at: undefined
             });
             const quizzId: number = 2;
 
@@ -296,21 +300,25 @@ describe("AnswerController", () => {
         it("should return status 200 and a list of answers", async () => {
             const aOne: Answer = new Answer({ 
                 id: 1,
-                idQuizz: 2,
-                idQuestion: 1,
-                orderIndex: 3,
+                id_quizz: 2,
+                id_question: 1,
+                order_index: 3,
                 content: "test content 1",
                 explication: "test explication 1",
-                isCorrect: false
+                is_correct: false,
+                created_at: undefined,
+                updated_at: undefined
             });
             const aTwo: Answer = new Answer({ 
                 id: 2,
-                idQuizz: 2,
-                idQuestion: 1,
-                orderIndex: 2,
+                id_quizz: 2,
+                id_question: 1,
+                order_index: 2,
                 content: "test content 2",
                 explication: "test explication 2",
-                isCorrect: true
+                is_correct: true,
+                created_at: undefined,
+                updated_at: undefined
             });
             const questionId: number = 1;
 
@@ -321,7 +329,7 @@ describe("AnswerController", () => {
 
             expect(answerService.getAnswersByQuestion).toHaveBeenCalled();
             expect(response.status).toBe(200);
-            expect(await response.json()).toEqual([
+            expect(await response.json()).toBe([
                 aOne,
                 aTwo
             ]);

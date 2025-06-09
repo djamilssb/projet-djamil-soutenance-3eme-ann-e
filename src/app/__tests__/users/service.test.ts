@@ -42,9 +42,9 @@ describe("UsersService", () => {
     it("should update a user", async () => {
         usersRepository.update.mockResolvedValue(true);
 
-        const result = await usersService.update(1, { username: "testuser", password: "passwordtest", password_kids: "passwordtest", email: "eee@frfrf.fr" });
+        const result = await usersService.update(1, { username: "testuser", email: "eee@frfrf.fr" });
 
-        expect(usersRepository.update).toHaveBeenCalledWith(1, { username: "testuser", password: "passwordtest", password_kids: "passwordtest", email: "eee@frfrf.fr" });
+        expect(usersRepository.update).toHaveBeenCalledWith(1, { username: "testuser", email: "eee@frfrf.fr" });
         expect(result).toBe(true);
     });
 

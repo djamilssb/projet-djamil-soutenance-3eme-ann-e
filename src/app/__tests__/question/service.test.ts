@@ -17,8 +17,8 @@ describe("QuestionService", () => {
 
     it("should retrieve all questions", async () => {
         const mockQuestions = [
-            new Question({ id: 1, idQuizz: 1, orderIndex: 1, content: "Question 1" }),
-            new Question({ id: 2, idQuizz: 1, orderIndex: 2, content: "Question 2" }),
+            new Question({ id: 1, id_quizz: 1, order_index: 1, content: "Question 1" }),
+            new Question({ id: 2, id_quizz: 1, order_index: 2, content: "Question 2" }),
         ];
         questionRepository.getAll.mockResolvedValue(mockQuestions);
         
@@ -30,7 +30,7 @@ describe("QuestionService", () => {
     });
 
     it("should retrieve a question by ID", async () => {
-        const mockQuestion = new Question({ id: 1, idQuizz: 1, orderIndex: 1, content: "Question 1" });
+        const mockQuestion = new Question({ id: 1, id_quizz: 1, order_index: 1, content: "Question 1" });
         questionRepository.getById.mockResolvedValue(mockQuestion);
 
         const question = await questionService.getById(1);
@@ -42,18 +42,18 @@ describe("QuestionService", () => {
     it("should create a question", async () => {
         questionRepository.create.mockResolvedValue(true);
 
-        const result = await questionService.create({ id: 1, idQuizz: 1, orderIndex: 1, content: "Question 1" });
+        const result = await questionService.create({ id: 1, id_quizz: 1, order_index: 1, content: "Question 1" });
 
-        expect(questionRepository.create).toHaveBeenCalledWith({ id: 1, idQuizz: 1, orderIndex: 1, content: "Question 1" });
+        expect(questionRepository.create).toHaveBeenCalledWith({ id: 1, id_quizz: 1, order_index: 1, content: "Question 1" });
         expect(result).toBe(true);
     });
 
     it("should update a question", async () => {
         questionRepository.update.mockResolvedValue(true);
 
-        const result = await questionService.update(1, { idQuizz: 1, orderIndex: 2, content: "Question content" });
+        const result = await questionService.update(1, { id_quizz: 1, order_index: 2, content: "Question content" });
 
-        expect(questionRepository.update).toHaveBeenCalledWith(1, { idQuizz: 1, orderIndex: 2, content: "Question content" });
+        expect(questionRepository.update).toHaveBeenCalledWith(1, { id_quizz: 1, order_index: 2, content: "Question content" });
         expect(result).toBe(true);
     });
 
@@ -68,8 +68,8 @@ describe("QuestionService", () => {
 
     it("should retrieve all questions by quizz", async () => {
         const mockQuestions = [
-            new Question({ id: 1, idQuizz: 1, orderIndex: 1, content: "Question 1" }),
-            new Question({ id: 2, idQuizz: 1, orderIndex: 2, content: "Question 2" }),
+            new Question({ id: 1, id_quizz: 1, order_index: 1, content: "Question 1" }),
+            new Question({ id: 2, id_quizz: 1, order_index: 2, content: "Question 2" }),
         ];
         questionRepository.getQuestionsByQuizz.mockResolvedValue(mockQuestions);
 

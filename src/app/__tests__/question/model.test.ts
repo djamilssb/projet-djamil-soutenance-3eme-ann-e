@@ -4,8 +4,8 @@ describe("Question Model", () => {
     it("should correctly initialize and return properties", () => {
         const question = new Question({
             id: 1,
-            idQuizz: 2,
-            orderIndex: 3,
+            id_quizz: 2,
+            order_index: 3,
             content: "test content"
         });
 

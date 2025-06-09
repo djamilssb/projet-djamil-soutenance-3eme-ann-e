@@ -73,7 +73,7 @@ describe("UsersController", () => {
 
             expect(usersService.getById).toHaveBeenCalledWith(999);
             expect(response.status).toBe(404);
-            expect(await response.json()).toEqual({ message: "User not found." });
+            expect(await response.json()).toEqual({ error: "User not found" });
         });
 
         it("should return status 400 for invalid user ID", async () => {
@@ -81,7 +81,7 @@ describe("UsersController", () => {
             const response = await usersController.getById(NaN);
 
             expect(response.status).toBe(400);
-            expect(await response.json()).toEqual({ message: "Invalid user ID." });
+            expect(await response.json()).toEqual({ error: "Invalid user ID" });
         });
     });
 
@@ -97,7 +97,7 @@ describe("UsersController", () => {
 
             expect(usersService.update).toHaveBeenCalledWith(1, body);
             expect(response.status).toBe(200);
-            expect(await response.json()).toEqual({ message: "User successfully updated." });
+            expect(await response.json()).toEqual({ message: "User updated successfully" });
         });
 
         it("should return status 400 for invalid user ID", async () => {
@@ -107,7 +107,7 @@ describe("UsersController", () => {
             const response = await usersController.update(NaN, body);
 
             expect(response.status).toBe(400);
-            expect(await response.json()).toEqual({ message: "Invalid user ID." });
+            expect(await response.json()).toEqual({ error: "Invalid user ID" });
         });
 
         it("should return status 500 if service fails", async () => {
@@ -120,7 +120,7 @@ describe("UsersController", () => {
 
             expect(usersService.update).toHaveBeenCalledWith(1, body);
             expect(response.status).toBe(500);
-            expect(await response.json()).toEqual({ message: "Failed to update the user." });
+            expect(await response.json()).toEqual({ details: "Service error", error: "Internal server error" });
         });
     });
 
@@ -134,7 +134,7 @@ describe("UsersController", () => {
 
             expect(usersService.delete).toHaveBeenCalledWith(1);
             expect(response.status).toBe(200);
-            expect(await response.json()).toEqual({ message: "User successfully deleted." });
+            expect(await response.json()).toEqual({ message: "User deleted successfully" });
         });
 
         it("should return status 400 for invalid user ID", async () => {
@@ -142,7 +142,7 @@ describe("UsersController", () => {
             const response = await usersController.delete(NaN);
 
             expect(response.status).toBe(400);
-            expect(await response.json()).toEqual({ message: "Invalid user ID." });
+            expect(await response.json()).toEqual({ error: "Invalid user ID" });
         });
 
         it("should return status 500 if service fails", async () => {
@@ -153,7 +153,7 @@ describe("UsersController", () => {
 
             expect(usersService.delete).toHaveBeenCalledWith(1);
             expect(response.status).toBe(500);
-            expect(await response.json()).toEqual({ message: "Failed to delete the user." });
+            expect(await response.json()).toEqual({ error: "Internal server error" });
         });
     });
 });
