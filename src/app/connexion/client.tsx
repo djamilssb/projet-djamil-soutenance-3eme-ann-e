@@ -20,13 +20,13 @@ const formOpts = formOptions({
 });
 
 function SignInForm() {
-    const router = useRouter();
+  const router = useRouter();
 
   const mutation = useMutation({
     mutationFn: fetchSignIn,
     onSuccess: () => {
-        router.push("/game/menu");
-    }
+      router.push("/game/menu");
+    },
   });
 
   const form = useForm({
@@ -58,9 +58,8 @@ function SignInForm() {
               <label className="mb-1" htmlFor="email">
                 Email
               </label>
-              <form.Field
-                name="email"
-                children={(field) => (
+              <form.Field name="email">
+                {(field) => (
                   <input
                     id="email"
                     type="email"
@@ -70,14 +69,13 @@ function SignInForm() {
                     required
                   />
                 )}
-              />
+              </form.Field>
 
               <label className="mb-1" htmlFor="password">
                 Mot de passe
               </label>
-              <form.Field
-                name="password"
-                children={(field) => (
+              <form.Field name="password">
+                {(field) => (
                   <input
                     id="password"
                     type="password"
@@ -86,7 +84,7 @@ function SignInForm() {
                     className="bg-[var(--grayed-input)] w-80 h-12 rounded p-2 mb-3"
                   />
                 )}
-              />
+              </form.Field>
 
               {/* <label className="mb-1" htmlFor="password_kids">
                 Mot de passe enfant

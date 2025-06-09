@@ -28,44 +28,44 @@ const formOpts = formOptions({
 
 function SignUp() {
   const [avatarUrl, setAvatarUrl] = useState<string>("/default_avatar.webp");
-  const [ hasEmailValid, setHasEmailValid ] = useState<boolean>(true);
-  const [ hasUsernameValid, setHasUsernameValid ] = useState<boolean>(true);
-  const [ hasPasswordValid, setHasPasswordValid ] = useState<boolean>(true);
-  const [ hasPhoneValid, setHasPhoneValid ] = useState<boolean>(true);
-  const {isModaleVisible, openModale, closeModale} = useModale();
+  const [hasEmailValid, setHasEmailValid] = useState<boolean>(true);
+  const [hasUsernameValid, setHasUsernameValid] = useState<boolean>(true);
+  const [hasPasswordValid, setHasPasswordValid] = useState<boolean>(true);
+  const [hasPhoneValid, setHasPhoneValid] = useState<boolean>(true);
+  const { isModaleVisible, openModale, closeModale } = useModale();
   const router = useRouter();
 
   const mutation = useMutation({
-  mutationFn: fetchSignUp,
-  onSuccess: (result) => {
-    if (result) {
-      router.push("/connexion");
-  }},
-});
+    mutationFn: fetchSignUp,
+    onSuccess: (result) => {
+      if (result) {
+        router.push("/connexion");
+      }
+    },
+  });
 
   const form = useForm({
     ...formOpts,
     onSubmit: async ({ value }) => {
-
       if (!isUsernameValid(value.username)) {
         setHasUsernameValid(false);
         return;
-      };
+      }
 
       if (!isEmailValid(value.email)) {
         setHasEmailValid(false);
         return;
-      };
+      }
 
       if (!isPasswordValid(value.password)) {
         setHasPasswordValid(false);
         return;
-      };
+      }
 
       if (!isPhoneValid(value.phone)) {
         setHasPhoneValid(false);
         return;
-      };
+      }
 
       const newUser = new Users({
         username: value.username,
@@ -104,9 +104,8 @@ function SignUp() {
           >
             <div className="flex-1 flex flex-col justify-center">
               <div className="flex flex-col gap-6 w-[20vw] text-lg">
-                <form.Field
-                  name="username"
-                  children={(field) => (
+                <form.Field name="username">
+                  {(field) => (
                     <div>
                       <input
                         type="text"
@@ -121,15 +120,14 @@ function SignUp() {
                       />
                       {!hasUsernameValid && (
                         <p className="text-red-500 text-sm mt-1">
-                          Le nom d'utilisateur doit contenir au moins 3 caractères alphanumériques.
+                          Le nom d&apos;utilisateur doit contenir au moins 3 caractères alphanumériques.
                         </p>
                       )}
                     </div>
                   )}
-                />
-                <form.Field
-                  name="email"
-                  children={(field) => (
+                </form.Field>
+                <form.Field name="email">
+                  {(field) => (
                     <div>
                       <input
                         type="email"
@@ -149,10 +147,9 @@ function SignUp() {
                       )}
                     </div>
                   )}
-                />
-                <form.Field
-                  name="password"
-                  children={(field) => (
+                </form.Field>
+                <form.Field name="password">
+                  {(field) => (
                     <div>
                       <input
                         type="password"
@@ -172,10 +169,9 @@ function SignUp() {
                       )}
                     </div>
                   )}
-                />
-                {/* <form.Field
-                  name="password_kids"
-                  children={(field) => (
+                </form.Field>
+                {/* <form.Field name="password_kids">
+                  {(field) => (
                     <input
                       type="password"
                       placeholder="Mot de passe enfant"
@@ -184,10 +180,9 @@ function SignUp() {
                       className="h-12 p-3 rounded bg-[var(--grayed-input)] text-white"
                     />
                   )}
-                /> */}
-                <form.Field
-                  name="address"
-                  children={(field) => (
+                </form.Field> */}
+                <form.Field name="address">
+                  {(field) => (
                     <input
                       type="text"
                       placeholder="Adresse"
@@ -196,10 +191,9 @@ function SignUp() {
                       className="w-full h-12 p-3 rounded bg-[var(--grayed-input)] text-white"
                     />
                   )}
-                />
-                <form.Field
-                  name="phone"
-                  children={(field) => (
+                </form.Field>
+                <form.Field name="phone">
+                  {(field) => (
                     <div>
                       <input
                         type="tel"
@@ -218,7 +212,7 @@ function SignUp() {
                       )}
                     </div>
                   )}
-                />
+                </form.Field>
               </div>
             </div>
 
@@ -229,7 +223,6 @@ function SignUp() {
                   alt="Avatar"
                   fill
                   className="object-cover"
-               
                 />
               </div>
               <button

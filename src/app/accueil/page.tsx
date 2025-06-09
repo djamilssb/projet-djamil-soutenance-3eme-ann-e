@@ -1,8 +1,8 @@
 import { cookies } from 'next/headers';
 import { Metadata } from "next";
 import Image from "next/image";
-import AdventureButton from "../components/AdventureButton"; 
 import "./style.css";
+import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: "Kidstrotter | Quiz éducatifs pour enfants",
@@ -103,11 +103,11 @@ export default async function Home(): Promise<React.JSX.Element> {
             </h2>
 
             <p className="text-white text-sm sm:text-base lg:text-lg xl:text-xl text-center mb-3 mt-6 sm:mb-4 lg:mb-6 px-2">
-              Créez un compte pour votre enfant afin qu'il s'amuse tout en développant sa culture générale grâce à des quizz ludiques et éducatifs !
+              Créez un compte pour votre enfant afin qu&apos;il s&apos;amuse tout en développant sa culture générale grâce à des quizz ludiques et éducatifs !
             </p>
 
             <Link href={isAuthenticated ? "/game/menu" : "/connexion"}>
-              <button className="bg-[var(--secondary-color)] hover:bg-[var(--hover-secondary)] text-black text-sm sm:text-base lg:text-lg xl:text-xl font-bold px-4 py-2 sm:px-6 sm:py-3 lg:px-8 lg:py-4 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl mt-4">
+              <button className="bg-[var(--secondary-color)] hover:bg-[var(--hover-secondary)] text-black text-sm sm:text-base lg:text-lg xl:text-xl font-bold px-4 py-2 sm:px-6 sm:py-3 lg:px-8 lg:py-4 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl mt-4 cursor-pointer">
                 Commencer l&apos;aventure
               </button>
             </Link>

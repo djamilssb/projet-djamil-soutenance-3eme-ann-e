@@ -1,4 +1,5 @@
 import Quizz from "../models/Quizz";
+import Users from "../models/Users";
 import QuizzRepository from "../repositories/QuizzRepository";
 
 class QuizzService {
@@ -118,7 +119,7 @@ class QuizzService {
         }
     }
 
-    public async getAllQuizByIdUser(userId: number): Promise<any[]> {
+    public async getAllQuizByIdUser(userId: number): Promise<Quizz[]> {
     try {
         return await this.quizzRepository.getAllQuizByIdUser(userId);
     } catch(e) {
@@ -127,7 +128,7 @@ class QuizzService {
     }
 }
 
-public async getQuizzesWhereIdUserIsNull(): Promise<any[]> {
+public async getQuizzesWhereIdUserIsNull(): Promise<Quizz|Quizz[]|undefined> {
     try {
         return await this.quizzRepository.getQuizzesWhereIdUserIsNull();
     } catch (error) {

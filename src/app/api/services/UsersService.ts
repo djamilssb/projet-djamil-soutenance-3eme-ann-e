@@ -34,7 +34,7 @@ class UsersService {
         }
     }
 
-    public async update(id: number, userData: any): Promise<boolean> {
+    public async update(id: number, userData: Users): Promise<boolean> {
         try {
             if (!id || isNaN(id)) {
                 throw new Error("Invalid user ID");
@@ -52,13 +52,12 @@ class UsersService {
                 username: userData.username,
                 phone: userData.phone,
                 address: userData.address,
-                id_avatar: userData.avatar_id
+                id_avatar: userData.id_avatar
             };
 
-            // Vérification et mise à jour du mot de passe principal
-            if (userData.password && userData.currentPassword) {
-                // Vérifier que le mot de passe actuel correspond au hash en base
-                const isCurrentPasswordValid = await bcrypt.compare(userData.currentPassword, currentUser.password || '');
+            if (userData.password && userData.getPassword()) {
+
+                const isCurrentPasswordValid = await bcrypt.compare(userData.getPassword()!, currentUser.password || '');
                 
                 if (!isCurrentPasswordValid) {
                     throw new Error("invalid_current_password");
@@ -68,15 +67,15 @@ class UsersService {
                 updateData.password = await bcrypt.hash(userData.password, 14);
             }
 
-            if (userData.password_kids && userData.currentPassword_kids) {
-                const isCurrentKidsPasswordValid = await bcrypt.compare(userData.currentPassword_kids, currentUser.password_kids || '');
+            // if (userData.password_kids && userData.currentPassword_kids) {
+            //     const isCurrentKidsPasswordValid = await bcrypt.compare(userData.currentPassword_kids, currentUser.password_kids || '');
                 
-                if (!isCurrentKidsPasswordValid) {
-                    throw new Error("invalid_current_kids_password");
-                }
+            //     if (!isCurrentKidsPasswordValid) {
+            //         throw new Error("invalid_current_kids_password");
+            //     }
 
-                updateData.password_kids = await bcrypt.hash(userData.password_kids, 14);
-            }
+            //     updateData.password_kids = await bcrypt.hash(userData.password_kids, 14);
+            // }
 
             const updated = await this.userRepository.update(id, updateData);
 

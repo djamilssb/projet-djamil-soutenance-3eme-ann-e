@@ -6,7 +6,7 @@ interface Input {
     iClass?: string,
     iName: string,
     label: string,
-    defaultValue?: any,
+    defaultValue?: undefined,
     readonly?: boolean,
     required?: boolean,
     onChange?: (value: number) => void

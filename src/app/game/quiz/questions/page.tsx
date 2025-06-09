@@ -10,6 +10,7 @@ import {
   mockQuestions,
   mockAnswers,
 } from "@/app/__tests__/quizMockData";
+import Answer from "@/app/api/models/Answer";
 
 // ===== FONCTIONS UTILITAIRES =====
 // Fonction avatar selon l'ID
@@ -36,7 +37,7 @@ function QuizGameContent({
   const router = useRouter();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
-  const [selectedAnswer, setSelectedAnswer] = useState<any | null>(null);
+  const [selectedAnswer, setSelectedAnswer] = useState<Answer | null>(null);
   const [showFeedback, setShowFeedback] = useState(false);
   const [useFallbackData, setUseFallbackData] = useState(false);
 

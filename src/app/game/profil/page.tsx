@@ -2,10 +2,10 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import ArrowBack from "@/app/components/ArrowBack";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import MenuAvatar from "./components/MenuAvatar";
+import QueryClientProvider from "@/app/components/QueryClientProvider";
 
 interface UserData {
   email: string;
@@ -21,14 +21,14 @@ interface UserData {
   currentPassword_kids?: string;
 }
 
-export default function CompteUser() {
+function CompteUser() {
   const router = useRouter();
   const queryClient = useQueryClient();
   const [editable, setEditable] = useState<boolean>(false);
   const [passwordError, setPasswordError] = useState<string>("");
   const [kidsPasswordError, setKidsPasswordError] = useState<string>("");
   const [showAvatarMenu, setShowAvatarMenu] = useState<boolean>(false);
-  
+
   const [userData, setUserData] = useState<UserData>({
     email: "",
     username: "",
@@ -44,46 +44,58 @@ export default function CompteUser() {
   });
   const [isPasswordModified, setIsPasswordModified] = useState(false);
   const [isKidsPasswordModified, setIsKidsPasswordModified] = useState(false);
-  
+
   // Récupérer les données utilisateur avec TanStack Query
   const { data, isLoading, isError } = useQuery({
     queryKey: ["userData"],
     queryFn: async () => {
-      const tokenResponse = await fetch('/api/auth/token-id');
+      const tokenResponse = await fetch("/api/auth/token-id");
       const tokenData = await tokenResponse.json();
-      
+
       if (!tokenData.id) {
-        router.push('/connexion');
-        throw new Error('Non authentifié');
+        router.push("/connexion");
+        throw new Error("Non authentifié");
       }
-      
+
       const response = await fetch(`/api/users/${tokenData.id}`);
       if (!response.ok) {
-        throw new Error('Erreur lors de la récupération des données utilisateur');
+        throw new Error(
+          "Erreur lors de la récupération des données utilisateur"
+        );
       }
-      
+
       return await response.json();
-    }
+    },
   });
 
   const updateUserMutation = useMutation({
-    mutationFn: async (dataToSend: any) => {
-      const tokenResponse = await fetch('/api/auth/token-id');
+    mutationFn: async (dataToSend: {
+      email: string;
+      username: string;
+      phone: string;
+      address: string;
+      avatar_id?: number;
+      password?: string;
+      password_kids?: string;
+      currentPassword?: string;
+      currentPassword_kids?: string;
+    }) => {
+      const tokenResponse = await fetch("/api/auth/token-id");
       const tokenData = await tokenResponse.json();
 
       if (!tokenData.id) {
-        router.push('/connexion');
-        throw new Error('Non authentifié');
+        router.push("/connexion");
+        throw new Error("Non authentifié");
       }
-      
+
       const response = await fetch(`/api/users/${tokenData.id}`, {
-        method: 'PUT',
+        method: "PUT",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(dataToSend),
       });
-      
+
       if (!response.ok) {
         const errorData = await response.json();
         if (errorData.error === "invalid_current_password") {
@@ -94,39 +106,42 @@ export default function CompteUser() {
           setKidsPasswordError("Le mot de passe enfant actuel est incorrect");
           throw new Error("invalid_current_kids_password");
         }
-        throw new Error('Échec de la mise à jour des données utilisateur');
+        throw new Error("Échec de la mise à jour des données utilisateur");
       }
-      
+
       return await response.json();
     },
     onSuccess: () => {
       setEditable(false);
-      queryClient.invalidateQueries({ queryKey: ['userData'] });
-      alert('Profil mis à jour avec succès !');
-      
-      setUserData(prevData => ({
+      queryClient.invalidateQueries({ queryKey: ["userData"] });
+      alert("Profil mis à jour avec succès !");
+
+      setUserData((prevData) => ({
         ...prevData,
-        password: '********',
-        password_kids: '********',
+        password: "********",
+        password_kids: "********",
         currentPassword: "",
         currentPassword_kids: "",
       }));
       setIsPasswordModified(false);
       setIsKidsPasswordModified(false);
     },
-    onError: (error: any) => {
-      if (error.message !== "invalid_current_password" && error.message !== "invalid_current_kids_password") {
-        console.error('Erreur lors de la mise à jour des données:', error);
-        alert('Erreur lors de la mise à jour du profil');
+    onError: (error: Error) => {
+      if (
+        error.message !== "invalid_current_password" &&
+        error.message !== "invalid_current_kids_password"
+      ) {
+        console.error("Erreur lors de la mise à jour des données:", error);
+        alert("Erreur lors de la mise à jour du profil");
       }
-    }
+    },
   });
 
   useEffect(() => {
     if (data) {
-      const savedAvatarUrl = localStorage.getItem('user_avatar_url');
-      const savedAvatarId = localStorage.getItem('user_avatar_id');
-      
+      const savedAvatarUrl = localStorage.getItem("user_avatar_url");
+      const savedAvatarId = localStorage.getItem("user_avatar_id");
+
       setUserData({
         email: data.email || "",
         username: data.username || "",
@@ -140,7 +155,7 @@ export default function CompteUser() {
         currentPassword: "",
         currentPassword_kids: "",
       });
-      
+
       setIsPasswordModified(false);
       setIsKidsPasswordModified(false);
     }
@@ -148,7 +163,7 @@ export default function CompteUser() {
 
   useEffect(() => {
     if (isError) {
-      router.push('/connexion');
+      router.push("/connexion");
     }
   }, [isError, router]);
 
@@ -164,15 +179,15 @@ export default function CompteUser() {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    
-    if (name === 'password' && value !== '********') {
+
+    if (name === "password" && value !== "********") {
       setIsPasswordModified(true);
     }
-    
-    if (name === 'password_kids' && value !== '********') {
+
+    if (name === "password_kids" && value !== "********") {
       setIsKidsPasswordModified(true);
     }
-    
+
     setUserData({ ...userData, [name]: value });
   };
 
@@ -180,12 +195,12 @@ export default function CompteUser() {
     setUserData({
       ...userData,
       avatar_id: avatarId,
-      avatar_url: avatarUrl
+      avatar_url: avatarUrl,
     });
-    
-    localStorage.setItem('user_avatar_url', avatarUrl);
-    localStorage.setItem('user_avatar_id', avatarId.toString());
-    
+
+    localStorage.setItem("user_avatar_url", avatarUrl);
+    localStorage.setItem("user_avatar_id", avatarId.toString());
+
     setShowAvatarMenu(false);
   };
 
@@ -193,17 +208,28 @@ export default function CompteUser() {
     try {
       setPasswordError("");
       setKidsPasswordError("");
-      
-      const isPasswordChanged = userData.password !== '********';
-      const isKidsPasswordChanged = userData.password_kids !== '********';
-      
-      if (isPasswordChanged && (!userData.currentPassword || userData.currentPassword.trim() === "")) {
-        setPasswordError("Veuillez entrer votre mot de passe actuel pour confirmer le changement");
+
+      const isPasswordChanged = userData.password !== "********";
+      const isKidsPasswordChanged = userData.password_kids !== "********";
+
+      if (
+        isPasswordChanged &&
+        (!userData.currentPassword || userData.currentPassword.trim() === "")
+      ) {
+        setPasswordError(
+          "Veuillez entrer votre mot de passe actuel pour confirmer le changement"
+        );
         return;
       }
-      
-      if (isKidsPasswordChanged && (!userData.currentPassword_kids || userData.currentPassword_kids.trim() === "")) {
-        setKidsPasswordError("Veuillez entrer le mot de passe enfant actuel pour confirmer le changement");
+
+      if (
+        isKidsPasswordChanged &&
+        (!userData.currentPassword_kids ||
+          userData.currentPassword_kids.trim() === "")
+      ) {
+        setKidsPasswordError(
+          "Veuillez entrer le mot de passe enfant actuel pour confirmer le changement"
+        );
         return;
       }
 
@@ -218,44 +244,43 @@ export default function CompteUser() {
         currentPassword?: string;
         currentPassword_kids?: string;
       }
-      
+
       const dataToSend: UpdateData = {
         email: userData.email,
         username: userData.username,
         phone: userData.phone,
         address: userData.address,
-        avatar_id: userData.avatar_id
+        avatar_id: userData.avatar_id,
       };
-      
+
       if (isPasswordChanged) {
         dataToSend.password = userData.password;
         dataToSend.currentPassword = userData.currentPassword;
       }
-      
+
       if (isKidsPasswordChanged) {
         dataToSend.password_kids = userData.password_kids;
         dataToSend.currentPassword_kids = userData.currentPassword_kids;
       }
-      
+
       updateUserMutation.mutate(dataToSend);
-      
     } catch (error) {
-      console.error('Erreur lors de la mise à jour des données:', error);
+      console.error("Erreur lors de la mise à jour des données:", error);
     }
   };
 
   const formatDate = (dateString: string) => {
     if (!dateString) return "";
-    
+
     try {
       const date = new Date(dateString);
-      return date.toLocaleDateString('fr-FR', { 
-        day: 'numeric', 
-        month: 'long', 
-        year: 'numeric'
+      return date.toLocaleDateString("fr-FR", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
       });
     } catch (error) {
-      console.error('Erreur lors du formatage de la date:', error);
+      console.error("Erreur lors du formatage de la date:", error);
       return dateString;
     }
   };
@@ -271,17 +296,17 @@ export default function CompteUser() {
   return (
     <>
       {showAvatarMenu && (
-        <MenuAvatar 
+        <MenuAvatar
           onAvatarSelect={handleAvatarSelect}
           onClose={() => setShowAvatarMenu(false)}
         />
       )}
-      
+
       <div className="bg-black/80 text-white p-8 rounded-lg shadow-lg w-full max-w-md">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold">Mon Compte</h2>
         </div>
-        
+
         <div className="flex flex-col items-center mb-6">
           <div className="relative w-24 h-24 rounded-full overflow-hidden mb-3">
             <Image
@@ -296,9 +321,9 @@ export default function CompteUser() {
               }}
             />
           </div>
-          
+
           {editable && (
-            <button 
+            <button
               onClick={() => setShowAvatarMenu(true)}
               className="bg-transparent border border-white px-4 py-2 rounded text-white hover:bg-white hover:text-black cursor-pointer"
             >
@@ -306,7 +331,7 @@ export default function CompteUser() {
             </button>
           )}
         </div>
-        
+
         <div className="space-y-6">
           <div className="flex justify-between items-center">
             <p className="text-lg">Mail :</p>
@@ -322,9 +347,9 @@ export default function CompteUser() {
               <p className="text-lg">{userData.email}</p>
             )}
           </div>
-          
+
           <div className="flex justify-between items-center">
-            <p className="text-lg">Nom d'utilisateur :</p>
+            <p className="text-lg">Nom d&apos;utilisateur :</p>
             {editable ? (
               <input
                 type="text"
@@ -337,7 +362,7 @@ export default function CompteUser() {
               <p className="text-lg">{userData.username}</p>
             )}
           </div>
-          
+
           <div className="flex justify-between items-center">
             <p className="text-lg">Téléphone :</p>
             {editable ? (
@@ -353,7 +378,7 @@ export default function CompteUser() {
               <p className="text-lg">{userData.phone || "Non renseigné"}</p>
             )}
           </div>
-          
+
           <div className="flex justify-between items-center">
             <p className="text-lg">Adresse :</p>
             {editable ? (
@@ -369,14 +394,14 @@ export default function CompteUser() {
               <p className="text-lg">{userData.address || "Non renseignée"}</p>
             )}
           </div>
-          
+
           {!editable && (
             <div className="flex justify-between items-center">
               <p className="text-lg">Mot de passe :</p>
               <p className="text-lg">{userData.password}</p>
             </div>
           )}
-          
+
           {editable && (
             <>
               {isPasswordModified && (
@@ -392,9 +417,13 @@ export default function CompteUser() {
                   />
                 </div>
               )}
-              
+
               <div className="flex justify-between items-center">
-                <p className="text-lg">{isPasswordModified ? "Nouveau mot de passe :" : "Mot de passe :"}</p>
+                <p className="text-lg">
+                  {isPasswordModified
+                    ? "Nouveau mot de passe :"
+                    : "Mot de passe :"}
+                </p>
                 <input
                   type="password"
                   name="password"
@@ -404,20 +433,20 @@ export default function CompteUser() {
                   className="bg-gray-800 text-white rounded px-3 py-1"
                 />
               </div>
-              
+
               {passwordError && (
                 <div className="text-red-500 text-center">{passwordError}</div>
               )}
             </>
           )}
-          
+
           {!editable && (
             <div className="flex justify-between items-center">
               <p className="text-lg">Mot de passe enfant :</p>
               <p className="text-lg">{userData.password_kids}</p>
             </div>
           )}
-          
+
           {editable && (
             <>
               {isKidsPasswordModified && (
@@ -433,9 +462,13 @@ export default function CompteUser() {
                   />
                 </div>
               )}
-              
+
               <div className="flex justify-between items-center">
-                <p className="text-lg">{isKidsPasswordModified ? "Nouveau mot de passe enfant :" : "Mot de passe enfant :"}</p>
+                <p className="text-lg">
+                  {isKidsPasswordModified
+                    ? "Nouveau mot de passe enfant :"
+                    : "Mot de passe enfant :"}
+                </p>
                 <input
                   type="password"
                   name="password_kids"
@@ -445,29 +478,47 @@ export default function CompteUser() {
                   className="bg-gray-800 text-white rounded px-3 py-1"
                 />
               </div>
-              
+
               {kidsPasswordError && (
-                <div className="text-red-500 text-center">{kidsPasswordError}</div>
+                <div className="text-red-500 text-center">
+                  {kidsPasswordError}
+                </div>
               )}
             </>
           )}
-          
+
           <div className="flex justify-between items-center">
             <p className="text-lg">Date de création :</p>
             <p className="text-lg">{formatDate(userData.created_at)}</p>
           </div>
         </div>
-        
+
         <div className="mt-8 flex justify-center">
-          <button 
+          <button
             onClick={handleModifier}
             disabled={updateUserMutation.isPending}
-            className={`bg-teal-400 hover:bg-teal-500 text-black font-bold py-2 px-12 rounded-full transition-colors cursor-pointer ${updateUserMutation.isPending ? 'opacity-50 cursor-not-allowed' : ''}`}
+            className={`bg-teal-400 hover:bg-teal-500 text-black font-bold py-2 px-12 rounded-full transition-colors cursor-pointer ${
+              updateUserMutation.isPending
+                ? "opacity-50 cursor-not-allowed"
+                : ""
+            }`}
           >
-            {updateUserMutation.isPending ? 'Chargement...' : editable ? 'Valider' : 'Modifier'}
+            {updateUserMutation.isPending
+              ? "Chargement..."
+              : editable
+              ? "Valider"
+              : "Modifier"}
           </button>
         </div>
       </div>
     </>
+  );
+}
+
+export default function Page() {
+  return (
+    <QueryClientProvider>
+      <CompteUser />
+    </QueryClientProvider>
   );
 }

@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import CharactersService from "../services/CharactersService";
 import Character from "../models/Characters";
 
@@ -9,7 +9,7 @@ class CharactersController {
         this.charactersService = new CharactersService();
     }
 
-    public async getAllCharacters(req: NextRequest): Promise<Response> {
+    public async getAllCharacters(): Promise<Response> {
         try {
             const characters = await this.charactersService.getAll();
             return new Response(JSON.stringify(characters), { status: 200 });
@@ -19,7 +19,7 @@ class CharactersController {
         }
     }
 
-    public async getCharacterById(req: NextRequest, id: number): Promise<NextResponse> {
+    public async getCharacterById(id: number): Promise<NextResponse> {
         const characterId = id;
 
         if (isNaN(characterId)) {
@@ -38,7 +38,7 @@ class CharactersController {
         }
     }
 
-    public async createCharacter(req: NextRequest, body: Partial<Character>): Promise<NextResponse> {
+    public async createCharacter(body: Partial<Character>): Promise<NextResponse> {
         const characterData = body;
 
         if (!characterData.name || !characterData.image_url) {
@@ -58,7 +58,7 @@ class CharactersController {
         }
     }
 
-    public async updateCharacter(req: NextRequest, id: number, newData: Partial<Character>): Promise<NextResponse> {
+    public async updateCharacter(id: number, newData: Partial<Character>): Promise<NextResponse> {
         const characterId = id;
 
         if (isNaN(characterId)) {
@@ -81,7 +81,7 @@ class CharactersController {
         }
     }
 
-    public async deleteCharacter(req: NextRequest, id: number): Promise<NextResponse> {
+    public async deleteCharacter(id: number): Promise<NextResponse> {
         const characterId = id;
 
         if (isNaN(characterId)) {

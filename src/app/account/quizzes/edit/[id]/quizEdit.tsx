@@ -1,7 +1,7 @@
 'use client';
 
 import { useParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import QuizForm from "@/app/components/quizzes/QuizForm";
 import { useQuery } from '@tanstack/react-query';
 import Loader from '@/app/components/Loader';
@@ -145,7 +145,7 @@ export default function QuizEdit(): React.JSX.Element {
 
     useEffect(() => {
         console.info('data', quizData, id)
-    }, [id])
+    }, [])
     
     return (
         <>

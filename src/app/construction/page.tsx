@@ -22,7 +22,7 @@ export default function ConstructionPage(): React.JSX.Element {
         
         <Link href="/accueil">
           <button className="bg-[var(--secondary-color)] hover:bg-[var(--hover-secondary)] text-black font-bold px-6 py-3 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
-            Retour à l'accueil
+            Retour à l&apos;accueil
           </button>
         </Link>
       </div>

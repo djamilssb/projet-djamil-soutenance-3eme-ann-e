@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import QuizListItem from './QuizListItem';
 import Link from "next/link";
+import Quizz from "@/app/api/models/Quizz";
 
 interface QuizListProps {
   idUserNull?: boolean; // Nouveau prop pour filtrer id_user=NULL 
@@ -60,7 +61,7 @@ export default function QuizList({
                 // Ajouter du code de débogage
                 console.log("Données brutes de l'API:", data);
                 
-                const formattedData = data.map((quiz: any) => ({
+                const formattedData = data.map((quiz: Quizz) => ({
                     id: quiz.id,
                     title: quiz.title,
                     date: new Date(quiz.created_at).toLocaleDateString('fr-FR'),

@@ -309,7 +309,7 @@ export default function QuizForm({ formData }: { formData: {data: QuizData, ques
      */
     const mutation = useMutation({
         mutationFn: fetchQuizCreate,
-        onSuccess: async (quizId: number, quizData, qList) => {
+        onSuccess: async (quizId: number) => {
             console.log("Quiz created:", quizId);
             console.warn("questions", questionsList);
     
@@ -357,7 +357,7 @@ export default function QuizForm({ formData }: { formData: {data: QuizData, ques
     const updateQuizMutation = useMutation({
         mutationFn: fetchQuizUpdate,
         onSuccess: async (_success, variables) => {
-            const { id: quizId, data: quizData } = variables;
+            const { id: quizId, data} = variables;
             console.log("Quiz updated:", quizId);
     
             try {
@@ -430,11 +430,11 @@ export default function QuizForm({ formData }: { formData: {data: QuizData, ques
     // we check if there is data with quiz or not
     // if there is data this is quiz update form, if not quiz creation form
     useEffect(() => {
-        if (formData && formData.questions.length > 0) {
-            setQuestionsList(questionsList);
-            setQuestionNumber(formData.questions.length);
-        }
-    }, [formData]);
+    if (formData && formData.questions.length > 0) {
+        setQuestionsList(formData.questions);
+        setQuestionNumber(formData.questions.length);
+    }
+}, [formData]);
 
     useEffect(() => {
         console.log('Questions list updated:', questionsList);

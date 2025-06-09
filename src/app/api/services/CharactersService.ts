@@ -15,7 +15,7 @@ class CharactersService {
     return characters
     ;
     } catch (error) {
-      throw new Error("Erreur lors de la récupération des personnages");
+      throw new Error("Erreur lors de la récupération des personnages: " + error);
     }
   }
 

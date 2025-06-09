@@ -2,7 +2,7 @@ import Auth from "../models/Auth";
 import Users from "../models/Users";
 import AuthRepository from "../repositories/AuthRepository";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 
 class AuthService {
     private authRepository: AuthRepository;
@@ -76,7 +76,7 @@ class AuthService {
           throw new Error("Token is required");
         }
 
-        const decoded: any = jwt.verify(token, process.env.JWT_SECRET!);
+        const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
         if (!decoded || !decoded.id) {
           throw new Error("Invalid token");
         }
