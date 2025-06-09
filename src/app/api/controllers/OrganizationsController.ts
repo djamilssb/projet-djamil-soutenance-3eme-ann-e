@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import kt_organizationsService from "../services/OrganizationsService";
 import kt_organizations from "../models/Organizations";
 
@@ -9,7 +9,7 @@ class kt_organizationsController {
         this.kt_organizationsService = new kt_organizationsService();
     }
 
-    public async getAllOrganizations(req: NextRequest): Promise<NextResponse> {
+    public async getAllOrganizations(): Promise<NextResponse> {
         try {
             const organizations = await this.kt_organizationsService.getAll();
             return NextResponse.json(organizations, { status: 200 });
@@ -19,7 +19,7 @@ class kt_organizationsController {
         }
     }
 
-    public async getOrganizationById(req: NextRequest, id: number): Promise<NextResponse> {
+    public async getOrganizationById(id: number): Promise<NextResponse> {
         if (isNaN(id)) {
             return NextResponse.json({ message: 'Invalid organization ID.' }, { status: 400 });
         }
@@ -36,7 +36,7 @@ class kt_organizationsController {
         }
     }
 
-    public async createOrganization(req: NextRequest, body: Partial<kt_organizations>): Promise<NextResponse> {
+    public async createOrganization(body: Partial<kt_organizations>): Promise<NextResponse> {
         const orgData = body;
 
         if (!orgData.name?.trim()) {
@@ -55,7 +55,7 @@ class kt_organizationsController {
         }
     }
 
-    public async updateOrganization(req: NextRequest, id: number, newData: Partial<kt_organizations>): Promise<NextResponse> {
+    public async updateOrganization(id: number, newData: Partial<kt_organizations>): Promise<NextResponse> {
         if (isNaN(id)) {
             return NextResponse.json({ message: 'Invalid organization ID.' }, { status: 400 });
         }
@@ -72,7 +72,7 @@ class kt_organizationsController {
         }
     }
 
-    public async deleteOrganization(req: NextRequest, id: number): Promise<NextResponse> {
+    public async deleteOrganization(id: number): Promise<NextResponse> {
         if (isNaN(id)) {
             return NextResponse.json({ message: 'Invalid organization ID.' }, { status: 400 });
         }

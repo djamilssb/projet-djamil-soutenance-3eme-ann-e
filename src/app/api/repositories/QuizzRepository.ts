@@ -56,7 +56,7 @@ class QuizzRepository {
         return rows.map((row: object) => new Quizz(row));
     }
 
-    public async getQuizzesWhereIdUserIsNull(): Promise<any[]> {
+    public async getQuizzesWhereIdUserIsNull(): Promise<Quizz|Quizz[]|undefined> {
         const query = `
             SELECT q.*, u.username as userName 
             FROM kt_quizzes q

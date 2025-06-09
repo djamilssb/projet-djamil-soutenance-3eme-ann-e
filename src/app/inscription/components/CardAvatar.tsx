@@ -1,4 +1,3 @@
-import { useModale } from "@/app/hooks/useModale";
 import Image from "next/image";
 
 interface CardAvatarProps {

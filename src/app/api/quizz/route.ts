@@ -23,15 +23,15 @@ export async function GET(req: NextRequest) {
         // Sinon, appeler getAll pour tous les quiz
         return await quizzController.getAll(req);
     } catch (error) {
-        return new Response(JSON.stringify({ message: "Internal server error." }), { status: 500 });
+        return new Response(JSON.stringify({ message: "Internal server error:" + error }), { status: 500 });
     }
 }
 
 export async function POST(req: NextRequest) {
     try {
         const body = await req.json();
-        return await quizzController.create(req, body);
+        return await quizzController.create(body);
     } catch (error) {
-        return new Response(JSON.stringify({ message: "Internal server error." }), { status: 500 });
+        return new Response(JSON.stringify({ message: "Internal server error: " + error }), { status: 500 });
     }
 }

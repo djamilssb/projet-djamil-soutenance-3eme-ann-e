@@ -1,5 +1,6 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import DepartementService from "../services/DepartementService";
+import Departement from "../models/Departement";
 
 class DepartementController {
     private departementService: DepartementService;
@@ -8,7 +9,7 @@ class DepartementController {
         this.departementService = new DepartementService();
     }
 
-    public async getAll(req: NextRequest): Promise<NextResponse> {
+    public async getAll(): Promise<NextResponse> {
         try {
             const departements = await this.departementService.getAll();
             return NextResponse.json(departements.length > 0 ? departements : [], { status: 200 });
@@ -18,7 +19,7 @@ class DepartementController {
         }
     }
 
-    public async getById(req: NextRequest, id: number): Promise<NextResponse> {
+    public async getById(id: number): Promise<NextResponse> {
         if (!id || isNaN(id)) {
             return NextResponse.json({ message: 'ID département invalide.' }, { status: 400 });
         }
@@ -35,7 +36,7 @@ class DepartementController {
         }
     }
 
-    public async getByNumber(req: NextRequest, number: string): Promise<NextResponse> {
+    public async getByNumber(number: string): Promise<NextResponse> {
         if (!number) {
             return NextResponse.json({ message: 'Numéro de département invalide.' }, { status: 400 });
         }
@@ -52,7 +53,7 @@ class DepartementController {
         }
     }
 
-    public async create(req: NextRequest, body: any): Promise<NextResponse> {
+    public async create(body: Partial<Departement>): Promise<NextResponse> {
         try {
             const created = await this.departementService.create(body);
             if (!created) {
@@ -65,7 +66,7 @@ class DepartementController {
         }
     }
 
-    public async update(req: NextRequest, id: number, body: any): Promise<NextResponse> {
+    public async update(id: number, body: Partial<Departement>): Promise<NextResponse> {
         if (!id || isNaN(id)) {
             return NextResponse.json({ message: 'ID département invalide.' }, { status: 400 });
         }
@@ -82,7 +83,7 @@ class DepartementController {
         }
     }
 
-    public async delete(req: NextRequest, id: number): Promise<NextResponse> {
+    public async delete(id: number): Promise<NextResponse> {
         if (!id || isNaN(id)) {
             return NextResponse.json({ message: 'ID département invalide.' }, { status: 400 });
         }

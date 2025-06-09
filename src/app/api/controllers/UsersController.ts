@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import UsersService from "../services/UsersService";
+import Users from "../models/Users";
 
 class UsersController {
     private usersService: UsersService;
@@ -49,7 +50,7 @@ class UsersController {
         }
     }
 
-    public async update(id: number, userData: any): Promise<NextResponse> {
+    public async update(id: number, userData: Partial<Users>): Promise<NextResponse> {
         try {
             
 

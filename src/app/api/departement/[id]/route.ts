@@ -9,9 +9,9 @@ export async function GET(req: NextRequest, context: { params: Promise<{ id: str
         if (isNaN(id)) {
             return new Response(JSON.stringify({ message: "Invalid ID." }), { status: 400 });
         }
-        return await departementController.getById(req, id);
+        return await departementController.getById(id);
     } catch (error) {
-        return new Response(JSON.stringify({ message: "Internal server error." }), { status: 500 });
+        return new Response(JSON.stringify({ message: "Internal server error:" + error}), { status: 500 });
     }
 }
 
@@ -22,9 +22,9 @@ export async function PUT(req: NextRequest, context: { params: Promise<{ id: str
             return new Response(JSON.stringify({ message: "Invalid ID." }), { status: 400 });
         }
         const body = await req.json();
-        return await departementController.update(req, id, body);
+        return await departementController.update(id, body);
     } catch (error) {
-        return new Response(JSON.stringify({ message: "Internal server error." }), { status: 500 });
+        return new Response(JSON.stringify({ message: "Internal server error: " + error}), { status: 500 });
     }
 }
 
@@ -34,8 +34,8 @@ export async function DELETE(req: NextRequest, context: { params: Promise<{ id: 
         if (isNaN(id)) {
             return new Response(JSON.stringify({ message: "Invalid ID." }), { status: 400 });
         }
-        return await departementController.delete(req, id);
+        return await departementController.delete(id);
     } catch (error) {
-        return new Response(JSON.stringify({ message: "Internal server error." }), { status: 500 });
+        return new Response(JSON.stringify({ message: "Internal server error: " + error }), { status: 500 });
     }
 }

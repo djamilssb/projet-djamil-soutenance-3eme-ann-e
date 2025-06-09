@@ -11,6 +11,6 @@ export async function GET(req: NextRequest, context: { params: Promise<{ id: str
         }
         return await qController.getQuestionsByQuizz(req, id);
     } catch (error) {
-        return new NextResponse(JSON.stringify({ message: "Internal server error." }), { status: 500 });
+        return new NextResponse(JSON.stringify({ message: "Internal server error: " + error }), { status: 500 });
     }
 }

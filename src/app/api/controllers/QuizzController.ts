@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import QuizzService from "../services/QuizzService";
+import Quizz from "../models/Quizz";
 
 class QuizzController {
     private quizzService: QuizzService;
@@ -38,7 +39,7 @@ class QuizzController {
         }
     }
 
-    public async getById(req: NextRequest, id: number): Promise<NextResponse> {
+    public async getById(id: number): Promise<NextResponse> {
         if (!id || isNaN(id)) {
             return NextResponse.json({ message: 'ID de quizz invalide.' }, { status: 400 });
         }
@@ -55,7 +56,7 @@ class QuizzController {
         }
     }
 
-    public async create(req: NextRequest, body: any): Promise<NextResponse> {
+    public async create(body: Partial<Quizz>): Promise<NextResponse> {
         try {
             if (!body.title || !body.id_user) {
                 return NextResponse.json({ message: 'Données du quizz incomplètes.' }, { status: 400 });
@@ -72,7 +73,7 @@ class QuizzController {
         }
     }
 
-    public async update(req: NextRequest, id: number, body: any): Promise<NextResponse> {
+    public async update(id: number, body: Partial<Quizz>): Promise<NextResponse> {
         if (!id || isNaN(id)) {
             return NextResponse.json({ message: 'ID de quizz invalide.' }, { status: 400 });
         }
@@ -89,7 +90,7 @@ class QuizzController {
         }
     }
 
-    public async delete(req: NextRequest, id: number): Promise<NextResponse> {
+    public async delete(id: number): Promise<NextResponse> {
         if (!id || isNaN(id)) {
             return NextResponse.json({ message: 'ID de quizz invalide.' }, { status: 400 });
         }
@@ -106,7 +107,7 @@ class QuizzController {
         }
     }
 
-    public async getByUserId(req: NextRequest, userId: number): Promise<NextResponse> {
+    public async getByUserId(userId: number): Promise<NextResponse> {
         if (!userId || isNaN(userId)) {
             return NextResponse.json({ message: 'ID utilisateur invalide.' }, { status: 400 });
         }
@@ -120,7 +121,7 @@ class QuizzController {
         }
     }
 
-    public async getByDepartementId(req: NextRequest, departementId: number): Promise<NextResponse> {
+    public async getByDepartementId(departementId: number): Promise<NextResponse> {
         if (!departementId || isNaN(departementId)) {
             return NextResponse.json({ message: 'ID département invalide.' }, { status: 400 });
         }

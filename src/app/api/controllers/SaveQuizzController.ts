@@ -1,5 +1,6 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import SaveQuizzService from "../services/SaveQuizzService";
+import SaveQuizz from "../models/SaveQuizz";
 
 class SaveQuizzController {
     private saveQuizzService: SaveQuizzService;
@@ -8,7 +9,7 @@ class SaveQuizzController {
         this.saveQuizzService = new SaveQuizzService();
     }
 
-    public async getAll(req: NextRequest): Promise<NextResponse> {
+    public async getAll(): Promise<NextResponse> {
         try {
             const quizSaves = await this.saveQuizzService.getAll();
             return NextResponse.json(quizSaves.length > 0 ? quizSaves : [], { status: 200 });
@@ -18,7 +19,7 @@ class SaveQuizzController {
         }
     }
 
-    public async getById(req: NextRequest, id: number): Promise<NextResponse> {
+    public async getById(id: number): Promise<NextResponse> {
         if (!id || isNaN(id)) {
             return NextResponse.json({ message: "Invalid quiz save ID." }, { status: 400 });
         }
@@ -35,7 +36,7 @@ class SaveQuizzController {
         }
     }
 
-    public async create(req: NextRequest, body: any): Promise<NextResponse> {
+    public async create(body: Partial<SaveQuizz>): Promise<NextResponse> {
         const { id_user, id_quizz, id_character, ...quizSaveData } = body;
     
         if (!id_user || isNaN(id_user) || !id_quizz || isNaN(id_quizz) || !id_character || isNaN(id_character)) {
@@ -71,7 +72,7 @@ class SaveQuizzController {
         }
     }
 
-    public async update(req: NextRequest, id: number, body: any): Promise<NextResponse> {
+    public async update(id: number, body: Partial<SaveQuizz>): Promise<NextResponse> {
         if (!id || isNaN(id)) {
             return NextResponse.json(
                 { message: "Invalid quiz save ID." },
@@ -109,7 +110,7 @@ class SaveQuizzController {
         }
     }
 
-    public async delete(req: NextRequest, id: number): Promise<NextResponse> {
+    public async delete(id: number): Promise<NextResponse> {
         if (!id || isNaN(id)) {
             return NextResponse.json({ message: "Invalid quiz save ID." }, { status: 400 });
         }
