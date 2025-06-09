@@ -1,27 +1,16 @@
 // app/score-page/page.tsx
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import "./style.css";
 
-export default function ScorePage() {
+// ===== COMPOSANT INTERNE AVEC SEARCHPARAMS =====
+function ScorePageContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
-
-  // À AJOUTER DANS LE FUTUR: Vérification de l'authentification
-  // useEffect(() => {
-  //   const checkAuth = async () => {
-  //     const isAuthenticated = await verifyUserAuthentication();
-  //     if (!isAuthenticated) {
-  //       router.push('/login?returnUrl=/game/quiz-list');
-  //     }
-  //   };
-  //
-  //   checkAuth();
-  // }, [router]);
 
   const [animateScore, setAnimateScore] = useState(false);
 
@@ -37,18 +26,8 @@ export default function ScorePage() {
     }, 300);
   }, []);
 
-
   // Fonction pour rejouer le quiz
   const handleReplayQuiz = () => {
-    // À MODIFIER: Vous pourriez vouloir effectuer des actions supplémentaires ici
-    // comme effacer des états globaux, réinitialiser des compteurs, etc.
-
-    // À AJOUTER DANS LE FUTUR: Vérification de l'authentification avant de rejouer
-    // if (!isAuthenticated) {
-    //   router.push('/login?returnUrl=/game/quiz/questions?quizId=' + quizId);
-    //   return;
-    // }
-
     // Redirection vers le même quiz pour le rejouer
     router.push(`/game/quiz/questions?quizId=${quizId}`);
   };
@@ -111,5 +90,20 @@ export default function ScorePage() {
         </div>
       </div>
     </div>
+  );
+}
+
+// ===== COMPOSANT PRINCIPAL AVEC SUSPENSE =====
+export default function ScorePage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="loading-container">
+          <p>Chargement des résultats...</p>
+        </div>
+      }
+    >
+      <ScorePageContent />
+    </Suspense>
   );
 }

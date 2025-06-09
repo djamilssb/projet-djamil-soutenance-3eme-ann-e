@@ -1,5 +1,5 @@
 "use client"; //s'execute côté client
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import QueryClientProvider from "@/app/components/QueryClientProvider";
@@ -358,8 +358,8 @@ function QuizGameContent({
   );
 }
 
-// ===== COMPOSANT DE PAGE PRINCIPAL =====
-export default function QuizzPage() {
+// ===== COMPOSANT INTERNE AVEC SEARCHPARAMS =====
+function QuizzPageContent() {
   // Utilisation de useSearchParams pour récupérer les paramètres d'URL
   const searchParams = useSearchParams();
 
@@ -375,5 +375,31 @@ export default function QuizzPage() {
     <QueryClientProvider>
       <QuizGameContent quizId={quizId} avatarId={avatarId} />
     </QueryClientProvider>
+  );
+}
+
+// ===== COMPOSANT DE PAGE PRINCIPAL AVEC SUSPENSE =====
+export default function QuizzPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="quiz-fullscreen">
+          <div className="quiz-background">
+            <Image
+              src="/paris.png"
+              alt="Background du quiz"
+              fill
+              style={{ objectFit: "cover" }}
+              priority
+            />
+          </div>
+          <div className="loading-container">
+            <p>Chargement du quiz...</p>
+          </div>
+        </div>
+      }
+    >
+      <QuizzPageContent />
+    </Suspense>
   );
 }
